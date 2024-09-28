@@ -1,0 +1,46 @@
+{
+    "family": "vrp-backend-task",
+    "containerDefinitions": [
+      {
+        "name": "vrp-backend-container",
+        "image": "<IMAGE_URI>",
+        "cpu": 256,
+        "memory": 512,
+        "portMappings": [
+          {
+            "containerPort": 80,
+            "hostPort": 80,
+            "protocol": "tcp"
+          }
+        ],
+        "essential": true,
+        "environment": [
+          {
+            "name": "VRP_DATA_TABLE",
+            "value": "VRPDataTable"
+          },
+          {
+            "name": "VRP_SOLUTIONS_BUCKET",
+            "value": "VRPSolutionsBucketName"
+          }
+        ],
+        "logConfiguration": {
+          "logDriver": "awslogs",
+          "options": {
+            "awslogs-group": "/ecs/vrp-backend",
+            "awslogs-region": "us-east-1",
+            "awslogs-stream-prefix": "ecs"
+          }
+        }
+      }
+    ],
+    "cpu": "256",
+    "memory": "512",
+    "networkMode": "awsvpc",
+    "requiresCompatibilities": [
+      "FARGATE"
+    ],
+    "executionRoleArn": "arn:aws:ecs:us-east-1:448049814374:task/vrp-backend-cluster/226c3cb679164fa9872fd860dfb007aa", 
+    "taskRoleArn": "arn:aws:iam::448049814374:role/VRPBackendEcsServiceStack-VRPBackendFargateServiceT-yktadXxY0qPV"  
+  }
+  
