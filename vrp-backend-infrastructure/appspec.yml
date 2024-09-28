@@ -3,7 +3,7 @@ Resources:
   - TargetService:
       Type: AWS::ECS::Service
       Properties:
-        TaskDefinition: <TASK_DEFINITION>
+        TaskDefinition: !Ref TaskDefinition
         LoadBalancerInfo:
           ContainerName: "vrp-backend-container"
           ContainerPort: 80

@@ -17,26 +17,19 @@ phases:
       - echo "IMAGE_TAG: $IMAGE_TAG"
   build:
     commands:
-      - echo "Build started on $(date)"
-      - echo "Building the Docker image..."
+      - echo Build started on `date`
+      - echo Building the Docker image...
       - docker build -t $ECR_REPO_URI:$IMAGE_TAG -f Services/Dockerfile vrp-services/
       - docker tag $ECR_REPO_URI:$IMAGE_TAG $ECR_REPO_URI:latest
   post_build:
     commands:
-      - echo "Build completed on $(date)"
-      - echo "Logging into Amazon ECR..."
-      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $ECR_REPO_URI
-      - echo "Pushing the Docker image..."
+      - echo Build completed on `date`
+      - echo Pushing the Docker image...
       - docker push $ECR_REPO_URI:$IMAGE_TAG
       - docker push $ECR_REPO_URI:latest
-      - echo "Writing image definitions file..."
-      - echo '[{"name":"vrp-backend-container","imageUri":"'$ECR_REPO_URI:$IMAGE_TAG'"}]' > imageDetail.json
-      - echo "Contents of imageDetail.json:"
+      - echo Writing image definitions file...
+      - echo '{"ImageURI":"'$ECR_REPO_URI:$IMAGE_TAG'"}' > imageDetail.json
       - cat imageDetail.json
-      - echo "Validating JSON format..."
-      - if jq . imageDetail.json >/dev/null 2>&1; then echo "JSON is valid"; else echo "JSON is invalid"; exit 1; fi
-      - echo "imageDetail.json location:"
-      - ls -l imageDetail.json
 
 artifacts:
   files:
