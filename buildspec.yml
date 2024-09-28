@@ -14,7 +14,7 @@ phases:
     commands:
       - echo "Logging into Amazon ECR..."
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $ECR_REPO_URI
-      - IMAGE_TAG=$(date +%Y%m%d%H%M%S)
+      - export IMAGE_TAG=$(date +%Y%m%d%H%M%S)  # Fix: Added export and wrapped the command
       - echo "IMAGE_TAG: $IMAGE_TAG"
 
   build:
