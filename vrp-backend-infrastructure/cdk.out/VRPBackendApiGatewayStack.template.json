@@ -1,0 +1,470 @@
+{
+ "Resources": {
+  "VRPBackendApiAE313B9D": {
+   "Type": "AWS::ApiGateway::RestApi",
+   "Properties": {
+    "Description": "This service serves VRP backend.",
+    "Name": "VRP Backend Service"
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendApiGatewayStack/VRPBackendApi/Resource"
+   }
+  },
+  "VRPBackendApiDeployment085943EB517e57d2093a8f8ddb5ad7b5da181f40": {
+   "Type": "AWS::ApiGateway::Deployment",
+   "Properties": {
+    "Description": "This service serves VRP backend.",
+    "RestApiId": {
+     "Ref": "VRPBackendApiAE313B9D"
+    }
+   },
+   "DependsOn": [
+    "VRPBackendApiproxyANY73A8C48F",
+    "VRPBackendApiproxy1AB1CC72",
+    "VRPBackendApiAuthorizerD10F9C9E"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendApiGatewayStack/VRPBackendApi/Deployment/Resource"
+   }
+  },
+  "VRPBackendApiDeploymentStageprod130BDF60": {
+   "Type": "AWS::ApiGateway::Stage",
+   "Properties": {
+    "DeploymentId": {
+     "Ref": "VRPBackendApiDeployment085943EB517e57d2093a8f8ddb5ad7b5da181f40"
+    },
+    "RestApiId": {
+     "Ref": "VRPBackendApiAE313B9D"
+    },
+    "StageName": "prod"
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendApiGatewayStack/VRPBackendApi/DeploymentStage.prod/Resource"
+   }
+  },
+  "VRPBackendApiproxy1AB1CC72": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Fn::GetAtt": [
+      "VRPBackendApiAE313B9D",
+      "RootResourceId"
+     ]
+    },
+    "PathPart": "{proxy+}",
+    "RestApiId": {
+     "Ref": "VRPBackendApiAE313B9D"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendApiGatewayStack/VRPBackendApi/Default/{proxy+}/Resource"
+   }
+  },
+  "VRPBackendApiproxyANY73A8C48F": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "COGNITO_USER_POOLS",
+    "AuthorizerId": {
+     "Ref": "VRPBackendApiAuthorizerD10F9C9E"
+    },
+    "HttpMethod": "ANY",
+    "Integration": {
+     "Type": "MOCK"
+    },
+    "ResourceId": {
+     "Ref": "VRPBackendApiproxy1AB1CC72"
+    },
+    "RestApiId": {
+     "Ref": "VRPBackendApiAE313B9D"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendApiGatewayStack/VRPBackendApi/Default/{proxy+}/ANY/Resource"
+   }
+  },
+  "VRPBackendApiAuthorizerD10F9C9E": {
+   "Type": "AWS::ApiGateway::Authorizer",
+   "Properties": {
+    "IdentitySource": "method.request.header.Authorization",
+    "Name": "VRPBackendApiGatewayStackVRPBackendApiAuthorizer54C27242",
+    "ProviderARNs": [
+     {
+      "Fn::ImportValue": "VRPBackendCognitoStack:ExportsOutputFnGetAttVRPBackendUserPool6E0C7F5CArn7645F585"
+     }
+    ],
+    "RestApiId": {
+     "Ref": "VRPBackendApiAE313B9D"
+    },
+    "Type": "COGNITO_USER_POOLS"
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendApiGatewayStack/VRPBackendApiAuthorizer/Resource"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/1WMQQuCQBBGf0t33VIQupZdo1A6x6ajjtmO7MwmFf33WEys07z3GL5YRclarRZ64LAor2GHF/XKRRfXQA981j3WWmDQD/XKgGXTY5BWZsId9B09bmDE1x/LRdfg2wgZMDlbwFbzLN+hkfcgDZU+TUS1QaETgz0Sdbxx0pDFJ1j/NNvb68FJ7+RvMK1MSqZEQTLvwFAJquXlPY5VoqJFy4ihdUbwBiob7weShGieCwEAAA=="
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendApiGatewayStack/CDKMetadata/Default"
+   },
+   "Condition": "CDKMetadataAvailable"
+  }
+ },
+ "Outputs": {
+  "VRPBackendApiEndpoint57BCFC5C": {
+   "Value": {
+    "Fn::Join": [
+     "",
+     [
+      "https://",
+      {
+       "Ref": "VRPBackendApiAE313B9D"
+      },
+      ".execute-api.",
+      {
+       "Ref": "AWS::Region"
+      },
+      ".",
+      {
+       "Ref": "AWS::URLSuffix"
+      },
+      "/",
+      {
+       "Ref": "VRPBackendApiDeploymentStageprod130BDF60"
+      },
+      "/"
+     ]
+    ]
+   }
+  },
+  "VRPBackendApiUrl": {
+   "Description": "The URL for the VRP Backend API",
+   "Value": {
+    "Fn::Join": [
+     "",
+     [
+      "https://",
+      {
+       "Ref": "VRPBackendApiAE313B9D"
+      },
+      ".execute-api.",
+      {
+       "Ref": "AWS::Region"
+      },
+      ".",
+      {
+       "Ref": "AWS::URLSuffix"
+      },
+      "/",
+      {
+       "Ref": "VRPBackendApiDeploymentStageprod130BDF60"
+      },
+      "/"
+     ]
+    ]
+   }
+  }
+ },
+ "Conditions": {
+  "CDKMetadataAvailable": {
+   "Fn::Or": [
+    {
+     "Fn::Or": [
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "af-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-east-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-northeast-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-northeast-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-northeast-3"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-south-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-southeast-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-southeast-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-southeast-3"
+       ]
+      }
+     ]
+    },
+    {
+     "Fn::Or": [
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-southeast-4"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ca-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ca-west-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "cn-north-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "cn-northwest-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-central-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-north-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-south-2"
+       ]
+      }
+     ]
+    },
+    {
+     "Fn::Or": [
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-west-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-west-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-west-3"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "il-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "me-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "me-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "sa-east-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-east-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-east-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-west-1"
+       ]
+      }
+     ]
+    },
+    {
+     "Fn::Equals": [
+      {
+       "Ref": "AWS::Region"
+      },
+      "us-west-2"
+     ]
+    }
+   ]
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}

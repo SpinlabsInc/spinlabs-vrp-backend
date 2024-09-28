@@ -1,0 +1,3988 @@
+{
+  "version": "tree-0.1",
+  "tree": {
+    "id": "App",
+    "path": "",
+    "children": {
+      "VRPBackendCoreInfrastructureStack": {
+        "id": "VRPBackendCoreInfrastructureStack",
+        "path": "VRPBackendCoreInfrastructureStack",
+        "children": {
+          "VRPBackendVPC": {
+            "id": "VRPBackendVPC",
+            "path": "VRPBackendCoreInfrastructureStack/VRPBackendVPC",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "VRPBackendCoreInfrastructureStack/VRPBackendVPC/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::EC2::VPC",
+                  "aws:cdk:cloudformation:props": {
+                    "cidrBlock": "10.0.0.0/16",
+                    "enableDnsHostnames": true,
+                    "enableDnsSupport": true,
+                    "instanceTenancy": "default",
+                    "tags": [
+                      {
+                        "key": "Name",
+                        "value": "VRPBackendCoreInfrastructureStack/VRPBackendVPC"
+                      }
+                    ]
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_ec2.CfnVPC",
+                  "version": "2.158.0"
+                }
+              },
+              "PublicSubnet1": {
+                "id": "PublicSubnet1",
+                "path": "VRPBackendCoreInfrastructureStack/VRPBackendVPC/PublicSubnet1",
+                "children": {
+                  "Subnet": {
+                    "id": "Subnet",
+                    "path": "VRPBackendCoreInfrastructureStack/VRPBackendVPC/PublicSubnet1/Subnet",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::Subnet",
+                      "aws:cdk:cloudformation:props": {
+                        "availabilityZone": {
+                          "Fn::Select": [
+                            0,
+                            {
+                              "Fn::GetAZs": ""
+                            }
+                          ]
+                        },
+                        "cidrBlock": "10.0.0.0/18",
+                        "mapPublicIpOnLaunch": true,
+                        "tags": [
+                          {
+                            "key": "aws-cdk:subnet-name",
+                            "value": "Public"
+                          },
+                          {
+                            "key": "aws-cdk:subnet-type",
+                            "value": "Public"
+                          },
+                          {
+                            "key": "Name",
+                            "value": "VRPBackendCoreInfrastructureStack/VRPBackendVPC/PublicSubnet1"
+                          }
+                        ],
+                        "vpcId": {
+                          "Ref": "VRPBackendVPC60C6D0EE"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.CfnSubnet",
+                      "version": "2.158.0"
+                    }
+                  },
+                  "Acl": {
+                    "id": "Acl",
+                    "path": "VRPBackendCoreInfrastructureStack/VRPBackendVPC/PublicSubnet1/Acl",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.Resource",
+                      "version": "2.158.0"
+                    }
+                  },
+                  "RouteTable": {
+                    "id": "RouteTable",
+                    "path": "VRPBackendCoreInfrastructureStack/VRPBackendVPC/PublicSubnet1/RouteTable",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::RouteTable",
+                      "aws:cdk:cloudformation:props": {
+                        "tags": [
+                          {
+                            "key": "Name",
+                            "value": "VRPBackendCoreInfrastructureStack/VRPBackendVPC/PublicSubnet1"
+                          }
+                        ],
+                        "vpcId": {
+                          "Ref": "VRPBackendVPC60C6D0EE"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.CfnRouteTable",
+                      "version": "2.158.0"
+                    }
+                  },
+                  "RouteTableAssociation": {
+                    "id": "RouteTableAssociation",
+                    "path": "VRPBackendCoreInfrastructureStack/VRPBackendVPC/PublicSubnet1/RouteTableAssociation",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::SubnetRouteTableAssociation",
+                      "aws:cdk:cloudformation:props": {
+                        "routeTableId": {
+                          "Ref": "VRPBackendVPCPublicSubnet1RouteTable971CFB64"
+                        },
+                        "subnetId": {
+                          "Ref": "VRPBackendVPCPublicSubnet1SubnetFF176F3E"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.CfnSubnetRouteTableAssociation",
+                      "version": "2.158.0"
+                    }
+                  },
+                  "DefaultRoute": {
+                    "id": "DefaultRoute",
+                    "path": "VRPBackendCoreInfrastructureStack/VRPBackendVPC/PublicSubnet1/DefaultRoute",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::Route",
+                      "aws:cdk:cloudformation:props": {
+                        "destinationCidrBlock": "0.0.0.0/0",
+                        "gatewayId": {
+                          "Ref": "VRPBackendVPCIGWDC5E8A67"
+                        },
+                        "routeTableId": {
+                          "Ref": "VRPBackendVPCPublicSubnet1RouteTable971CFB64"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.CfnRoute",
+                      "version": "2.158.0"
+                    }
+                  },
+                  "EIP": {
+                    "id": "EIP",
+                    "path": "VRPBackendCoreInfrastructureStack/VRPBackendVPC/PublicSubnet1/EIP",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::EIP",
+                      "aws:cdk:cloudformation:props": {
+                        "domain": "vpc",
+                        "tags": [
+                          {
+                            "key": "Name",
+                            "value": "VRPBackendCoreInfrastructureStack/VRPBackendVPC/PublicSubnet1"
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.CfnEIP",
+                      "version": "2.158.0"
+                    }
+                  },
+                  "NATGateway": {
+                    "id": "NATGateway",
+                    "path": "VRPBackendCoreInfrastructureStack/VRPBackendVPC/PublicSubnet1/NATGateway",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::NatGateway",
+                      "aws:cdk:cloudformation:props": {
+                        "allocationId": {
+                          "Fn::GetAtt": [
+                            "VRPBackendVPCPublicSubnet1EIP7054F877",
+                            "AllocationId"
+                          ]
+                        },
+                        "subnetId": {
+                          "Ref": "VRPBackendVPCPublicSubnet1SubnetFF176F3E"
+                        },
+                        "tags": [
+                          {
+                            "key": "Name",
+                            "value": "VRPBackendCoreInfrastructureStack/VRPBackendVPC/PublicSubnet1"
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.CfnNatGateway",
+                      "version": "2.158.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_ec2.PublicSubnet",
+                  "version": "2.158.0"
+                }
+              },
+              "PublicSubnet2": {
+                "id": "PublicSubnet2",
+                "path": "VRPBackendCoreInfrastructureStack/VRPBackendVPC/PublicSubnet2",
+                "children": {
+                  "Subnet": {
+                    "id": "Subnet",
+                    "path": "VRPBackendCoreInfrastructureStack/VRPBackendVPC/PublicSubnet2/Subnet",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::Subnet",
+                      "aws:cdk:cloudformation:props": {
+                        "availabilityZone": {
+                          "Fn::Select": [
+                            1,
+                            {
+                              "Fn::GetAZs": ""
+                            }
+                          ]
+                        },
+                        "cidrBlock": "10.0.64.0/18",
+                        "mapPublicIpOnLaunch": true,
+                        "tags": [
+                          {
+                            "key": "aws-cdk:subnet-name",
+                            "value": "Public"
+                          },
+                          {
+                            "key": "aws-cdk:subnet-type",
+                            "value": "Public"
+                          },
+                          {
+                            "key": "Name",
+                            "value": "VRPBackendCoreInfrastructureStack/VRPBackendVPC/PublicSubnet2"
+                          }
+                        ],
+                        "vpcId": {
+                          "Ref": "VRPBackendVPC60C6D0EE"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.CfnSubnet",
+                      "version": "2.158.0"
+                    }
+                  },
+                  "Acl": {
+                    "id": "Acl",
+                    "path": "VRPBackendCoreInfrastructureStack/VRPBackendVPC/PublicSubnet2/Acl",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.Resource",
+                      "version": "2.158.0"
+                    }
+                  },
+                  "RouteTable": {
+                    "id": "RouteTable",
+                    "path": "VRPBackendCoreInfrastructureStack/VRPBackendVPC/PublicSubnet2/RouteTable",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::RouteTable",
+                      "aws:cdk:cloudformation:props": {
+                        "tags": [
+                          {
+                            "key": "Name",
+                            "value": "VRPBackendCoreInfrastructureStack/VRPBackendVPC/PublicSubnet2"
+                          }
+                        ],
+                        "vpcId": {
+                          "Ref": "VRPBackendVPC60C6D0EE"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.CfnRouteTable",
+                      "version": "2.158.0"
+                    }
+                  },
+                  "RouteTableAssociation": {
+                    "id": "RouteTableAssociation",
+                    "path": "VRPBackendCoreInfrastructureStack/VRPBackendVPC/PublicSubnet2/RouteTableAssociation",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::SubnetRouteTableAssociation",
+                      "aws:cdk:cloudformation:props": {
+                        "routeTableId": {
+                          "Ref": "VRPBackendVPCPublicSubnet2RouteTable3E0D8FE5"
+                        },
+                        "subnetId": {
+                          "Ref": "VRPBackendVPCPublicSubnet2Subnet8CF671C6"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.CfnSubnetRouteTableAssociation",
+                      "version": "2.158.0"
+                    }
+                  },
+                  "DefaultRoute": {
+                    "id": "DefaultRoute",
+                    "path": "VRPBackendCoreInfrastructureStack/VRPBackendVPC/PublicSubnet2/DefaultRoute",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::Route",
+                      "aws:cdk:cloudformation:props": {
+                        "destinationCidrBlock": "0.0.0.0/0",
+                        "gatewayId": {
+                          "Ref": "VRPBackendVPCIGWDC5E8A67"
+                        },
+                        "routeTableId": {
+                          "Ref": "VRPBackendVPCPublicSubnet2RouteTable3E0D8FE5"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.CfnRoute",
+                      "version": "2.158.0"
+                    }
+                  },
+                  "EIP": {
+                    "id": "EIP",
+                    "path": "VRPBackendCoreInfrastructureStack/VRPBackendVPC/PublicSubnet2/EIP",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::EIP",
+                      "aws:cdk:cloudformation:props": {
+                        "domain": "vpc",
+                        "tags": [
+                          {
+                            "key": "Name",
+                            "value": "VRPBackendCoreInfrastructureStack/VRPBackendVPC/PublicSubnet2"
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.CfnEIP",
+                      "version": "2.158.0"
+                    }
+                  },
+                  "NATGateway": {
+                    "id": "NATGateway",
+                    "path": "VRPBackendCoreInfrastructureStack/VRPBackendVPC/PublicSubnet2/NATGateway",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::NatGateway",
+                      "aws:cdk:cloudformation:props": {
+                        "allocationId": {
+                          "Fn::GetAtt": [
+                            "VRPBackendVPCPublicSubnet2EIP30638439",
+                            "AllocationId"
+                          ]
+                        },
+                        "subnetId": {
+                          "Ref": "VRPBackendVPCPublicSubnet2Subnet8CF671C6"
+                        },
+                        "tags": [
+                          {
+                            "key": "Name",
+                            "value": "VRPBackendCoreInfrastructureStack/VRPBackendVPC/PublicSubnet2"
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.CfnNatGateway",
+                      "version": "2.158.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_ec2.PublicSubnet",
+                  "version": "2.158.0"
+                }
+              },
+              "PrivateSubnet1": {
+                "id": "PrivateSubnet1",
+                "path": "VRPBackendCoreInfrastructureStack/VRPBackendVPC/PrivateSubnet1",
+                "children": {
+                  "Subnet": {
+                    "id": "Subnet",
+                    "path": "VRPBackendCoreInfrastructureStack/VRPBackendVPC/PrivateSubnet1/Subnet",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::Subnet",
+                      "aws:cdk:cloudformation:props": {
+                        "availabilityZone": {
+                          "Fn::Select": [
+                            0,
+                            {
+                              "Fn::GetAZs": ""
+                            }
+                          ]
+                        },
+                        "cidrBlock": "10.0.128.0/18",
+                        "mapPublicIpOnLaunch": false,
+                        "tags": [
+                          {
+                            "key": "aws-cdk:subnet-name",
+                            "value": "Private"
+                          },
+                          {
+                            "key": "aws-cdk:subnet-type",
+                            "value": "Private"
+                          },
+                          {
+                            "key": "Name",
+                            "value": "VRPBackendCoreInfrastructureStack/VRPBackendVPC/PrivateSubnet1"
+                          }
+                        ],
+                        "vpcId": {
+                          "Ref": "VRPBackendVPC60C6D0EE"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.CfnSubnet",
+                      "version": "2.158.0"
+                    }
+                  },
+                  "Acl": {
+                    "id": "Acl",
+                    "path": "VRPBackendCoreInfrastructureStack/VRPBackendVPC/PrivateSubnet1/Acl",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.Resource",
+                      "version": "2.158.0"
+                    }
+                  },
+                  "RouteTable": {
+                    "id": "RouteTable",
+                    "path": "VRPBackendCoreInfrastructureStack/VRPBackendVPC/PrivateSubnet1/RouteTable",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::RouteTable",
+                      "aws:cdk:cloudformation:props": {
+                        "tags": [
+                          {
+                            "key": "Name",
+                            "value": "VRPBackendCoreInfrastructureStack/VRPBackendVPC/PrivateSubnet1"
+                          }
+                        ],
+                        "vpcId": {
+                          "Ref": "VRPBackendVPC60C6D0EE"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.CfnRouteTable",
+                      "version": "2.158.0"
+                    }
+                  },
+                  "RouteTableAssociation": {
+                    "id": "RouteTableAssociation",
+                    "path": "VRPBackendCoreInfrastructureStack/VRPBackendVPC/PrivateSubnet1/RouteTableAssociation",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::SubnetRouteTableAssociation",
+                      "aws:cdk:cloudformation:props": {
+                        "routeTableId": {
+                          "Ref": "VRPBackendVPCPrivateSubnet1RouteTable490F94BA"
+                        },
+                        "subnetId": {
+                          "Ref": "VRPBackendVPCPrivateSubnet1Subnet8C465972"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.CfnSubnetRouteTableAssociation",
+                      "version": "2.158.0"
+                    }
+                  },
+                  "DefaultRoute": {
+                    "id": "DefaultRoute",
+                    "path": "VRPBackendCoreInfrastructureStack/VRPBackendVPC/PrivateSubnet1/DefaultRoute",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::Route",
+                      "aws:cdk:cloudformation:props": {
+                        "destinationCidrBlock": "0.0.0.0/0",
+                        "natGatewayId": {
+                          "Ref": "VRPBackendVPCPublicSubnet1NATGateway1B4D1F3F"
+                        },
+                        "routeTableId": {
+                          "Ref": "VRPBackendVPCPrivateSubnet1RouteTable490F94BA"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.CfnRoute",
+                      "version": "2.158.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_ec2.PrivateSubnet",
+                  "version": "2.158.0"
+                }
+              },
+              "PrivateSubnet2": {
+                "id": "PrivateSubnet2",
+                "path": "VRPBackendCoreInfrastructureStack/VRPBackendVPC/PrivateSubnet2",
+                "children": {
+                  "Subnet": {
+                    "id": "Subnet",
+                    "path": "VRPBackendCoreInfrastructureStack/VRPBackendVPC/PrivateSubnet2/Subnet",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::Subnet",
+                      "aws:cdk:cloudformation:props": {
+                        "availabilityZone": {
+                          "Fn::Select": [
+                            1,
+                            {
+                              "Fn::GetAZs": ""
+                            }
+                          ]
+                        },
+                        "cidrBlock": "10.0.192.0/18",
+                        "mapPublicIpOnLaunch": false,
+                        "tags": [
+                          {
+                            "key": "aws-cdk:subnet-name",
+                            "value": "Private"
+                          },
+                          {
+                            "key": "aws-cdk:subnet-type",
+                            "value": "Private"
+                          },
+                          {
+                            "key": "Name",
+                            "value": "VRPBackendCoreInfrastructureStack/VRPBackendVPC/PrivateSubnet2"
+                          }
+                        ],
+                        "vpcId": {
+                          "Ref": "VRPBackendVPC60C6D0EE"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.CfnSubnet",
+                      "version": "2.158.0"
+                    }
+                  },
+                  "Acl": {
+                    "id": "Acl",
+                    "path": "VRPBackendCoreInfrastructureStack/VRPBackendVPC/PrivateSubnet2/Acl",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.Resource",
+                      "version": "2.158.0"
+                    }
+                  },
+                  "RouteTable": {
+                    "id": "RouteTable",
+                    "path": "VRPBackendCoreInfrastructureStack/VRPBackendVPC/PrivateSubnet2/RouteTable",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::RouteTable",
+                      "aws:cdk:cloudformation:props": {
+                        "tags": [
+                          {
+                            "key": "Name",
+                            "value": "VRPBackendCoreInfrastructureStack/VRPBackendVPC/PrivateSubnet2"
+                          }
+                        ],
+                        "vpcId": {
+                          "Ref": "VRPBackendVPC60C6D0EE"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.CfnRouteTable",
+                      "version": "2.158.0"
+                    }
+                  },
+                  "RouteTableAssociation": {
+                    "id": "RouteTableAssociation",
+                    "path": "VRPBackendCoreInfrastructureStack/VRPBackendVPC/PrivateSubnet2/RouteTableAssociation",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::SubnetRouteTableAssociation",
+                      "aws:cdk:cloudformation:props": {
+                        "routeTableId": {
+                          "Ref": "VRPBackendVPCPrivateSubnet2RouteTable9C826CA3"
+                        },
+                        "subnetId": {
+                          "Ref": "VRPBackendVPCPrivateSubnet2Subnet5AAFB2AF"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.CfnSubnetRouteTableAssociation",
+                      "version": "2.158.0"
+                    }
+                  },
+                  "DefaultRoute": {
+                    "id": "DefaultRoute",
+                    "path": "VRPBackendCoreInfrastructureStack/VRPBackendVPC/PrivateSubnet2/DefaultRoute",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::Route",
+                      "aws:cdk:cloudformation:props": {
+                        "destinationCidrBlock": "0.0.0.0/0",
+                        "natGatewayId": {
+                          "Ref": "VRPBackendVPCPublicSubnet2NATGateway3B7C5A58"
+                        },
+                        "routeTableId": {
+                          "Ref": "VRPBackendVPCPrivateSubnet2RouteTable9C826CA3"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.CfnRoute",
+                      "version": "2.158.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_ec2.PrivateSubnet",
+                  "version": "2.158.0"
+                }
+              },
+              "IGW": {
+                "id": "IGW",
+                "path": "VRPBackendCoreInfrastructureStack/VRPBackendVPC/IGW",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::EC2::InternetGateway",
+                  "aws:cdk:cloudformation:props": {
+                    "tags": [
+                      {
+                        "key": "Name",
+                        "value": "VRPBackendCoreInfrastructureStack/VRPBackendVPC"
+                      }
+                    ]
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_ec2.CfnInternetGateway",
+                  "version": "2.158.0"
+                }
+              },
+              "VPCGW": {
+                "id": "VPCGW",
+                "path": "VRPBackendCoreInfrastructureStack/VRPBackendVPC/VPCGW",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::EC2::VPCGatewayAttachment",
+                  "aws:cdk:cloudformation:props": {
+                    "internetGatewayId": {
+                      "Ref": "VRPBackendVPCIGWDC5E8A67"
+                    },
+                    "vpcId": {
+                      "Ref": "VRPBackendVPC60C6D0EE"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_ec2.CfnVPCGatewayAttachment",
+                  "version": "2.158.0"
+                }
+              },
+              "RestrictDefaultSecurityGroupCustomResource": {
+                "id": "RestrictDefaultSecurityGroupCustomResource",
+                "path": "VRPBackendCoreInfrastructureStack/VRPBackendVPC/RestrictDefaultSecurityGroupCustomResource",
+                "children": {
+                  "Default": {
+                    "id": "Default",
+                    "path": "VRPBackendCoreInfrastructureStack/VRPBackendVPC/RestrictDefaultSecurityGroupCustomResource/Default",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.CfnResource",
+                      "version": "2.158.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CustomResource",
+                  "version": "2.158.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_ec2.Vpc",
+              "version": "2.158.0"
+            }
+          },
+          "LatestNodeRuntimeMap": {
+            "id": "LatestNodeRuntimeMap",
+            "path": "VRPBackendCoreInfrastructureStack/LatestNodeRuntimeMap",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnMapping",
+              "version": "2.158.0"
+            }
+          },
+          "Custom::VpcRestrictDefaultSGCustomResourceProvider": {
+            "id": "Custom::VpcRestrictDefaultSGCustomResourceProvider",
+            "path": "VRPBackendCoreInfrastructureStack/Custom::VpcRestrictDefaultSGCustomResourceProvider",
+            "children": {
+              "Staging": {
+                "id": "Staging",
+                "path": "VRPBackendCoreInfrastructureStack/Custom::VpcRestrictDefaultSGCustomResourceProvider/Staging",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.AssetStaging",
+                  "version": "2.158.0"
+                }
+              },
+              "Role": {
+                "id": "Role",
+                "path": "VRPBackendCoreInfrastructureStack/Custom::VpcRestrictDefaultSGCustomResourceProvider/Role",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnResource",
+                  "version": "2.158.0"
+                }
+              },
+              "Handler": {
+                "id": "Handler",
+                "path": "VRPBackendCoreInfrastructureStack/Custom::VpcRestrictDefaultSGCustomResourceProvider/Handler",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnResource",
+                  "version": "2.158.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CustomResourceProviderBase",
+              "version": "2.158.0"
+            }
+          },
+          "VRPBackendRepo": {
+            "id": "VRPBackendRepo",
+            "path": "VRPBackendCoreInfrastructureStack/VRPBackendRepo",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "VRPBackendCoreInfrastructureStack/VRPBackendRepo/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::ECR::Repository",
+                  "aws:cdk:cloudformation:props": {
+                    "repositoryName": "vrp-backend-repo"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_ecr.CfnRepository",
+                  "version": "2.158.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_ecr.Repository",
+              "version": "2.158.0"
+            }
+          },
+          "VRPBackendCluster": {
+            "id": "VRPBackendCluster",
+            "path": "VRPBackendCoreInfrastructureStack/VRPBackendCluster",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "VRPBackendCoreInfrastructureStack/VRPBackendCluster/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::ECS::Cluster",
+                  "aws:cdk:cloudformation:props": {
+                    "clusterName": "vrp-backend-cluster"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_ecs.CfnCluster",
+                  "version": "2.158.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_ecs.Cluster",
+              "version": "2.158.0"
+            }
+          },
+          "VRPBackendALB": {
+            "id": "VRPBackendALB",
+            "path": "VRPBackendCoreInfrastructureStack/VRPBackendALB",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "VRPBackendCoreInfrastructureStack/VRPBackendALB/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
+                  "aws:cdk:cloudformation:props": {
+                    "loadBalancerAttributes": [
+                      {
+                        "key": "deletion_protection.enabled",
+                        "value": "false"
+                      }
+                    ],
+                    "scheme": "internet-facing",
+                    "securityGroups": [
+                      {
+                        "Fn::GetAtt": [
+                          "VRPBackendALBSecurityGroup392B001B",
+                          "GroupId"
+                        ]
+                      }
+                    ],
+                    "subnets": [
+                      {
+                        "Ref": "VRPBackendVPCPublicSubnet1SubnetFF176F3E"
+                      },
+                      {
+                        "Ref": "VRPBackendVPCPublicSubnet2Subnet8CF671C6"
+                      }
+                    ],
+                    "type": "application"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_elasticloadbalancingv2.CfnLoadBalancer",
+                  "version": "2.158.0"
+                }
+              },
+              "SecurityGroup": {
+                "id": "SecurityGroup",
+                "path": "VRPBackendCoreInfrastructureStack/VRPBackendALB/SecurityGroup",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "VRPBackendCoreInfrastructureStack/VRPBackendALB/SecurityGroup/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::SecurityGroup",
+                      "aws:cdk:cloudformation:props": {
+                        "groupDescription": "Automatically created Security Group for ELB VRPBackendCoreInfrastructureStackVRPBackendALBCD178028",
+                        "securityGroupEgress": [
+                          {
+                            "cidrIp": "255.255.255.255/32",
+                            "description": "Disallow all traffic",
+                            "ipProtocol": "icmp",
+                            "fromPort": 252,
+                            "toPort": 86
+                          }
+                        ],
+                        "vpcId": {
+                          "Ref": "VRPBackendVPC60C6D0EE"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.CfnSecurityGroup",
+                      "version": "2.158.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_ec2.SecurityGroup",
+                  "version": "2.158.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_elasticloadbalancingv2.ApplicationLoadBalancer",
+              "version": "2.158.0"
+            }
+          },
+          "VRPBackendAlbSecurityGroup": {
+            "id": "VRPBackendAlbSecurityGroup",
+            "path": "VRPBackendCoreInfrastructureStack/VRPBackendAlbSecurityGroup",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "VRPBackendCoreInfrastructureStack/VRPBackendAlbSecurityGroup/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::EC2::SecurityGroup",
+                  "aws:cdk:cloudformation:props": {
+                    "groupDescription": "Security group for the VRPBackend ALB",
+                    "securityGroupEgress": [
+                      {
+                        "cidrIp": "0.0.0.0/0",
+                        "description": "Allow all outbound traffic by default",
+                        "ipProtocol": "-1"
+                      }
+                    ],
+                    "securityGroupIngress": [
+                      {
+                        "cidrIp": "0.0.0.0/0",
+                        "ipProtocol": "tcp",
+                        "fromPort": 80,
+                        "toPort": 80,
+                        "description": "from 0.0.0.0/0:80"
+                      }
+                    ],
+                    "vpcId": {
+                      "Ref": "VRPBackendVPC60C6D0EE"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_ec2.CfnSecurityGroup",
+                  "version": "2.158.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_ec2.SecurityGroup",
+              "version": "2.158.0"
+            }
+          },
+          "VRPDataTable": {
+            "id": "VRPDataTable",
+            "path": "VRPBackendCoreInfrastructureStack/VRPDataTable",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "VRPBackendCoreInfrastructureStack/VRPDataTable/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::DynamoDB::Table",
+                  "aws:cdk:cloudformation:props": {
+                    "attributeDefinitions": [
+                      {
+                        "attributeName": "id",
+                        "attributeType": "S"
+                      }
+                    ],
+                    "billingMode": "PAY_PER_REQUEST",
+                    "keySchema": [
+                      {
+                        "attributeName": "id",
+                        "keyType": "HASH"
+                      }
+                    ]
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_dynamodb.CfnTable",
+                  "version": "2.158.0"
+                }
+              },
+              "ScalingRole": {
+                "id": "ScalingRole",
+                "path": "VRPBackendCoreInfrastructureStack/VRPDataTable/ScalingRole",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.Resource",
+                  "version": "2.158.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_dynamodb.Table",
+              "version": "2.158.0"
+            }
+          },
+          "VRPSolutionsBucket": {
+            "id": "VRPSolutionsBucket",
+            "path": "VRPBackendCoreInfrastructureStack/VRPSolutionsBucket",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "VRPBackendCoreInfrastructureStack/VRPSolutionsBucket/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::S3::Bucket",
+                  "aws:cdk:cloudformation:props": {
+                    "bucketEncryption": {
+                      "serverSideEncryptionConfiguration": [
+                        {
+                          "serverSideEncryptionByDefault": {
+                            "sseAlgorithm": "AES256"
+                          }
+                        }
+                      ]
+                    },
+                    "tags": [
+                      {
+                        "key": "aws-cdk:auto-delete-objects",
+                        "value": "true"
+                      }
+                    ],
+                    "versioningConfiguration": {
+                      "status": "Enabled"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_s3.CfnBucket",
+                  "version": "2.158.0"
+                }
+              },
+              "Policy": {
+                "id": "Policy",
+                "path": "VRPBackendCoreInfrastructureStack/VRPSolutionsBucket/Policy",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "VRPBackendCoreInfrastructureStack/VRPSolutionsBucket/Policy/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::S3::BucketPolicy",
+                      "aws:cdk:cloudformation:props": {
+                        "bucket": {
+                          "Ref": "VRPSolutionsBucket21695A78"
+                        },
+                        "policyDocument": {
+                          "Statement": [
+                            {
+                              "Action": [
+                                "s3:DeleteObject*",
+                                "s3:GetBucket*",
+                                "s3:List*",
+                                "s3:PutBucketPolicy"
+                              ],
+                              "Effect": "Allow",
+                              "Principal": {
+                                "AWS": {
+                                  "Fn::GetAtt": [
+                                    "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092",
+                                    "Arn"
+                                  ]
+                                }
+                              },
+                              "Resource": [
+                                {
+                                  "Fn::GetAtt": [
+                                    "VRPSolutionsBucket21695A78",
+                                    "Arn"
+                                  ]
+                                },
+                                {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      {
+                                        "Fn::GetAtt": [
+                                          "VRPSolutionsBucket21695A78",
+                                          "Arn"
+                                        ]
+                                      },
+                                      "/*"
+                                    ]
+                                  ]
+                                }
+                              ]
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_s3.CfnBucketPolicy",
+                      "version": "2.158.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_s3.BucketPolicy",
+                  "version": "2.158.0"
+                }
+              },
+              "AutoDeleteObjectsCustomResource": {
+                "id": "AutoDeleteObjectsCustomResource",
+                "path": "VRPBackendCoreInfrastructureStack/VRPSolutionsBucket/AutoDeleteObjectsCustomResource",
+                "children": {
+                  "Default": {
+                    "id": "Default",
+                    "path": "VRPBackendCoreInfrastructureStack/VRPSolutionsBucket/AutoDeleteObjectsCustomResource/Default",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.CfnResource",
+                      "version": "2.158.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CustomResource",
+                  "version": "2.158.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_s3.Bucket",
+              "version": "2.158.0"
+            }
+          },
+          "Custom::S3AutoDeleteObjectsCustomResourceProvider": {
+            "id": "Custom::S3AutoDeleteObjectsCustomResourceProvider",
+            "path": "VRPBackendCoreInfrastructureStack/Custom::S3AutoDeleteObjectsCustomResourceProvider",
+            "children": {
+              "Staging": {
+                "id": "Staging",
+                "path": "VRPBackendCoreInfrastructureStack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Staging",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.AssetStaging",
+                  "version": "2.158.0"
+                }
+              },
+              "Role": {
+                "id": "Role",
+                "path": "VRPBackendCoreInfrastructureStack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Role",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnResource",
+                  "version": "2.158.0"
+                }
+              },
+              "Handler": {
+                "id": "Handler",
+                "path": "VRPBackendCoreInfrastructureStack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Handler",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnResource",
+                  "version": "2.158.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CustomResourceProviderBase",
+              "version": "2.158.0"
+            }
+          },
+          "VRPBackendECRRepositoryUri": {
+            "id": "VRPBackendECRRepositoryUri",
+            "path": "VRPBackendCoreInfrastructureStack/VRPBackendECRRepositoryUri",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnOutput",
+              "version": "2.158.0"
+            }
+          },
+          "VRPBackendALBDNSName": {
+            "id": "VRPBackendALBDNSName",
+            "path": "VRPBackendCoreInfrastructureStack/VRPBackendALBDNSName",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnOutput",
+              "version": "2.158.0"
+            }
+          },
+          "VRPDataTableName": {
+            "id": "VRPDataTableName",
+            "path": "VRPBackendCoreInfrastructureStack/VRPDataTableName",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnOutput",
+              "version": "2.158.0"
+            }
+          },
+          "VRPSolutionsBucketName": {
+            "id": "VRPSolutionsBucketName",
+            "path": "VRPBackendCoreInfrastructureStack/VRPSolutionsBucketName",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnOutput",
+              "version": "2.158.0"
+            }
+          },
+          "CDKMetadata": {
+            "id": "CDKMetadata",
+            "path": "VRPBackendCoreInfrastructureStack/CDKMetadata",
+            "children": {
+              "Default": {
+                "id": "Default",
+                "path": "VRPBackendCoreInfrastructureStack/CDKMetadata/Default",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnResource",
+                  "version": "2.158.0"
+                }
+              },
+              "Condition": {
+                "id": "Condition",
+                "path": "VRPBackendCoreInfrastructureStack/CDKMetadata/Condition",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnCondition",
+                  "version": "2.158.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.3.0"
+            }
+          },
+          "Exports": {
+            "id": "Exports",
+            "path": "VRPBackendCoreInfrastructureStack/Exports",
+            "children": {
+              "Output{\"Ref\":\"VRPBackendVPCPublicSubnet1SubnetFF176F3E\"}": {
+                "id": "Output{\"Ref\":\"VRPBackendVPCPublicSubnet1SubnetFF176F3E\"}",
+                "path": "VRPBackendCoreInfrastructureStack/Exports/Output{\"Ref\":\"VRPBackendVPCPublicSubnet1SubnetFF176F3E\"}",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnOutput",
+                  "version": "2.158.0"
+                }
+              },
+              "Output{\"Ref\":\"VRPBackendVPCPublicSubnet2Subnet8CF671C6\"}": {
+                "id": "Output{\"Ref\":\"VRPBackendVPCPublicSubnet2Subnet8CF671C6\"}",
+                "path": "VRPBackendCoreInfrastructureStack/Exports/Output{\"Ref\":\"VRPBackendVPCPublicSubnet2Subnet8CF671C6\"}",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnOutput",
+                  "version": "2.158.0"
+                }
+              },
+              "Output{\"Ref\":\"VRPBackendVPC60C6D0EE\"}": {
+                "id": "Output{\"Ref\":\"VRPBackendVPC60C6D0EE\"}",
+                "path": "VRPBackendCoreInfrastructureStack/Exports/Output{\"Ref\":\"VRPBackendVPC60C6D0EE\"}",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnOutput",
+                  "version": "2.158.0"
+                }
+              },
+              "Output{\"Fn::GetAtt\":[\"VRPDataTable3E5097ED\",\"Arn\"]}": {
+                "id": "Output{\"Fn::GetAtt\":[\"VRPDataTable3E5097ED\",\"Arn\"]}",
+                "path": "VRPBackendCoreInfrastructureStack/Exports/Output{\"Fn::GetAtt\":[\"VRPDataTable3E5097ED\",\"Arn\"]}",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnOutput",
+                  "version": "2.158.0"
+                }
+              },
+              "Output{\"Fn::GetAtt\":[\"VRPSolutionsBucket21695A78\",\"Arn\"]}": {
+                "id": "Output{\"Fn::GetAtt\":[\"VRPSolutionsBucket21695A78\",\"Arn\"]}",
+                "path": "VRPBackendCoreInfrastructureStack/Exports/Output{\"Fn::GetAtt\":[\"VRPSolutionsBucket21695A78\",\"Arn\"]}",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnOutput",
+                  "version": "2.158.0"
+                }
+              },
+              "Output{\"Ref\":\"VRPDataTable3E5097ED\"}": {
+                "id": "Output{\"Ref\":\"VRPDataTable3E5097ED\"}",
+                "path": "VRPBackendCoreInfrastructureStack/Exports/Output{\"Ref\":\"VRPDataTable3E5097ED\"}",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnOutput",
+                  "version": "2.158.0"
+                }
+              },
+              "Output{\"Ref\":\"VRPSolutionsBucket21695A78\"}": {
+                "id": "Output{\"Ref\":\"VRPSolutionsBucket21695A78\"}",
+                "path": "VRPBackendCoreInfrastructureStack/Exports/Output{\"Ref\":\"VRPSolutionsBucket21695A78\"}",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnOutput",
+                  "version": "2.158.0"
+                }
+              },
+              "Output{\"Ref\":\"VRPBackendCluster2C6BD971\"}": {
+                "id": "Output{\"Ref\":\"VRPBackendCluster2C6BD971\"}",
+                "path": "VRPBackendCoreInfrastructureStack/Exports/Output{\"Ref\":\"VRPBackendCluster2C6BD971\"}",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnOutput",
+                  "version": "2.158.0"
+                }
+              },
+              "Output{\"Ref\":\"VRPBackendVPCPrivateSubnet1Subnet8C465972\"}": {
+                "id": "Output{\"Ref\":\"VRPBackendVPCPrivateSubnet1Subnet8C465972\"}",
+                "path": "VRPBackendCoreInfrastructureStack/Exports/Output{\"Ref\":\"VRPBackendVPCPrivateSubnet1Subnet8C465972\"}",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnOutput",
+                  "version": "2.158.0"
+                }
+              },
+              "Output{\"Ref\":\"VRPBackendVPCPrivateSubnet2Subnet5AAFB2AF\"}": {
+                "id": "Output{\"Ref\":\"VRPBackendVPCPrivateSubnet2Subnet5AAFB2AF\"}",
+                "path": "VRPBackendCoreInfrastructureStack/Exports/Output{\"Ref\":\"VRPBackendVPCPrivateSubnet2Subnet5AAFB2AF\"}",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnOutput",
+                  "version": "2.158.0"
+                }
+              },
+              "Output{\"Fn::GetAtt\":[\"VRPBackendRepo8233BB19\",\"Arn\"]}": {
+                "id": "Output{\"Fn::GetAtt\":[\"VRPBackendRepo8233BB19\",\"Arn\"]}",
+                "path": "VRPBackendCoreInfrastructureStack/Exports/Output{\"Fn::GetAtt\":[\"VRPBackendRepo8233BB19\",\"Arn\"]}",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnOutput",
+                  "version": "2.158.0"
+                }
+              },
+              "Output{\"Ref\":\"VRPBackendRepo8233BB19\"}": {
+                "id": "Output{\"Ref\":\"VRPBackendRepo8233BB19\"}",
+                "path": "VRPBackendCoreInfrastructureStack/Exports/Output{\"Ref\":\"VRPBackendRepo8233BB19\"}",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnOutput",
+                  "version": "2.158.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.3.0"
+            }
+          },
+          "BootstrapVersion": {
+            "id": "BootstrapVersion",
+            "path": "VRPBackendCoreInfrastructureStack/BootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnParameter",
+              "version": "2.158.0"
+            }
+          },
+          "CheckBootstrapVersion": {
+            "id": "CheckBootstrapVersion",
+            "path": "VRPBackendCoreInfrastructureStack/CheckBootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnRule",
+              "version": "2.158.0"
+            }
+          }
+        },
+        "constructInfo": {
+          "fqn": "aws-cdk-lib.Stack",
+          "version": "2.158.0"
+        }
+      },
+      "VRPBackendCognitoStack": {
+        "id": "VRPBackendCognitoStack",
+        "path": "VRPBackendCognitoStack",
+        "children": {
+          "VRPBackendUserPool": {
+            "id": "VRPBackendUserPool",
+            "path": "VRPBackendCognitoStack/VRPBackendUserPool",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "VRPBackendCognitoStack/VRPBackendUserPool/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Cognito::UserPool",
+                  "aws:cdk:cloudformation:props": {
+                    "accountRecoverySetting": {
+                      "recoveryMechanisms": [
+                        {
+                          "name": "verified_phone_number",
+                          "priority": 1
+                        },
+                        {
+                          "name": "verified_email",
+                          "priority": 2
+                        }
+                      ]
+                    },
+                    "adminCreateUserConfig": {
+                      "allowAdminCreateUserOnly": false
+                    },
+                    "autoVerifiedAttributes": [
+                      "email"
+                    ],
+                    "emailVerificationMessage": "The verification code to your new account is {####}",
+                    "emailVerificationSubject": "Verify your new account",
+                    "schema": [
+                      {
+                        "name": "email",
+                        "mutable": true,
+                        "required": true
+                      }
+                    ],
+                    "smsVerificationMessage": "The verification code to your new account is {####}",
+                    "usernameAttributes": [
+                      "email"
+                    ],
+                    "verificationMessageTemplate": {
+                      "defaultEmailOption": "CONFIRM_WITH_CODE",
+                      "emailMessage": "The verification code to your new account is {####}",
+                      "emailSubject": "Verify your new account",
+                      "smsMessage": "The verification code to your new account is {####}"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_cognito.CfnUserPool",
+                  "version": "2.158.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_cognito.UserPool",
+              "version": "2.158.0"
+            }
+          },
+          "UserPoolId": {
+            "id": "UserPoolId",
+            "path": "VRPBackendCognitoStack/UserPoolId",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnOutput",
+              "version": "2.158.0"
+            }
+          },
+          "CDKMetadata": {
+            "id": "CDKMetadata",
+            "path": "VRPBackendCognitoStack/CDKMetadata",
+            "children": {
+              "Default": {
+                "id": "Default",
+                "path": "VRPBackendCognitoStack/CDKMetadata/Default",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnResource",
+                  "version": "2.158.0"
+                }
+              },
+              "Condition": {
+                "id": "Condition",
+                "path": "VRPBackendCognitoStack/CDKMetadata/Condition",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnCondition",
+                  "version": "2.158.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.3.0"
+            }
+          },
+          "Exports": {
+            "id": "Exports",
+            "path": "VRPBackendCognitoStack/Exports",
+            "children": {
+              "Output{\"Fn::GetAtt\":[\"VRPBackendUserPool6E0C7F5C\",\"Arn\"]}": {
+                "id": "Output{\"Fn::GetAtt\":[\"VRPBackendUserPool6E0C7F5C\",\"Arn\"]}",
+                "path": "VRPBackendCognitoStack/Exports/Output{\"Fn::GetAtt\":[\"VRPBackendUserPool6E0C7F5C\",\"Arn\"]}",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnOutput",
+                  "version": "2.158.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.3.0"
+            }
+          },
+          "BootstrapVersion": {
+            "id": "BootstrapVersion",
+            "path": "VRPBackendCognitoStack/BootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnParameter",
+              "version": "2.158.0"
+            }
+          },
+          "CheckBootstrapVersion": {
+            "id": "CheckBootstrapVersion",
+            "path": "VRPBackendCognitoStack/CheckBootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnRule",
+              "version": "2.158.0"
+            }
+          }
+        },
+        "constructInfo": {
+          "fqn": "aws-cdk-lib.Stack",
+          "version": "2.158.0"
+        }
+      },
+      "VRPBackendApiGatewayStack": {
+        "id": "VRPBackendApiGatewayStack",
+        "path": "VRPBackendApiGatewayStack",
+        "children": {
+          "VRPBackendApi": {
+            "id": "VRPBackendApi",
+            "path": "VRPBackendApiGatewayStack/VRPBackendApi",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "VRPBackendApiGatewayStack/VRPBackendApi/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::ApiGateway::RestApi",
+                  "aws:cdk:cloudformation:props": {
+                    "description": "This service serves VRP backend.",
+                    "name": "VRP Backend Service"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_apigateway.CfnRestApi",
+                  "version": "2.158.0"
+                }
+              },
+              "Deployment": {
+                "id": "Deployment",
+                "path": "VRPBackendApiGatewayStack/VRPBackendApi/Deployment",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "VRPBackendApiGatewayStack/VRPBackendApi/Deployment/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::ApiGateway::Deployment",
+                      "aws:cdk:cloudformation:props": {
+                        "description": "This service serves VRP backend.",
+                        "restApiId": {
+                          "Ref": "VRPBackendApiAE313B9D"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_apigateway.CfnDeployment",
+                      "version": "2.158.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_apigateway.Deployment",
+                  "version": "2.158.0"
+                }
+              },
+              "DeploymentStage.prod": {
+                "id": "DeploymentStage.prod",
+                "path": "VRPBackendApiGatewayStack/VRPBackendApi/DeploymentStage.prod",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "VRPBackendApiGatewayStack/VRPBackendApi/DeploymentStage.prod/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::ApiGateway::Stage",
+                      "aws:cdk:cloudformation:props": {
+                        "deploymentId": {
+                          "Ref": "VRPBackendApiDeployment085943EB517e57d2093a8f8ddb5ad7b5da181f40"
+                        },
+                        "restApiId": {
+                          "Ref": "VRPBackendApiAE313B9D"
+                        },
+                        "stageName": "prod"
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_apigateway.CfnStage",
+                      "version": "2.158.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_apigateway.Stage",
+                  "version": "2.158.0"
+                }
+              },
+              "Endpoint": {
+                "id": "Endpoint",
+                "path": "VRPBackendApiGatewayStack/VRPBackendApi/Endpoint",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnOutput",
+                  "version": "2.158.0"
+                }
+              },
+              "Default": {
+                "id": "Default",
+                "path": "VRPBackendApiGatewayStack/VRPBackendApi/Default",
+                "children": {
+                  "{proxy+}": {
+                    "id": "{proxy+}",
+                    "path": "VRPBackendApiGatewayStack/VRPBackendApi/Default/{proxy+}",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "VRPBackendApiGatewayStack/VRPBackendApi/Default/{proxy+}/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::ApiGateway::Resource",
+                          "aws:cdk:cloudformation:props": {
+                            "parentId": {
+                              "Fn::GetAtt": [
+                                "VRPBackendApiAE313B9D",
+                                "RootResourceId"
+                              ]
+                            },
+                            "pathPart": "{proxy+}",
+                            "restApiId": {
+                              "Ref": "VRPBackendApiAE313B9D"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_apigateway.CfnResource",
+                          "version": "2.158.0"
+                        }
+                      },
+                      "ANY": {
+                        "id": "ANY",
+                        "path": "VRPBackendApiGatewayStack/VRPBackendApi/Default/{proxy+}/ANY",
+                        "children": {
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "VRPBackendApiGatewayStack/VRPBackendApi/Default/{proxy+}/ANY/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::ApiGateway::Method",
+                              "aws:cdk:cloudformation:props": {
+                                "authorizationType": "COGNITO_USER_POOLS",
+                                "authorizerId": {
+                                  "Ref": "VRPBackendApiAuthorizerD10F9C9E"
+                                },
+                                "httpMethod": "ANY",
+                                "integration": {
+                                  "type": "MOCK"
+                                },
+                                "resourceId": {
+                                  "Ref": "VRPBackendApiproxy1AB1CC72"
+                                },
+                                "restApiId": {
+                                  "Ref": "VRPBackendApiAE313B9D"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_apigateway.CfnMethod",
+                              "version": "2.158.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_apigateway.Method",
+                          "version": "2.158.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_apigateway.Resource",
+                      "version": "2.158.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_apigateway.ResourceBase",
+                  "version": "2.158.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_apigateway.RestApi",
+              "version": "2.158.0"
+            }
+          },
+          "VRPBackendApiAuthorizer": {
+            "id": "VRPBackendApiAuthorizer",
+            "path": "VRPBackendApiGatewayStack/VRPBackendApiAuthorizer",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "VRPBackendApiGatewayStack/VRPBackendApiAuthorizer/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::ApiGateway::Authorizer",
+                  "aws:cdk:cloudformation:props": {
+                    "identitySource": "method.request.header.Authorization",
+                    "name": "VRPBackendApiGatewayStackVRPBackendApiAuthorizer54C27242",
+                    "providerArns": [
+                      {
+                        "Fn::ImportValue": "VRPBackendCognitoStack:ExportsOutputFnGetAttVRPBackendUserPool6E0C7F5CArn7645F585"
+                      }
+                    ],
+                    "restApiId": {
+                      "Ref": "VRPBackendApiAE313B9D"
+                    },
+                    "type": "COGNITO_USER_POOLS"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_apigateway.CfnAuthorizer",
+                  "version": "2.158.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_apigateway.CognitoUserPoolsAuthorizer",
+              "version": "2.158.0"
+            }
+          },
+          "VRPBackendApiUrl": {
+            "id": "VRPBackendApiUrl",
+            "path": "VRPBackendApiGatewayStack/VRPBackendApiUrl",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnOutput",
+              "version": "2.158.0"
+            }
+          },
+          "CDKMetadata": {
+            "id": "CDKMetadata",
+            "path": "VRPBackendApiGatewayStack/CDKMetadata",
+            "children": {
+              "Default": {
+                "id": "Default",
+                "path": "VRPBackendApiGatewayStack/CDKMetadata/Default",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnResource",
+                  "version": "2.158.0"
+                }
+              },
+              "Condition": {
+                "id": "Condition",
+                "path": "VRPBackendApiGatewayStack/CDKMetadata/Condition",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnCondition",
+                  "version": "2.158.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.3.0"
+            }
+          },
+          "BootstrapVersion": {
+            "id": "BootstrapVersion",
+            "path": "VRPBackendApiGatewayStack/BootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnParameter",
+              "version": "2.158.0"
+            }
+          },
+          "CheckBootstrapVersion": {
+            "id": "CheckBootstrapVersion",
+            "path": "VRPBackendApiGatewayStack/CheckBootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnRule",
+              "version": "2.158.0"
+            }
+          }
+        },
+        "constructInfo": {
+          "fqn": "aws-cdk-lib.Stack",
+          "version": "2.158.0"
+        }
+      },
+      "VRPBackendEcsServiceStack": {
+        "id": "VRPBackendEcsServiceStack",
+        "path": "VRPBackendEcsServiceStack",
+        "children": {
+          "VRPBackendFargateService": {
+            "id": "VRPBackendFargateService",
+            "path": "VRPBackendEcsServiceStack/VRPBackendFargateService",
+            "children": {
+              "LB": {
+                "id": "LB",
+                "path": "VRPBackendEcsServiceStack/VRPBackendFargateService/LB",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "VRPBackendEcsServiceStack/VRPBackendFargateService/LB/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
+                      "aws:cdk:cloudformation:props": {
+                        "loadBalancerAttributes": [
+                          {
+                            "key": "deletion_protection.enabled",
+                            "value": "false"
+                          }
+                        ],
+                        "scheme": "internet-facing",
+                        "securityGroups": [
+                          {
+                            "Fn::GetAtt": [
+                              "VRPBackendFargateServiceLBSecurityGroup379A95EA",
+                              "GroupId"
+                            ]
+                          }
+                        ],
+                        "subnets": [
+                          {
+                            "Fn::ImportValue": "VRPBackendCoreInfrastructureStack:ExportsOutputRefVRPBackendVPCPublicSubnet1SubnetFF176F3E850C58ED"
+                          },
+                          {
+                            "Fn::ImportValue": "VRPBackendCoreInfrastructureStack:ExportsOutputRefVRPBackendVPCPublicSubnet2Subnet8CF671C6CBD073DE"
+                          }
+                        ],
+                        "type": "application"
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_elasticloadbalancingv2.CfnLoadBalancer",
+                      "version": "2.158.0"
+                    }
+                  },
+                  "SecurityGroup": {
+                    "id": "SecurityGroup",
+                    "path": "VRPBackendEcsServiceStack/VRPBackendFargateService/LB/SecurityGroup",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "VRPBackendEcsServiceStack/VRPBackendFargateService/LB/SecurityGroup/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::EC2::SecurityGroup",
+                          "aws:cdk:cloudformation:props": {
+                            "groupDescription": "Automatically created Security Group for ELB VRPBackendEcsServiceStackVRPBackendFargateServiceLB37DF05B3",
+                            "securityGroupIngress": [
+                              {
+                                "cidrIp": "0.0.0.0/0",
+                                "ipProtocol": "tcp",
+                                "fromPort": 80,
+                                "toPort": 80,
+                                "description": "Allow from anyone on port 80"
+                              }
+                            ],
+                            "vpcId": {
+                              "Fn::ImportValue": "VRPBackendCoreInfrastructureStack:ExportsOutputRefVRPBackendVPC60C6D0EE92200239"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_ec2.CfnSecurityGroup",
+                          "version": "2.158.0"
+                        }
+                      },
+                      "to VRPBackendEcsServiceStackVRPBackendFargateServiceSecurityGroup8B1E0020:80": {
+                        "id": "to VRPBackendEcsServiceStackVRPBackendFargateServiceSecurityGroup8B1E0020:80",
+                        "path": "VRPBackendEcsServiceStack/VRPBackendFargateService/LB/SecurityGroup/to VRPBackendEcsServiceStackVRPBackendFargateServiceSecurityGroup8B1E0020:80",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::EC2::SecurityGroupEgress",
+                          "aws:cdk:cloudformation:props": {
+                            "description": "Load balancer to target",
+                            "destinationSecurityGroupId": {
+                              "Fn::GetAtt": [
+                                "VRPBackendFargateServiceSecurityGroup2259DAE6",
+                                "GroupId"
+                              ]
+                            },
+                            "fromPort": 80,
+                            "groupId": {
+                              "Fn::GetAtt": [
+                                "VRPBackendFargateServiceLBSecurityGroup379A95EA",
+                                "GroupId"
+                              ]
+                            },
+                            "ipProtocol": "tcp",
+                            "toPort": 80
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_ec2.CfnSecurityGroupEgress",
+                          "version": "2.158.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.SecurityGroup",
+                      "version": "2.158.0"
+                    }
+                  },
+                  "PublicListener": {
+                    "id": "PublicListener",
+                    "path": "VRPBackendEcsServiceStack/VRPBackendFargateService/LB/PublicListener",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "VRPBackendEcsServiceStack/VRPBackendFargateService/LB/PublicListener/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::ElasticLoadBalancingV2::Listener",
+                          "aws:cdk:cloudformation:props": {
+                            "defaultActions": [
+                              {
+                                "type": "forward",
+                                "targetGroupArn": {
+                                  "Ref": "VRPBackendFargateServiceLBPublicListenerECSGroup67273753"
+                                }
+                              }
+                            ],
+                            "loadBalancerArn": {
+                              "Ref": "VRPBackendFargateServiceLB527E1B78"
+                            },
+                            "port": 80,
+                            "protocol": "HTTP"
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_elasticloadbalancingv2.CfnListener",
+                          "version": "2.158.0"
+                        }
+                      },
+                      "ECSGroup": {
+                        "id": "ECSGroup",
+                        "path": "VRPBackendEcsServiceStack/VRPBackendFargateService/LB/PublicListener/ECSGroup",
+                        "children": {
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "VRPBackendEcsServiceStack/VRPBackendFargateService/LB/PublicListener/ECSGroup/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+                              "aws:cdk:cloudformation:props": {
+                                "healthCheckPath": "/",
+                                "matcher": {
+                                  "httpCode": "200-399"
+                                },
+                                "port": 80,
+                                "protocol": "HTTP",
+                                "targetGroupAttributes": [
+                                  {
+                                    "key": "stickiness.enabled",
+                                    "value": "false"
+                                  }
+                                ],
+                                "targetType": "ip",
+                                "vpcId": {
+                                  "Fn::ImportValue": "VRPBackendCoreInfrastructureStack:ExportsOutputRefVRPBackendVPC60C6D0EE92200239"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_elasticloadbalancingv2.CfnTargetGroup",
+                              "version": "2.158.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_elasticloadbalancingv2.ApplicationTargetGroup",
+                          "version": "2.158.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_elasticloadbalancingv2.ApplicationListener",
+                      "version": "2.158.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_elasticloadbalancingv2.ApplicationLoadBalancer",
+                  "version": "2.158.0"
+                }
+              },
+              "LoadBalancerDNS": {
+                "id": "LoadBalancerDNS",
+                "path": "VRPBackendEcsServiceStack/VRPBackendFargateService/LoadBalancerDNS",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnOutput",
+                  "version": "2.158.0"
+                }
+              },
+              "ServiceURL": {
+                "id": "ServiceURL",
+                "path": "VRPBackendEcsServiceStack/VRPBackendFargateService/ServiceURL",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnOutput",
+                  "version": "2.158.0"
+                }
+              },
+              "TaskDef": {
+                "id": "TaskDef",
+                "path": "VRPBackendEcsServiceStack/VRPBackendFargateService/TaskDef",
+                "children": {
+                  "TaskRole": {
+                    "id": "TaskRole",
+                    "path": "VRPBackendEcsServiceStack/VRPBackendFargateService/TaskDef/TaskRole",
+                    "children": {
+                      "ImportTaskRole": {
+                        "id": "ImportTaskRole",
+                        "path": "VRPBackendEcsServiceStack/VRPBackendFargateService/TaskDef/TaskRole/ImportTaskRole",
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.Resource",
+                          "version": "2.158.0"
+                        }
+                      },
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "VRPBackendEcsServiceStack/VRPBackendFargateService/TaskDef/TaskRole/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                          "aws:cdk:cloudformation:props": {
+                            "assumeRolePolicyDocument": {
+                              "Statement": [
+                                {
+                                  "Action": "sts:AssumeRole",
+                                  "Effect": "Allow",
+                                  "Principal": {
+                                    "Service": "ecs-tasks.amazonaws.com"
+                                  }
+                                }
+                              ],
+                              "Version": "2012-10-17"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                          "version": "2.158.0"
+                        }
+                      },
+                      "DefaultPolicy": {
+                        "id": "DefaultPolicy",
+                        "path": "VRPBackendEcsServiceStack/VRPBackendFargateService/TaskDef/TaskRole/DefaultPolicy",
+                        "children": {
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "VRPBackendEcsServiceStack/VRPBackendFargateService/TaskDef/TaskRole/DefaultPolicy/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                              "aws:cdk:cloudformation:props": {
+                                "policyDocument": {
+                                  "Statement": [
+                                    {
+                                      "Action": [
+                                        "dynamodb:BatchGetItem",
+                                        "dynamodb:BatchWriteItem",
+                                        "dynamodb:ConditionCheckItem",
+                                        "dynamodb:DeleteItem",
+                                        "dynamodb:DescribeTable",
+                                        "dynamodb:GetItem",
+                                        "dynamodb:GetRecords",
+                                        "dynamodb:GetShardIterator",
+                                        "dynamodb:PutItem",
+                                        "dynamodb:Query",
+                                        "dynamodb:Scan",
+                                        "dynamodb:UpdateItem"
+                                      ],
+                                      "Effect": "Allow",
+                                      "Resource": [
+                                        {
+                                          "Fn::ImportValue": "VRPBackendCoreInfrastructureStack:ExportsOutputFnGetAttVRPDataTable3E5097EDArn9B713839"
+                                        },
+                                        {
+                                          "Ref": "AWS::NoValue"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "Action": [
+                                        "s3:Abort*",
+                                        "s3:DeleteObject*",
+                                        "s3:GetBucket*",
+                                        "s3:GetObject*",
+                                        "s3:List*",
+                                        "s3:PutObject",
+                                        "s3:PutObjectLegalHold",
+                                        "s3:PutObjectRetention",
+                                        "s3:PutObjectTagging",
+                                        "s3:PutObjectVersionTagging"
+                                      ],
+                                      "Effect": "Allow",
+                                      "Resource": [
+                                        {
+                                          "Fn::ImportValue": "VRPBackendCoreInfrastructureStack:ExportsOutputFnGetAttVRPSolutionsBucket21695A78Arn9EC44865"
+                                        },
+                                        {
+                                          "Fn::Join": [
+                                            "",
+                                            [
+                                              {
+                                                "Fn::ImportValue": "VRPBackendCoreInfrastructureStack:ExportsOutputFnGetAttVRPSolutionsBucket21695A78Arn9EC44865"
+                                              },
+                                              "/*"
+                                            ]
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ],
+                                  "Version": "2012-10-17"
+                                },
+                                "policyName": "VRPBackendFargateServiceTaskDefTaskRoleDefaultPolicyDC3CEB10",
+                                "roles": [
+                                  {
+                                    "Ref": "VRPBackendFargateServiceTaskDefTaskRole0D13EE8D"
+                                  }
+                                ]
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                              "version": "2.158.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_iam.Policy",
+                          "version": "2.158.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.Role",
+                      "version": "2.158.0"
+                    }
+                  },
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "VRPBackendEcsServiceStack/VRPBackendFargateService/TaskDef/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::ECS::TaskDefinition",
+                      "aws:cdk:cloudformation:props": {
+                        "containerDefinitions": [
+                          {
+                            "essential": true,
+                            "image": "public.ecr.aws/nginx/nginx:latest",
+                            "name": "vrp-backend-container",
+                            "portMappings": [
+                              {
+                                "containerPort": 80,
+                                "protocol": "tcp"
+                              }
+                            ],
+                            "logConfiguration": {
+                              "logDriver": "awslogs",
+                              "options": {
+                                "awslogs-group": {
+                                  "Ref": "VRPBackendFargateServiceTaskDefvrpbackendcontainerLogGroup3B6CB1DB"
+                                },
+                                "awslogs-stream-prefix": "VRPBackendFargateService",
+                                "awslogs-region": {
+                                  "Ref": "AWS::Region"
+                                }
+                              }
+                            },
+                            "environment": [
+                              {
+                                "name": "VRP_DATA_TABLE",
+                                "value": {
+                                  "Fn::ImportValue": "VRPBackendCoreInfrastructureStack:ExportsOutputRefVRPDataTable3E5097EDBDCB015C"
+                                }
+                              },
+                              {
+                                "name": "VRP_SOLUTIONS_BUCKET",
+                                "value": {
+                                  "Fn::ImportValue": "VRPBackendCoreInfrastructureStack:ExportsOutputRefVRPSolutionsBucket21695A78557379F5"
+                                }
+                              }
+                            ]
+                          }
+                        ],
+                        "cpu": "256",
+                        "executionRoleArn": {
+                          "Fn::GetAtt": [
+                            "VRPBackendFargateServiceTaskDefExecutionRole8F79EEFB",
+                            "Arn"
+                          ]
+                        },
+                        "family": "VRPBackendEcsServiceStackVRPBackendFargateServiceTaskDef85937891",
+                        "memory": "512",
+                        "networkMode": "awsvpc",
+                        "requiresCompatibilities": [
+                          "FARGATE"
+                        ],
+                        "taskRoleArn": {
+                          "Fn::GetAtt": [
+                            "VRPBackendFargateServiceTaskDefTaskRole0D13EE8D",
+                            "Arn"
+                          ]
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ecs.CfnTaskDefinition",
+                      "version": "2.158.0"
+                    }
+                  },
+                  "vrp-backend-container": {
+                    "id": "vrp-backend-container",
+                    "path": "VRPBackendEcsServiceStack/VRPBackendFargateService/TaskDef/vrp-backend-container",
+                    "children": {
+                      "LogGroup": {
+                        "id": "LogGroup",
+                        "path": "VRPBackendEcsServiceStack/VRPBackendFargateService/TaskDef/vrp-backend-container/LogGroup",
+                        "children": {
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "VRPBackendEcsServiceStack/VRPBackendFargateService/TaskDef/vrp-backend-container/LogGroup/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::Logs::LogGroup",
+                              "aws:cdk:cloudformation:props": {}
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_logs.CfnLogGroup",
+                              "version": "2.158.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_logs.LogGroup",
+                          "version": "2.158.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ecs.ContainerDefinition",
+                      "version": "2.158.0"
+                    }
+                  },
+                  "ExecutionRole": {
+                    "id": "ExecutionRole",
+                    "path": "VRPBackendEcsServiceStack/VRPBackendFargateService/TaskDef/ExecutionRole",
+                    "children": {
+                      "ImportExecutionRole": {
+                        "id": "ImportExecutionRole",
+                        "path": "VRPBackendEcsServiceStack/VRPBackendFargateService/TaskDef/ExecutionRole/ImportExecutionRole",
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.Resource",
+                          "version": "2.158.0"
+                        }
+                      },
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "VRPBackendEcsServiceStack/VRPBackendFargateService/TaskDef/ExecutionRole/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                          "aws:cdk:cloudformation:props": {
+                            "assumeRolePolicyDocument": {
+                              "Statement": [
+                                {
+                                  "Action": "sts:AssumeRole",
+                                  "Effect": "Allow",
+                                  "Principal": {
+                                    "Service": "ecs-tasks.amazonaws.com"
+                                  }
+                                }
+                              ],
+                              "Version": "2012-10-17"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                          "version": "2.158.0"
+                        }
+                      },
+                      "DefaultPolicy": {
+                        "id": "DefaultPolicy",
+                        "path": "VRPBackendEcsServiceStack/VRPBackendFargateService/TaskDef/ExecutionRole/DefaultPolicy",
+                        "children": {
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "VRPBackendEcsServiceStack/VRPBackendFargateService/TaskDef/ExecutionRole/DefaultPolicy/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                              "aws:cdk:cloudformation:props": {
+                                "policyDocument": {
+                                  "Statement": [
+                                    {
+                                      "Action": [
+                                        "logs:CreateLogStream",
+                                        "logs:PutLogEvents"
+                                      ],
+                                      "Effect": "Allow",
+                                      "Resource": {
+                                        "Fn::GetAtt": [
+                                          "VRPBackendFargateServiceTaskDefvrpbackendcontainerLogGroup3B6CB1DB",
+                                          "Arn"
+                                        ]
+                                      }
+                                    }
+                                  ],
+                                  "Version": "2012-10-17"
+                                },
+                                "policyName": "VRPBackendFargateServiceTaskDefExecutionRoleDefaultPolicy955AF0A5",
+                                "roles": [
+                                  {
+                                    "Ref": "VRPBackendFargateServiceTaskDefExecutionRole8F79EEFB"
+                                  }
+                                ]
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                              "version": "2.158.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_iam.Policy",
+                          "version": "2.158.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.Role",
+                      "version": "2.158.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_ecs.FargateTaskDefinition",
+                  "version": "2.158.0"
+                }
+              },
+              "Service": {
+                "id": "Service",
+                "path": "VRPBackendEcsServiceStack/VRPBackendFargateService/Service",
+                "children": {
+                  "Service": {
+                    "id": "Service",
+                    "path": "VRPBackendEcsServiceStack/VRPBackendFargateService/Service/Service",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::ECS::Service",
+                      "aws:cdk:cloudformation:props": {
+                        "cluster": {
+                          "Fn::ImportValue": "VRPBackendCoreInfrastructureStack:ExportsOutputRefVRPBackendCluster2C6BD971E20D368B"
+                        },
+                        "deploymentConfiguration": {
+                          "maximumPercent": 200,
+                          "minimumHealthyPercent": 50
+                        },
+                        "desiredCount": 1,
+                        "enableEcsManagedTags": false,
+                        "healthCheckGracePeriodSeconds": 60,
+                        "launchType": "FARGATE",
+                        "loadBalancers": [
+                          {
+                            "targetGroupArn": {
+                              "Ref": "VRPBackendFargateServiceLBPublicListenerECSGroup67273753"
+                            },
+                            "containerName": "vrp-backend-container",
+                            "containerPort": 80
+                          }
+                        ],
+                        "networkConfiguration": {
+                          "awsvpcConfiguration": {
+                            "assignPublicIp": "DISABLED",
+                            "subnets": [
+                              {
+                                "Fn::ImportValue": "VRPBackendCoreInfrastructureStack:ExportsOutputRefVRPBackendVPCPrivateSubnet1Subnet8C465972DAE9255F"
+                              },
+                              {
+                                "Fn::ImportValue": "VRPBackendCoreInfrastructureStack:ExportsOutputRefVRPBackendVPCPrivateSubnet2Subnet5AAFB2AF7F3BB99B"
+                              }
+                            ],
+                            "securityGroups": [
+                              {
+                                "Fn::GetAtt": [
+                                  "VRPBackendFargateServiceSecurityGroup2259DAE6",
+                                  "GroupId"
+                                ]
+                              }
+                            ]
+                          }
+                        },
+                        "taskDefinition": {
+                          "Ref": "VRPBackendFargateServiceTaskDef9EC6EC0B"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ecs.CfnService",
+                      "version": "2.158.0"
+                    }
+                  },
+                  "SecurityGroup": {
+                    "id": "SecurityGroup",
+                    "path": "VRPBackendEcsServiceStack/VRPBackendFargateService/Service/SecurityGroup",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "VRPBackendEcsServiceStack/VRPBackendFargateService/Service/SecurityGroup/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::EC2::SecurityGroup",
+                          "aws:cdk:cloudformation:props": {
+                            "groupDescription": "VRPBackendEcsServiceStack/VRPBackendFargateService/Service/SecurityGroup",
+                            "securityGroupEgress": [
+                              {
+                                "cidrIp": "0.0.0.0/0",
+                                "description": "Allow all outbound traffic by default",
+                                "ipProtocol": "-1"
+                              }
+                            ],
+                            "vpcId": {
+                              "Fn::ImportValue": "VRPBackendCoreInfrastructureStack:ExportsOutputRefVRPBackendVPC60C6D0EE92200239"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_ec2.CfnSecurityGroup",
+                          "version": "2.158.0"
+                        }
+                      },
+                      "from VRPBackendEcsServiceStackVRPBackendFargateServiceLBSecurityGroup8CEE28B9:80": {
+                        "id": "from VRPBackendEcsServiceStackVRPBackendFargateServiceLBSecurityGroup8CEE28B9:80",
+                        "path": "VRPBackendEcsServiceStack/VRPBackendFargateService/Service/SecurityGroup/from VRPBackendEcsServiceStackVRPBackendFargateServiceLBSecurityGroup8CEE28B9:80",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::EC2::SecurityGroupIngress",
+                          "aws:cdk:cloudformation:props": {
+                            "description": "Load balancer to target",
+                            "fromPort": 80,
+                            "groupId": {
+                              "Fn::GetAtt": [
+                                "VRPBackendFargateServiceSecurityGroup2259DAE6",
+                                "GroupId"
+                              ]
+                            },
+                            "ipProtocol": "tcp",
+                            "sourceSecurityGroupId": {
+                              "Fn::GetAtt": [
+                                "VRPBackendFargateServiceLBSecurityGroup379A95EA",
+                                "GroupId"
+                              ]
+                            },
+                            "toPort": 80
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_ec2.CfnSecurityGroupIngress",
+                          "version": "2.158.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.SecurityGroup",
+                      "version": "2.158.0"
+                    }
+                  },
+                  "ScalingRole": {
+                    "id": "ScalingRole",
+                    "path": "VRPBackendEcsServiceStack/VRPBackendFargateService/Service/ScalingRole",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.Resource",
+                      "version": "2.158.0"
+                    }
+                  },
+                  "TaskCount": {
+                    "id": "TaskCount",
+                    "path": "VRPBackendEcsServiceStack/VRPBackendFargateService/Service/TaskCount",
+                    "children": {
+                      "Target": {
+                        "id": "Target",
+                        "path": "VRPBackendEcsServiceStack/VRPBackendFargateService/Service/TaskCount/Target",
+                        "children": {
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "VRPBackendEcsServiceStack/VRPBackendFargateService/Service/TaskCount/Target/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::ApplicationAutoScaling::ScalableTarget",
+                              "aws:cdk:cloudformation:props": {
+                                "maxCapacity": 2,
+                                "minCapacity": 1,
+                                "resourceId": {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "service/",
+                                      {
+                                        "Fn::ImportValue": "VRPBackendCoreInfrastructureStack:ExportsOutputRefVRPBackendCluster2C6BD971E20D368B"
+                                      },
+                                      "/",
+                                      {
+                                        "Fn::GetAtt": [
+                                          "VRPBackendFargateService1F47BB8A",
+                                          "Name"
+                                        ]
+                                      }
+                                    ]
+                                  ]
+                                },
+                                "roleArn": {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:",
+                                      {
+                                        "Ref": "AWS::Partition"
+                                      },
+                                      ":iam::",
+                                      {
+                                        "Ref": "AWS::AccountId"
+                                      },
+                                      ":role/aws-service-role/ecs.application-autoscaling.amazonaws.com/AWSServiceRoleForApplicationAutoScaling_ECSService"
+                                    ]
+                                  ]
+                                },
+                                "scalableDimension": "ecs:service:DesiredCount",
+                                "serviceNamespace": "ecs"
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_applicationautoscaling.CfnScalableTarget",
+                              "version": "2.158.0"
+                            }
+                          },
+                          "CpuScaling": {
+                            "id": "CpuScaling",
+                            "path": "VRPBackendEcsServiceStack/VRPBackendFargateService/Service/TaskCount/Target/CpuScaling",
+                            "children": {
+                              "Resource": {
+                                "id": "Resource",
+                                "path": "VRPBackendEcsServiceStack/VRPBackendFargateService/Service/TaskCount/Target/CpuScaling/Resource",
+                                "attributes": {
+                                  "aws:cdk:cloudformation:type": "AWS::ApplicationAutoScaling::ScalingPolicy",
+                                  "aws:cdk:cloudformation:props": {
+                                    "policyName": "VRPBackendEcsServiceStackVRPBackendFargateServiceTaskCountTargetCpuScaling9E5C325D",
+                                    "policyType": "TargetTrackingScaling",
+                                    "scalingTargetId": {
+                                      "Ref": "VRPBackendFargateServiceTaskCountTargetBD28B261"
+                                    },
+                                    "targetTrackingScalingPolicyConfiguration": {
+                                      "predefinedMetricSpecification": {
+                                        "predefinedMetricType": "ECSServiceAverageCPUUtilization"
+                                      },
+                                      "scaleInCooldown": 60,
+                                      "scaleOutCooldown": 60,
+                                      "targetValue": 70
+                                    }
+                                  }
+                                },
+                                "constructInfo": {
+                                  "fqn": "aws-cdk-lib.aws_applicationautoscaling.CfnScalingPolicy",
+                                  "version": "2.158.0"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_applicationautoscaling.TargetTrackingScalingPolicy",
+                              "version": "2.158.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_applicationautoscaling.ScalableTarget",
+                          "version": "2.158.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ecs.ScalableTaskCount",
+                      "version": "2.158.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_ecs.FargateService",
+                  "version": "2.158.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_ecs_patterns.ApplicationLoadBalancedFargateService",
+              "version": "2.158.0"
+            }
+          },
+          "Http5xxAlarm": {
+            "id": "Http5xxAlarm",
+            "path": "VRPBackendEcsServiceStack/Http5xxAlarm",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "VRPBackendEcsServiceStack/Http5xxAlarm/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
+                  "aws:cdk:cloudformation:props": {
+                    "alarmDescription": "HTTP 5xx errors > 10",
+                    "comparisonOperator": "GreaterThanOrEqualToThreshold",
+                    "dimensions": [
+                      {
+                        "name": "LoadBalancer",
+                        "value": {
+                          "Fn::GetAtt": [
+                            "VRPBackendFargateServiceLB527E1B78",
+                            "LoadBalancerFullName"
+                          ]
+                        }
+                      }
+                    ],
+                    "evaluationPeriods": 1,
+                    "metricName": "HTTPCode_Target_5XX_Count",
+                    "namespace": "AWS/ApplicationELB",
+                    "period": 300,
+                    "statistic": "Sum",
+                    "threshold": 10
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_cloudwatch.CfnAlarm",
+                  "version": "2.158.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_cloudwatch.Alarm",
+              "version": "2.158.0"
+            }
+          },
+          "VRPBackendEcsServiceName": {
+            "id": "VRPBackendEcsServiceName",
+            "path": "VRPBackendEcsServiceStack/VRPBackendEcsServiceName",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnOutput",
+              "version": "2.158.0"
+            }
+          },
+          "VRPBackendLoadBalancerDNS": {
+            "id": "VRPBackendLoadBalancerDNS",
+            "path": "VRPBackendEcsServiceStack/VRPBackendLoadBalancerDNS",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnOutput",
+              "version": "2.158.0"
+            }
+          },
+          "CDKMetadata": {
+            "id": "CDKMetadata",
+            "path": "VRPBackendEcsServiceStack/CDKMetadata",
+            "children": {
+              "Default": {
+                "id": "Default",
+                "path": "VRPBackendEcsServiceStack/CDKMetadata/Default",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnResource",
+                  "version": "2.158.0"
+                }
+              },
+              "Condition": {
+                "id": "Condition",
+                "path": "VRPBackendEcsServiceStack/CDKMetadata/Condition",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnCondition",
+                  "version": "2.158.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.3.0"
+            }
+          },
+          "Exports": {
+            "id": "Exports",
+            "path": "VRPBackendEcsServiceStack/Exports",
+            "children": {
+              "Output{\"Fn::GetAtt\":[\"VRPBackendFargateService1F47BB8A\",\"Name\"]}": {
+                "id": "Output{\"Fn::GetAtt\":[\"VRPBackendFargateService1F47BB8A\",\"Name\"]}",
+                "path": "VRPBackendEcsServiceStack/Exports/Output{\"Fn::GetAtt\":[\"VRPBackendFargateService1F47BB8A\",\"Name\"]}",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnOutput",
+                  "version": "2.158.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.3.0"
+            }
+          },
+          "BootstrapVersion": {
+            "id": "BootstrapVersion",
+            "path": "VRPBackendEcsServiceStack/BootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnParameter",
+              "version": "2.158.0"
+            }
+          },
+          "CheckBootstrapVersion": {
+            "id": "CheckBootstrapVersion",
+            "path": "VRPBackendEcsServiceStack/CheckBootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnRule",
+              "version": "2.158.0"
+            }
+          }
+        },
+        "constructInfo": {
+          "fqn": "aws-cdk-lib.Stack",
+          "version": "2.158.0"
+        }
+      },
+      "VRPBackendIntegrationStack": {
+        "id": "VRPBackendIntegrationStack",
+        "path": "VRPBackendIntegrationStack",
+        "children": {
+          "CDKMetadata": {
+            "id": "CDKMetadata",
+            "path": "VRPBackendIntegrationStack/CDKMetadata",
+            "children": {
+              "Default": {
+                "id": "Default",
+                "path": "VRPBackendIntegrationStack/CDKMetadata/Default",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnResource",
+                  "version": "2.158.0"
+                }
+              },
+              "Condition": {
+                "id": "Condition",
+                "path": "VRPBackendIntegrationStack/CDKMetadata/Condition",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnCondition",
+                  "version": "2.158.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.3.0"
+            }
+          },
+          "BootstrapVersion": {
+            "id": "BootstrapVersion",
+            "path": "VRPBackendIntegrationStack/BootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnParameter",
+              "version": "2.158.0"
+            }
+          },
+          "CheckBootstrapVersion": {
+            "id": "CheckBootstrapVersion",
+            "path": "VRPBackendIntegrationStack/CheckBootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnRule",
+              "version": "2.158.0"
+            }
+          }
+        },
+        "constructInfo": {
+          "fqn": "aws-cdk-lib.Stack",
+          "version": "2.158.0"
+        }
+      },
+      "VRPBackendCICDPipelineStack": {
+        "id": "VRPBackendCICDPipelineStack",
+        "path": "VRPBackendCICDPipelineStack",
+        "children": {
+          "GithubToken": {
+            "id": "GithubToken",
+            "path": "VRPBackendCICDPipelineStack/GithubToken",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.Resource",
+              "version": "2.158.0"
+            }
+          },
+          "BuildProject": {
+            "id": "BuildProject",
+            "path": "VRPBackendCICDPipelineStack/BuildProject",
+            "children": {
+              "Role": {
+                "id": "Role",
+                "path": "VRPBackendCICDPipelineStack/BuildProject/Role",
+                "children": {
+                  "ImportRole": {
+                    "id": "ImportRole",
+                    "path": "VRPBackendCICDPipelineStack/BuildProject/Role/ImportRole",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.Resource",
+                      "version": "2.158.0"
+                    }
+                  },
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "VRPBackendCICDPipelineStack/BuildProject/Role/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:props": {
+                        "assumeRolePolicyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sts:AssumeRole",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "codebuild.amazonaws.com"
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                      "version": "2.158.0"
+                    }
+                  },
+                  "DefaultPolicy": {
+                    "id": "DefaultPolicy",
+                    "path": "VRPBackendCICDPipelineStack/BuildProject/Role/DefaultPolicy",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "VRPBackendCICDPipelineStack/BuildProject/Role/DefaultPolicy/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                          "aws:cdk:cloudformation:props": {
+                            "policyDocument": {
+                              "Statement": [
+                                {
+                                  "Action": [
+                                    "logs:CreateLogGroup",
+                                    "logs:CreateLogStream",
+                                    "logs:PutLogEvents"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": [
+                                    {
+                                      "Fn::Join": [
+                                        "",
+                                        [
+                                          "arn:",
+                                          {
+                                            "Ref": "AWS::Partition"
+                                          },
+                                          ":logs:",
+                                          {
+                                            "Ref": "AWS::Region"
+                                          },
+                                          ":",
+                                          {
+                                            "Ref": "AWS::AccountId"
+                                          },
+                                          ":log-group:/aws/codebuild/",
+                                          {
+                                            "Ref": "BuildProject097C5DB7"
+                                          },
+                                          ":*"
+                                        ]
+                                      ]
+                                    },
+                                    {
+                                      "Fn::Join": [
+                                        "",
+                                        [
+                                          "arn:",
+                                          {
+                                            "Ref": "AWS::Partition"
+                                          },
+                                          ":logs:",
+                                          {
+                                            "Ref": "AWS::Region"
+                                          },
+                                          ":",
+                                          {
+                                            "Ref": "AWS::AccountId"
+                                          },
+                                          ":log-group:/aws/codebuild/",
+                                          {
+                                            "Ref": "BuildProject097C5DB7"
+                                          }
+                                        ]
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "Action": [
+                                    "codebuild:BatchPutCodeCoverages",
+                                    "codebuild:BatchPutTestCases",
+                                    "codebuild:CreateReport",
+                                    "codebuild:CreateReportGroup",
+                                    "codebuild:UpdateReport"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": {
+                                    "Fn::Join": [
+                                      "",
+                                      [
+                                        "arn:",
+                                        {
+                                          "Ref": "AWS::Partition"
+                                        },
+                                        ":codebuild:",
+                                        {
+                                          "Ref": "AWS::Region"
+                                        },
+                                        ":",
+                                        {
+                                          "Ref": "AWS::AccountId"
+                                        },
+                                        ":report-group/",
+                                        {
+                                          "Ref": "BuildProject097C5DB7"
+                                        },
+                                        "-*"
+                                      ]
+                                    ]
+                                  }
+                                },
+                                {
+                                  "Action": [
+                                    "ecr:BatchCheckLayerAvailability",
+                                    "ecr:BatchGetImage",
+                                    "ecr:CompleteLayerUpload",
+                                    "ecr:GetDownloadUrlForLayer",
+                                    "ecr:InitiateLayerUpload",
+                                    "ecr:PutImage",
+                                    "ecr:UploadLayerPart"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": {
+                                    "Fn::ImportValue": "VRPBackendCoreInfrastructureStack:ExportsOutputFnGetAttVRPBackendRepo8233BB19ArnE15220AD"
+                                  }
+                                },
+                                {
+                                  "Action": [
+                                    "ecr:BatchCheckLayerAvailability",
+                                    "ecr:BatchGetImage",
+                                    "ecr:CompleteLayerUpload",
+                                    "ecr:DescribeRepositories",
+                                    "ecr:GetAuthorizationToken",
+                                    "ecr:GetDownloadUrlForLayer",
+                                    "ecr:InitiateLayerUpload",
+                                    "ecr:ListImages",
+                                    "ecr:PutImage",
+                                    "ecr:UploadLayerPart"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": "*"
+                                },
+                                {
+                                  "Action": "secretsmanager:GetSecretValue",
+                                  "Effect": "Allow",
+                                  "Resource": "arn:aws:secretsmanager:us-east-1:448049814374:secret:DockerHubCredentials-HH2LVS"
+                                },
+                                {
+                                  "Action": [
+                                    "s3:Abort*",
+                                    "s3:DeleteObject*",
+                                    "s3:GetBucket*",
+                                    "s3:GetObject*",
+                                    "s3:List*",
+                                    "s3:PutObject",
+                                    "s3:PutObjectLegalHold",
+                                    "s3:PutObjectRetention",
+                                    "s3:PutObjectTagging",
+                                    "s3:PutObjectVersionTagging"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": [
+                                    {
+                                      "Fn::GetAtt": [
+                                        "PipelineArtifactsBucket22248F97",
+                                        "Arn"
+                                      ]
+                                    },
+                                    {
+                                      "Fn::Join": [
+                                        "",
+                                        [
+                                          {
+                                            "Fn::GetAtt": [
+                                              "PipelineArtifactsBucket22248F97",
+                                              "Arn"
+                                            ]
+                                          },
+                                          "/*"
+                                        ]
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ],
+                              "Version": "2012-10-17"
+                            },
+                            "policyName": "BuildProjectRoleDefaultPolicy3E9F248C",
+                            "roles": [
+                              {
+                                "Ref": "BuildProjectRoleAA92C755"
+                              }
+                            ]
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                          "version": "2.158.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.Policy",
+                      "version": "2.158.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.Role",
+                  "version": "2.158.0"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "VRPBackendCICDPipelineStack/BuildProject/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::CodeBuild::Project",
+                  "aws:cdk:cloudformation:props": {
+                    "artifacts": {
+                      "type": "CODEPIPELINE"
+                    },
+                    "cache": {
+                      "type": "NO_CACHE"
+                    },
+                    "encryptionKey": "alias/aws/s3",
+                    "environment": {
+                      "type": "LINUX_CONTAINER",
+                      "image": "aws/codebuild/standard:5.0",
+                      "imagePullCredentialsType": "CODEBUILD",
+                      "privilegedMode": true,
+                      "computeType": "BUILD_GENERAL1_SMALL",
+                      "environmentVariables": [
+                        {
+                          "name": "ECR_REPO_URI",
+                          "type": "PLAINTEXT",
+                          "value": {
+                            "Fn::Join": [
+                              "",
+                              [
+                                {
+                                  "Fn::Select": [
+                                    4,
+                                    {
+                                      "Fn::Split": [
+                                        ":",
+                                        {
+                                          "Fn::ImportValue": "VRPBackendCoreInfrastructureStack:ExportsOutputFnGetAttVRPBackendRepo8233BB19ArnE15220AD"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                ".dkr.ecr.",
+                                {
+                                  "Fn::Select": [
+                                    3,
+                                    {
+                                      "Fn::Split": [
+                                        ":",
+                                        {
+                                          "Fn::ImportValue": "VRPBackendCoreInfrastructureStack:ExportsOutputFnGetAttVRPBackendRepo8233BB19ArnE15220AD"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                ".",
+                                {
+                                  "Ref": "AWS::URLSuffix"
+                                },
+                                "/",
+                                {
+                                  "Fn::ImportValue": "VRPBackendCoreInfrastructureStack:ExportsOutputRefVRPBackendRepo8233BB19CBDECBE0"
+                                }
+                              ]
+                            ]
+                          }
+                        },
+                        {
+                          "name": "AWS_DEFAULT_REGION",
+                          "type": "PLAINTEXT",
+                          "value": {
+                            "Ref": "AWS::Region"
+                          }
+                        }
+                      ]
+                    },
+                    "serviceRole": {
+                      "Fn::GetAtt": [
+                        "BuildProjectRoleAA92C755",
+                        "Arn"
+                      ]
+                    },
+                    "source": {
+                      "type": "CODEPIPELINE",
+                      "buildSpec": "buildspec.yml"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_codebuild.CfnProject",
+                  "version": "2.158.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_codebuild.PipelineProject",
+              "version": "2.158.0"
+            }
+          },
+          "Pipeline": {
+            "id": "Pipeline",
+            "path": "VRPBackendCICDPipelineStack/Pipeline",
+            "children": {
+              "ArtifactsBucket": {
+                "id": "ArtifactsBucket",
+                "path": "VRPBackendCICDPipelineStack/Pipeline/ArtifactsBucket",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "VRPBackendCICDPipelineStack/Pipeline/ArtifactsBucket/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::S3::Bucket",
+                      "aws:cdk:cloudformation:props": {
+                        "bucketEncryption": {
+                          "serverSideEncryptionConfiguration": [
+                            {
+                              "serverSideEncryptionByDefault": {
+                                "sseAlgorithm": "aws:kms"
+                              }
+                            }
+                          ]
+                        },
+                        "publicAccessBlockConfiguration": {
+                          "blockPublicAcls": true,
+                          "blockPublicPolicy": true,
+                          "ignorePublicAcls": true,
+                          "restrictPublicBuckets": true
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_s3.CfnBucket",
+                      "version": "2.158.0"
+                    }
+                  },
+                  "Policy": {
+                    "id": "Policy",
+                    "path": "VRPBackendCICDPipelineStack/Pipeline/ArtifactsBucket/Policy",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "VRPBackendCICDPipelineStack/Pipeline/ArtifactsBucket/Policy/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::S3::BucketPolicy",
+                          "aws:cdk:cloudformation:props": {
+                            "bucket": {
+                              "Ref": "PipelineArtifactsBucket22248F97"
+                            },
+                            "policyDocument": {
+                              "Statement": [
+                                {
+                                  "Action": "s3:*",
+                                  "Condition": {
+                                    "Bool": {
+                                      "aws:SecureTransport": "false"
+                                    }
+                                  },
+                                  "Effect": "Deny",
+                                  "Principal": {
+                                    "AWS": "*"
+                                  },
+                                  "Resource": [
+                                    {
+                                      "Fn::GetAtt": [
+                                        "PipelineArtifactsBucket22248F97",
+                                        "Arn"
+                                      ]
+                                    },
+                                    {
+                                      "Fn::Join": [
+                                        "",
+                                        [
+                                          {
+                                            "Fn::GetAtt": [
+                                              "PipelineArtifactsBucket22248F97",
+                                              "Arn"
+                                            ]
+                                          },
+                                          "/*"
+                                        ]
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ],
+                              "Version": "2012-10-17"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_s3.CfnBucketPolicy",
+                          "version": "2.158.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_s3.BucketPolicy",
+                      "version": "2.158.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_s3.Bucket",
+                  "version": "2.158.0"
+                }
+              },
+              "Role": {
+                "id": "Role",
+                "path": "VRPBackendCICDPipelineStack/Pipeline/Role",
+                "children": {
+                  "ImportRole": {
+                    "id": "ImportRole",
+                    "path": "VRPBackendCICDPipelineStack/Pipeline/Role/ImportRole",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.Resource",
+                      "version": "2.158.0"
+                    }
+                  },
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "VRPBackendCICDPipelineStack/Pipeline/Role/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:props": {
+                        "assumeRolePolicyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sts:AssumeRole",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "codepipeline.amazonaws.com"
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                      "version": "2.158.0"
+                    }
+                  },
+                  "DefaultPolicy": {
+                    "id": "DefaultPolicy",
+                    "path": "VRPBackendCICDPipelineStack/Pipeline/Role/DefaultPolicy",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "VRPBackendCICDPipelineStack/Pipeline/Role/DefaultPolicy/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                          "aws:cdk:cloudformation:props": {
+                            "policyDocument": {
+                              "Statement": [
+                                {
+                                  "Action": [
+                                    "s3:Abort*",
+                                    "s3:DeleteObject*",
+                                    "s3:GetBucket*",
+                                    "s3:GetObject*",
+                                    "s3:List*",
+                                    "s3:PutObject",
+                                    "s3:PutObjectLegalHold",
+                                    "s3:PutObjectRetention",
+                                    "s3:PutObjectTagging",
+                                    "s3:PutObjectVersionTagging"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": [
+                                    {
+                                      "Fn::GetAtt": [
+                                        "PipelineArtifactsBucket22248F97",
+                                        "Arn"
+                                      ]
+                                    },
+                                    {
+                                      "Fn::Join": [
+                                        "",
+                                        [
+                                          {
+                                            "Fn::GetAtt": [
+                                              "PipelineArtifactsBucket22248F97",
+                                              "Arn"
+                                            ]
+                                          },
+                                          "/*"
+                                        ]
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "Action": "sts:AssumeRole",
+                                  "Effect": "Allow",
+                                  "Resource": [
+                                    {
+                                      "Fn::GetAtt": [
+                                        "PipelineApproveCodePipelineActionRole6E3F114D",
+                                        "Arn"
+                                      ]
+                                    },
+                                    {
+                                      "Fn::GetAtt": [
+                                        "PipelineBuildCodePipelineActionRoleD77A08E6",
+                                        "Arn"
+                                      ]
+                                    },
+                                    {
+                                      "Fn::GetAtt": [
+                                        "PipelineDeployDeployToECSCodePipelineActionRole895B27C5",
+                                        "Arn"
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ],
+                              "Version": "2012-10-17"
+                            },
+                            "policyName": "PipelineRoleDefaultPolicyC7A05455",
+                            "roles": [
+                              {
+                                "Ref": "PipelineRoleD68726F7"
+                              }
+                            ]
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                          "version": "2.158.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.Policy",
+                      "version": "2.158.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.Role",
+                  "version": "2.158.0"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "VRPBackendCICDPipelineStack/Pipeline/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::CodePipeline::Pipeline",
+                  "aws:cdk:cloudformation:props": {
+                    "artifactStore": {
+                      "type": "S3",
+                      "location": {
+                        "Ref": "PipelineArtifactsBucket22248F97"
+                      }
+                    },
+                    "name": "LaundryServicePipeline",
+                    "pipelineType": "V2",
+                    "roleArn": {
+                      "Fn::GetAtt": [
+                        "PipelineRoleD68726F7",
+                        "Arn"
+                      ]
+                    },
+                    "stages": [
+                      {
+                        "name": "Source",
+                        "actions": [
+                          {
+                            "name": "GitHub_Source",
+                            "outputArtifacts": [
+                              {
+                                "name": "SourceOutput"
+                              }
+                            ],
+                            "actionTypeId": {
+                              "category": "Source",
+                              "version": "1",
+                              "owner": "ThirdParty",
+                              "provider": "GitHub"
+                            },
+                            "configuration": {
+                              "Owner": "SpinlabsInc",
+                              "Repo": "spinlabs-vrp-backend",
+                              "Branch": "main",
+                              "OAuthToken": {
+                                "Fn::Join": [
+                                  "",
+                                  [
+                                    "{{resolve:secretsmanager:arn:",
+                                    {
+                                      "Ref": "AWS::Partition"
+                                    },
+                                    ":secretsmanager:",
+                                    {
+                                      "Ref": "AWS::Region"
+                                    },
+                                    ":",
+                                    {
+                                      "Ref": "AWS::AccountId"
+                                    },
+                                    ":secret:GithubToken:SecretString:GithubToken::}}"
+                                  ]
+                                ]
+                              },
+                              "PollForSourceChanges": false
+                            },
+                            "runOrder": 1
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Build",
+                        "actions": [
+                          {
+                            "name": "Build",
+                            "inputArtifacts": [
+                              {
+                                "name": "SourceOutput"
+                              }
+                            ],
+                            "outputArtifacts": [
+                              {
+                                "name": "BuildOutput"
+                              }
+                            ],
+                            "actionTypeId": {
+                              "category": "Build",
+                              "version": "1",
+                              "owner": "AWS",
+                              "provider": "CodeBuild"
+                            },
+                            "configuration": {
+                              "ProjectName": {
+                                "Ref": "BuildProject097C5DB7"
+                              }
+                            },
+                            "runOrder": 1,
+                            "roleArn": {
+                              "Fn::GetAtt": [
+                                "PipelineBuildCodePipelineActionRoleD77A08E6",
+                                "Arn"
+                              ]
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Approve",
+                        "actions": [
+                          {
+                            "name": "Approve",
+                            "actionTypeId": {
+                              "category": "Approval",
+                              "version": "1",
+                              "owner": "AWS",
+                              "provider": "Manual"
+                            },
+                            "runOrder": 1,
+                            "roleArn": {
+                              "Fn::GetAtt": [
+                                "PipelineApproveCodePipelineActionRole6E3F114D",
+                                "Arn"
+                              ]
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Deploy",
+                        "actions": [
+                          {
+                            "name": "DeployToECS",
+                            "inputArtifacts": [
+                              {
+                                "name": "BuildOutput"
+                              }
+                            ],
+                            "actionTypeId": {
+                              "category": "Deploy",
+                              "version": "1",
+                              "owner": "AWS",
+                              "provider": "ECS"
+                            },
+                            "configuration": {
+                              "ClusterName": {
+                                "Fn::ImportValue": "VRPBackendCoreInfrastructureStack:ExportsOutputRefVRPBackendCluster2C6BD971E20D368B"
+                              },
+                              "ServiceName": {
+                                "Fn::ImportValue": "VRPBackendEcsServiceStack:ExportsOutputFnGetAttVRPBackendFargateService1F47BB8ANameD023DB5E"
+                              },
+                              "FileName": "imageDetail.json",
+                              "DeploymentTimeout": 60
+                            },
+                            "runOrder": 2,
+                            "roleArn": {
+                              "Fn::GetAtt": [
+                                "PipelineDeployDeployToECSCodePipelineActionRole895B27C5",
+                                "Arn"
+                              ]
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_codepipeline.CfnPipeline",
+                  "version": "2.158.0"
+                }
+              },
+              "Source": {
+                "id": "Source",
+                "path": "VRPBackendCICDPipelineStack/Pipeline/Source",
+                "children": {
+                  "GitHub_Source": {
+                    "id": "GitHub_Source",
+                    "path": "VRPBackendCICDPipelineStack/Pipeline/Source/GitHub_Source",
+                    "children": {
+                      "WebhookResource": {
+                        "id": "WebhookResource",
+                        "path": "VRPBackendCICDPipelineStack/Pipeline/Source/GitHub_Source/WebhookResource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::CodePipeline::Webhook",
+                          "aws:cdk:cloudformation:props": {
+                            "authentication": "GITHUB_HMAC",
+                            "authenticationConfiguration": {
+                              "secretToken": {
+                                "Fn::Join": [
+                                  "",
+                                  [
+                                    "{{resolve:secretsmanager:arn:",
+                                    {
+                                      "Ref": "AWS::Partition"
+                                    },
+                                    ":secretsmanager:",
+                                    {
+                                      "Ref": "AWS::Region"
+                                    },
+                                    ":",
+                                    {
+                                      "Ref": "AWS::AccountId"
+                                    },
+                                    ":secret:GithubToken:SecretString:GithubToken::}}"
+                                  ]
+                                ]
+                              }
+                            },
+                            "filters": [
+                              {
+                                "jsonPath": "$.ref",
+                                "matchEquals": "refs/heads/{Branch}"
+                              }
+                            ],
+                            "registerWithThirdParty": true,
+                            "targetAction": "GitHub_Source",
+                            "targetPipeline": {
+                              "Ref": "PipelineC660917D"
+                            },
+                            "targetPipelineVersion": 1
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_codepipeline.CfnWebhook",
+                          "version": "2.158.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "constructs.Construct",
+                      "version": "10.3.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0"
+                }
+              },
+              "Build": {
+                "id": "Build",
+                "path": "VRPBackendCICDPipelineStack/Pipeline/Build",
+                "children": {
+                  "Build": {
+                    "id": "Build",
+                    "path": "VRPBackendCICDPipelineStack/Pipeline/Build/Build",
+                    "children": {
+                      "CodePipelineActionRole": {
+                        "id": "CodePipelineActionRole",
+                        "path": "VRPBackendCICDPipelineStack/Pipeline/Build/Build/CodePipelineActionRole",
+                        "children": {
+                          "ImportCodePipelineActionRole": {
+                            "id": "ImportCodePipelineActionRole",
+                            "path": "VRPBackendCICDPipelineStack/Pipeline/Build/Build/CodePipelineActionRole/ImportCodePipelineActionRole",
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.Resource",
+                              "version": "2.158.0"
+                            }
+                          },
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "VRPBackendCICDPipelineStack/Pipeline/Build/Build/CodePipelineActionRole/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                              "aws:cdk:cloudformation:props": {
+                                "assumeRolePolicyDocument": {
+                                  "Statement": [
+                                    {
+                                      "Action": "sts:AssumeRole",
+                                      "Effect": "Allow",
+                                      "Principal": {
+                                        "AWS": {
+                                          "Fn::Join": [
+                                            "",
+                                            [
+                                              "arn:",
+                                              {
+                                                "Ref": "AWS::Partition"
+                                              },
+                                              ":iam::",
+                                              {
+                                                "Ref": "AWS::AccountId"
+                                              },
+                                              ":root"
+                                            ]
+                                          ]
+                                        }
+                                      }
+                                    }
+                                  ],
+                                  "Version": "2012-10-17"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                              "version": "2.158.0"
+                            }
+                          },
+                          "DefaultPolicy": {
+                            "id": "DefaultPolicy",
+                            "path": "VRPBackendCICDPipelineStack/Pipeline/Build/Build/CodePipelineActionRole/DefaultPolicy",
+                            "children": {
+                              "Resource": {
+                                "id": "Resource",
+                                "path": "VRPBackendCICDPipelineStack/Pipeline/Build/Build/CodePipelineActionRole/DefaultPolicy/Resource",
+                                "attributes": {
+                                  "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                                  "aws:cdk:cloudformation:props": {
+                                    "policyDocument": {
+                                      "Statement": [
+                                        {
+                                          "Action": [
+                                            "codebuild:BatchGetBuilds",
+                                            "codebuild:StartBuild",
+                                            "codebuild:StopBuild"
+                                          ],
+                                          "Effect": "Allow",
+                                          "Resource": {
+                                            "Fn::GetAtt": [
+                                              "BuildProject097C5DB7",
+                                              "Arn"
+                                            ]
+                                          }
+                                        }
+                                      ],
+                                      "Version": "2012-10-17"
+                                    },
+                                    "policyName": "PipelineBuildCodePipelineActionRoleDefaultPolicyC9CB73F8",
+                                    "roles": [
+                                      {
+                                        "Ref": "PipelineBuildCodePipelineActionRoleD77A08E6"
+                                      }
+                                    ]
+                                  }
+                                },
+                                "constructInfo": {
+                                  "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                                  "version": "2.158.0"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_iam.Policy",
+                              "version": "2.158.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_iam.Role",
+                          "version": "2.158.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "constructs.Construct",
+                      "version": "10.3.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0"
+                }
+              },
+              "Approve": {
+                "id": "Approve",
+                "path": "VRPBackendCICDPipelineStack/Pipeline/Approve",
+                "children": {
+                  "Approve": {
+                    "id": "Approve",
+                    "path": "VRPBackendCICDPipelineStack/Pipeline/Approve/Approve",
+                    "children": {
+                      "CodePipelineActionRole": {
+                        "id": "CodePipelineActionRole",
+                        "path": "VRPBackendCICDPipelineStack/Pipeline/Approve/Approve/CodePipelineActionRole",
+                        "children": {
+                          "ImportCodePipelineActionRole": {
+                            "id": "ImportCodePipelineActionRole",
+                            "path": "VRPBackendCICDPipelineStack/Pipeline/Approve/Approve/CodePipelineActionRole/ImportCodePipelineActionRole",
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.Resource",
+                              "version": "2.158.0"
+                            }
+                          },
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "VRPBackendCICDPipelineStack/Pipeline/Approve/Approve/CodePipelineActionRole/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                              "aws:cdk:cloudformation:props": {
+                                "assumeRolePolicyDocument": {
+                                  "Statement": [
+                                    {
+                                      "Action": "sts:AssumeRole",
+                                      "Effect": "Allow",
+                                      "Principal": {
+                                        "AWS": {
+                                          "Fn::Join": [
+                                            "",
+                                            [
+                                              "arn:",
+                                              {
+                                                "Ref": "AWS::Partition"
+                                              },
+                                              ":iam::",
+                                              {
+                                                "Ref": "AWS::AccountId"
+                                              },
+                                              ":root"
+                                            ]
+                                          ]
+                                        }
+                                      }
+                                    }
+                                  ],
+                                  "Version": "2012-10-17"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                              "version": "2.158.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_iam.Role",
+                          "version": "2.158.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "constructs.Construct",
+                      "version": "10.3.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0"
+                }
+              },
+              "Deploy": {
+                "id": "Deploy",
+                "path": "VRPBackendCICDPipelineStack/Pipeline/Deploy",
+                "children": {
+                  "DeployToECS": {
+                    "id": "DeployToECS",
+                    "path": "VRPBackendCICDPipelineStack/Pipeline/Deploy/DeployToECS",
+                    "children": {
+                      "CodePipelineActionRole": {
+                        "id": "CodePipelineActionRole",
+                        "path": "VRPBackendCICDPipelineStack/Pipeline/Deploy/DeployToECS/CodePipelineActionRole",
+                        "children": {
+                          "ImportCodePipelineActionRole": {
+                            "id": "ImportCodePipelineActionRole",
+                            "path": "VRPBackendCICDPipelineStack/Pipeline/Deploy/DeployToECS/CodePipelineActionRole/ImportCodePipelineActionRole",
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.Resource",
+                              "version": "2.158.0"
+                            }
+                          },
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "VRPBackendCICDPipelineStack/Pipeline/Deploy/DeployToECS/CodePipelineActionRole/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                              "aws:cdk:cloudformation:props": {
+                                "assumeRolePolicyDocument": {
+                                  "Statement": [
+                                    {
+                                      "Action": "sts:AssumeRole",
+                                      "Effect": "Allow",
+                                      "Principal": {
+                                        "AWS": {
+                                          "Fn::Join": [
+                                            "",
+                                            [
+                                              "arn:",
+                                              {
+                                                "Ref": "AWS::Partition"
+                                              },
+                                              ":iam::",
+                                              {
+                                                "Ref": "AWS::AccountId"
+                                              },
+                                              ":root"
+                                            ]
+                                          ]
+                                        }
+                                      }
+                                    }
+                                  ],
+                                  "Version": "2012-10-17"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                              "version": "2.158.0"
+                            }
+                          },
+                          "DefaultPolicy": {
+                            "id": "DefaultPolicy",
+                            "path": "VRPBackendCICDPipelineStack/Pipeline/Deploy/DeployToECS/CodePipelineActionRole/DefaultPolicy",
+                            "children": {
+                              "Resource": {
+                                "id": "Resource",
+                                "path": "VRPBackendCICDPipelineStack/Pipeline/Deploy/DeployToECS/CodePipelineActionRole/DefaultPolicy/Resource",
+                                "attributes": {
+                                  "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                                  "aws:cdk:cloudformation:props": {
+                                    "policyDocument": {
+                                      "Statement": [
+                                        {
+                                          "Action": [
+                                            "ecs:DescribeServices",
+                                            "ecs:DescribeTaskDefinition",
+                                            "ecs:DescribeTasks",
+                                            "ecs:ListTasks",
+                                            "ecs:RegisterTaskDefinition",
+                                            "ecs:TagResource",
+                                            "ecs:UpdateService"
+                                          ],
+                                          "Effect": "Allow",
+                                          "Resource": "*"
+                                        },
+                                        {
+                                          "Action": "iam:PassRole",
+                                          "Condition": {
+                                            "StringEqualsIfExists": {
+                                              "iam:PassedToService": [
+                                                "ec2.amazonaws.com",
+                                                "ecs-tasks.amazonaws.com"
+                                              ]
+                                            }
+                                          },
+                                          "Effect": "Allow",
+                                          "Resource": "*"
+                                        },
+                                        {
+                                          "Action": [
+                                            "s3:GetBucket*",
+                                            "s3:GetObject*",
+                                            "s3:List*"
+                                          ],
+                                          "Effect": "Allow",
+                                          "Resource": [
+                                            {
+                                              "Fn::GetAtt": [
+                                                "PipelineArtifactsBucket22248F97",
+                                                "Arn"
+                                              ]
+                                            },
+                                            {
+                                              "Fn::Join": [
+                                                "",
+                                                [
+                                                  {
+                                                    "Fn::GetAtt": [
+                                                      "PipelineArtifactsBucket22248F97",
+                                                      "Arn"
+                                                    ]
+                                                  },
+                                                  "/*"
+                                                ]
+                                              ]
+                                            }
+                                          ]
+                                        }
+                                      ],
+                                      "Version": "2012-10-17"
+                                    },
+                                    "policyName": "PipelineDeployDeployToECSCodePipelineActionRoleDefaultPolicy4F358851",
+                                    "roles": [
+                                      {
+                                        "Ref": "PipelineDeployDeployToECSCodePipelineActionRole895B27C5"
+                                      }
+                                    ]
+                                  }
+                                },
+                                "constructInfo": {
+                                  "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                                  "version": "2.158.0"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_iam.Policy",
+                              "version": "2.158.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_iam.Role",
+                          "version": "2.158.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "constructs.Construct",
+                      "version": "10.3.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_codepipeline.Pipeline",
+              "version": "2.158.0"
+            }
+          },
+          "PipelineFailureAlarm": {
+            "id": "PipelineFailureAlarm",
+            "path": "VRPBackendCICDPipelineStack/PipelineFailureAlarm",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "VRPBackendCICDPipelineStack/PipelineFailureAlarm/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
+                  "aws:cdk:cloudformation:props": {
+                    "alarmDescription": "Pipeline has failed",
+                    "comparisonOperator": "GreaterThanOrEqualToThreshold",
+                    "dimensions": [
+                      {
+                        "name": "PipelineName",
+                        "value": {
+                          "Ref": "PipelineC660917D"
+                        }
+                      }
+                    ],
+                    "evaluationPeriods": 1,
+                    "metricName": "PipelineExecutionFailure",
+                    "namespace": "AWS/CodePipeline",
+                    "period": 300,
+                    "statistic": "Average",
+                    "threshold": 1
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_cloudwatch.CfnAlarm",
+                  "version": "2.158.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_cloudwatch.Alarm",
+              "version": "2.158.0"
+            }
+          },
+          "EcsClusterName": {
+            "id": "EcsClusterName",
+            "path": "VRPBackendCICDPipelineStack/EcsClusterName",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnOutput",
+              "version": "2.158.0"
+            }
+          },
+          "EcsServiceName": {
+            "id": "EcsServiceName",
+            "path": "VRPBackendCICDPipelineStack/EcsServiceName",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnOutput",
+              "version": "2.158.0"
+            }
+          },
+          "CDKMetadata": {
+            "id": "CDKMetadata",
+            "path": "VRPBackendCICDPipelineStack/CDKMetadata",
+            "children": {
+              "Default": {
+                "id": "Default",
+                "path": "VRPBackendCICDPipelineStack/CDKMetadata/Default",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnResource",
+                  "version": "2.158.0"
+                }
+              },
+              "Condition": {
+                "id": "Condition",
+                "path": "VRPBackendCICDPipelineStack/CDKMetadata/Condition",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnCondition",
+                  "version": "2.158.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.3.0"
+            }
+          },
+          "BootstrapVersion": {
+            "id": "BootstrapVersion",
+            "path": "VRPBackendCICDPipelineStack/BootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnParameter",
+              "version": "2.158.0"
+            }
+          },
+          "CheckBootstrapVersion": {
+            "id": "CheckBootstrapVersion",
+            "path": "VRPBackendCICDPipelineStack/CheckBootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnRule",
+              "version": "2.158.0"
+            }
+          }
+        },
+        "constructInfo": {
+          "fqn": "aws-cdk-lib.Stack",
+          "version": "2.158.0"
+        }
+      },
+      "Tree": {
+        "id": "Tree",
+        "path": "Tree",
+        "constructInfo": {
+          "fqn": "constructs.Construct",
+          "version": "10.3.0"
+        }
+      }
+    },
+    "constructInfo": {
+      "fqn": "aws-cdk-lib.App",
+      "version": "2.158.0"
+    }
+  }
+}

@@ -1,0 +1,1011 @@
+{
+  "version": "36.3.0",
+  "artifacts": {
+    "VRPBackendCoreInfrastructureStack.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "VRPBackendCoreInfrastructureStack.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "VRPBackendCoreInfrastructureStack": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://unknown-account/unknown-region",
+      "properties": {
+        "templateFile": "VRPBackendCoreInfrastructureStack.template.json",
+        "terminationProtection": false,
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-${AWS::Region}",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-${AWS::Region}",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/b5e9b3f767ac52d7f1032e12d6bc28abd23171c60521b884a782e007aa8bdf3d.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "VRPBackendCoreInfrastructureStack.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-lookup-role-${AWS::AccountId}-${AWS::Region}",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        }
+      },
+      "dependencies": [
+        "VRPBackendCoreInfrastructureStack.assets"
+      ],
+      "metadata": {
+        "/VRPBackendCoreInfrastructureStack/VRPBackendVPC/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VRPBackendVPC60C6D0EE"
+          }
+        ],
+        "/VRPBackendCoreInfrastructureStack/VRPBackendVPC/PublicSubnet1/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VRPBackendVPCPublicSubnet1SubnetFF176F3E"
+          }
+        ],
+        "/VRPBackendCoreInfrastructureStack/VRPBackendVPC/PublicSubnet1/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VRPBackendVPCPublicSubnet1RouteTable971CFB64"
+          }
+        ],
+        "/VRPBackendCoreInfrastructureStack/VRPBackendVPC/PublicSubnet1/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VRPBackendVPCPublicSubnet1RouteTableAssociation5C4A7AFF"
+          }
+        ],
+        "/VRPBackendCoreInfrastructureStack/VRPBackendVPC/PublicSubnet1/DefaultRoute": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VRPBackendVPCPublicSubnet1DefaultRouteA39672BB"
+          }
+        ],
+        "/VRPBackendCoreInfrastructureStack/VRPBackendVPC/PublicSubnet1/EIP": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VRPBackendVPCPublicSubnet1EIP7054F877"
+          }
+        ],
+        "/VRPBackendCoreInfrastructureStack/VRPBackendVPC/PublicSubnet1/NATGateway": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VRPBackendVPCPublicSubnet1NATGateway1B4D1F3F"
+          }
+        ],
+        "/VRPBackendCoreInfrastructureStack/VRPBackendVPC/PublicSubnet2/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VRPBackendVPCPublicSubnet2Subnet8CF671C6"
+          }
+        ],
+        "/VRPBackendCoreInfrastructureStack/VRPBackendVPC/PublicSubnet2/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VRPBackendVPCPublicSubnet2RouteTable3E0D8FE5"
+          }
+        ],
+        "/VRPBackendCoreInfrastructureStack/VRPBackendVPC/PublicSubnet2/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VRPBackendVPCPublicSubnet2RouteTableAssociationC96192E0"
+          }
+        ],
+        "/VRPBackendCoreInfrastructureStack/VRPBackendVPC/PublicSubnet2/DefaultRoute": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VRPBackendVPCPublicSubnet2DefaultRoute045F3A4D"
+          }
+        ],
+        "/VRPBackendCoreInfrastructureStack/VRPBackendVPC/PublicSubnet2/EIP": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VRPBackendVPCPublicSubnet2EIP30638439"
+          }
+        ],
+        "/VRPBackendCoreInfrastructureStack/VRPBackendVPC/PublicSubnet2/NATGateway": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VRPBackendVPCPublicSubnet2NATGateway3B7C5A58"
+          }
+        ],
+        "/VRPBackendCoreInfrastructureStack/VRPBackendVPC/PrivateSubnet1/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VRPBackendVPCPrivateSubnet1Subnet8C465972"
+          }
+        ],
+        "/VRPBackendCoreInfrastructureStack/VRPBackendVPC/PrivateSubnet1/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VRPBackendVPCPrivateSubnet1RouteTable490F94BA"
+          }
+        ],
+        "/VRPBackendCoreInfrastructureStack/VRPBackendVPC/PrivateSubnet1/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VRPBackendVPCPrivateSubnet1RouteTableAssociation691AC739"
+          }
+        ],
+        "/VRPBackendCoreInfrastructureStack/VRPBackendVPC/PrivateSubnet1/DefaultRoute": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VRPBackendVPCPrivateSubnet1DefaultRoute4DA6132F"
+          }
+        ],
+        "/VRPBackendCoreInfrastructureStack/VRPBackendVPC/PrivateSubnet2/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VRPBackendVPCPrivateSubnet2Subnet5AAFB2AF"
+          }
+        ],
+        "/VRPBackendCoreInfrastructureStack/VRPBackendVPC/PrivateSubnet2/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VRPBackendVPCPrivateSubnet2RouteTable9C826CA3"
+          }
+        ],
+        "/VRPBackendCoreInfrastructureStack/VRPBackendVPC/PrivateSubnet2/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VRPBackendVPCPrivateSubnet2RouteTableAssociation979E8BED"
+          }
+        ],
+        "/VRPBackendCoreInfrastructureStack/VRPBackendVPC/PrivateSubnet2/DefaultRoute": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VRPBackendVPCPrivateSubnet2DefaultRouteE6452790"
+          }
+        ],
+        "/VRPBackendCoreInfrastructureStack/VRPBackendVPC/IGW": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VRPBackendVPCIGWDC5E8A67"
+          }
+        ],
+        "/VRPBackendCoreInfrastructureStack/VRPBackendVPC/VPCGW": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VRPBackendVPCVPCGWC8DB5E0F"
+          }
+        ],
+        "/VRPBackendCoreInfrastructureStack/VRPBackendVPC/RestrictDefaultSecurityGroupCustomResource/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VRPBackendVPCRestrictDefaultSecurityGroupCustomResource193C2C7A"
+          }
+        ],
+        "/VRPBackendCoreInfrastructureStack/LatestNodeRuntimeMap": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "LatestNodeRuntimeMap"
+          }
+        ],
+        "/VRPBackendCoreInfrastructureStack/Custom::VpcRestrictDefaultSGCustomResourceProvider": [
+          {
+            "type": "aws:cdk:is-custom-resource-handler-customResourceProvider",
+            "data": true
+          }
+        ],
+        "/VRPBackendCoreInfrastructureStack/Custom::VpcRestrictDefaultSGCustomResourceProvider/Role": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomVpcRestrictDefaultSGCustomResourceProviderRole26592FE0"
+          }
+        ],
+        "/VRPBackendCoreInfrastructureStack/Custom::VpcRestrictDefaultSGCustomResourceProvider/Handler": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomVpcRestrictDefaultSGCustomResourceProviderHandlerDC833E5E"
+          }
+        ],
+        "/VRPBackendCoreInfrastructureStack/VRPBackendRepo/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VRPBackendRepo8233BB19"
+          }
+        ],
+        "/VRPBackendCoreInfrastructureStack/VRPBackendCluster/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VRPBackendCluster2C6BD971"
+          }
+        ],
+        "/VRPBackendCoreInfrastructureStack/VRPBackendALB/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VRPBackendALB96992749"
+          }
+        ],
+        "/VRPBackendCoreInfrastructureStack/VRPBackendALB/SecurityGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VRPBackendALBSecurityGroup392B001B"
+          }
+        ],
+        "/VRPBackendCoreInfrastructureStack/VRPBackendAlbSecurityGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VRPBackendAlbSecurityGroup76F444F6"
+          }
+        ],
+        "/VRPBackendCoreInfrastructureStack/VRPDataTable/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VRPDataTable3E5097ED"
+          }
+        ],
+        "/VRPBackendCoreInfrastructureStack/VRPSolutionsBucket/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VRPSolutionsBucket21695A78"
+          }
+        ],
+        "/VRPBackendCoreInfrastructureStack/VRPSolutionsBucket/Policy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VRPSolutionsBucketPolicy2AB828FA"
+          }
+        ],
+        "/VRPBackendCoreInfrastructureStack/VRPSolutionsBucket/AutoDeleteObjectsCustomResource/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VRPSolutionsBucketAutoDeleteObjectsCustomResource77BDA246"
+          }
+        ],
+        "/VRPBackendCoreInfrastructureStack/Custom::S3AutoDeleteObjectsCustomResourceProvider": [
+          {
+            "type": "aws:cdk:is-custom-resource-handler-customResourceProvider",
+            "data": true
+          }
+        ],
+        "/VRPBackendCoreInfrastructureStack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Role": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092"
+          }
+        ],
+        "/VRPBackendCoreInfrastructureStack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Handler": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F"
+          }
+        ],
+        "/VRPBackendCoreInfrastructureStack/VRPBackendECRRepositoryUri": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VRPBackendECRRepositoryUri"
+          }
+        ],
+        "/VRPBackendCoreInfrastructureStack/VRPBackendALBDNSName": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VRPBackendALBDNSName"
+          }
+        ],
+        "/VRPBackendCoreInfrastructureStack/VRPDataTableName": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VRPDataTableName"
+          }
+        ],
+        "/VRPBackendCoreInfrastructureStack/VRPSolutionsBucketName": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VRPSolutionsBucketName"
+          }
+        ],
+        "/VRPBackendCoreInfrastructureStack/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/VRPBackendCoreInfrastructureStack/CDKMetadata/Condition": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadataAvailable"
+          }
+        ],
+        "/VRPBackendCoreInfrastructureStack/Exports/Output{\"Ref\":\"VRPBackendVPCPublicSubnet1SubnetFF176F3E\"}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputRefVRPBackendVPCPublicSubnet1SubnetFF176F3E850C58ED"
+          }
+        ],
+        "/VRPBackendCoreInfrastructureStack/Exports/Output{\"Ref\":\"VRPBackendVPCPublicSubnet2Subnet8CF671C6\"}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputRefVRPBackendVPCPublicSubnet2Subnet8CF671C6CBD073DE"
+          }
+        ],
+        "/VRPBackendCoreInfrastructureStack/Exports/Output{\"Ref\":\"VRPBackendVPC60C6D0EE\"}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputRefVRPBackendVPC60C6D0EE92200239"
+          }
+        ],
+        "/VRPBackendCoreInfrastructureStack/Exports/Output{\"Fn::GetAtt\":[\"VRPDataTable3E5097ED\",\"Arn\"]}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputFnGetAttVRPDataTable3E5097EDArn9B713839"
+          }
+        ],
+        "/VRPBackendCoreInfrastructureStack/Exports/Output{\"Fn::GetAtt\":[\"VRPSolutionsBucket21695A78\",\"Arn\"]}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputFnGetAttVRPSolutionsBucket21695A78Arn9EC44865"
+          }
+        ],
+        "/VRPBackendCoreInfrastructureStack/Exports/Output{\"Ref\":\"VRPDataTable3E5097ED\"}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputRefVRPDataTable3E5097EDBDCB015C"
+          }
+        ],
+        "/VRPBackendCoreInfrastructureStack/Exports/Output{\"Ref\":\"VRPSolutionsBucket21695A78\"}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputRefVRPSolutionsBucket21695A78557379F5"
+          }
+        ],
+        "/VRPBackendCoreInfrastructureStack/Exports/Output{\"Ref\":\"VRPBackendCluster2C6BD971\"}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputRefVRPBackendCluster2C6BD971E20D368B"
+          }
+        ],
+        "/VRPBackendCoreInfrastructureStack/Exports/Output{\"Ref\":\"VRPBackendVPCPrivateSubnet1Subnet8C465972\"}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputRefVRPBackendVPCPrivateSubnet1Subnet8C465972DAE9255F"
+          }
+        ],
+        "/VRPBackendCoreInfrastructureStack/Exports/Output{\"Ref\":\"VRPBackendVPCPrivateSubnet2Subnet5AAFB2AF\"}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputRefVRPBackendVPCPrivateSubnet2Subnet5AAFB2AF7F3BB99B"
+          }
+        ],
+        "/VRPBackendCoreInfrastructureStack/Exports/Output{\"Fn::GetAtt\":[\"VRPBackendRepo8233BB19\",\"Arn\"]}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputFnGetAttVRPBackendRepo8233BB19ArnE15220AD"
+          }
+        ],
+        "/VRPBackendCoreInfrastructureStack/Exports/Output{\"Ref\":\"VRPBackendRepo8233BB19\"}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputRefVRPBackendRepo8233BB19CBDECBE0"
+          }
+        ],
+        "/VRPBackendCoreInfrastructureStack/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/VRPBackendCoreInfrastructureStack/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "VRPBackendCoreInfrastructureStack"
+    },
+    "VRPBackendCognitoStack.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "VRPBackendCognitoStack.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "VRPBackendCognitoStack": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://unknown-account/unknown-region",
+      "properties": {
+        "templateFile": "VRPBackendCognitoStack.template.json",
+        "terminationProtection": false,
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-${AWS::Region}",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-${AWS::Region}",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/f70a7dc11681f9948b755303070ae02c5db06dc215e0e93555829124c03a4dea.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "VRPBackendCognitoStack.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-lookup-role-${AWS::AccountId}-${AWS::Region}",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        }
+      },
+      "dependencies": [
+        "VRPBackendCognitoStack.assets"
+      ],
+      "metadata": {
+        "/VRPBackendCognitoStack/VRPBackendUserPool/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VRPBackendUserPool6E0C7F5C"
+          }
+        ],
+        "/VRPBackendCognitoStack/UserPoolId": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "UserPoolId"
+          }
+        ],
+        "/VRPBackendCognitoStack/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/VRPBackendCognitoStack/CDKMetadata/Condition": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadataAvailable"
+          }
+        ],
+        "/VRPBackendCognitoStack/Exports/Output{\"Fn::GetAtt\":[\"VRPBackendUserPool6E0C7F5C\",\"Arn\"]}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputFnGetAttVRPBackendUserPool6E0C7F5CArn7645F585"
+          }
+        ],
+        "/VRPBackendCognitoStack/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/VRPBackendCognitoStack/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "VRPBackendCognitoStack"
+    },
+    "VRPBackendApiGatewayStack.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "VRPBackendApiGatewayStack.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "VRPBackendApiGatewayStack": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://unknown-account/unknown-region",
+      "properties": {
+        "templateFile": "VRPBackendApiGatewayStack.template.json",
+        "terminationProtection": false,
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-${AWS::Region}",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-${AWS::Region}",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/1ede153131812ae11f1ad33973155c9dbd810dcce4194a7a14e6fc366b302fb3.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "VRPBackendApiGatewayStack.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-lookup-role-${AWS::AccountId}-${AWS::Region}",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        }
+      },
+      "dependencies": [
+        "VRPBackendCognitoStack",
+        "VRPBackendApiGatewayStack.assets"
+      ],
+      "metadata": {
+        "/VRPBackendApiGatewayStack/VRPBackendApi/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VRPBackendApiAE313B9D"
+          }
+        ],
+        "/VRPBackendApiGatewayStack/VRPBackendApi/Deployment/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VRPBackendApiDeployment085943EB517e57d2093a8f8ddb5ad7b5da181f40"
+          }
+        ],
+        "/VRPBackendApiGatewayStack/VRPBackendApi/DeploymentStage.prod/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VRPBackendApiDeploymentStageprod130BDF60"
+          }
+        ],
+        "/VRPBackendApiGatewayStack/VRPBackendApi/Endpoint": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VRPBackendApiEndpoint57BCFC5C"
+          }
+        ],
+        "/VRPBackendApiGatewayStack/VRPBackendApi/Default/{proxy+}/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VRPBackendApiproxy1AB1CC72"
+          }
+        ],
+        "/VRPBackendApiGatewayStack/VRPBackendApi/Default/{proxy+}/ANY/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VRPBackendApiproxyANY73A8C48F"
+          }
+        ],
+        "/VRPBackendApiGatewayStack/VRPBackendApiAuthorizer/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VRPBackendApiAuthorizerD10F9C9E"
+          }
+        ],
+        "/VRPBackendApiGatewayStack/VRPBackendApiUrl": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VRPBackendApiUrl"
+          }
+        ],
+        "/VRPBackendApiGatewayStack/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/VRPBackendApiGatewayStack/CDKMetadata/Condition": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadataAvailable"
+          }
+        ],
+        "/VRPBackendApiGatewayStack/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/VRPBackendApiGatewayStack/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "VRPBackendApiGatewayStack"
+    },
+    "VRPBackendEcsServiceStack.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "VRPBackendEcsServiceStack.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "VRPBackendEcsServiceStack": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://unknown-account/unknown-region",
+      "properties": {
+        "templateFile": "VRPBackendEcsServiceStack.template.json",
+        "terminationProtection": false,
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-${AWS::Region}",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-${AWS::Region}",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/1252c3148c78d26ec9f8f1c478049476655f688d2f6c4371bd56dbcb0319ae7f.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "VRPBackendEcsServiceStack.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-lookup-role-${AWS::AccountId}-${AWS::Region}",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        }
+      },
+      "dependencies": [
+        "VRPBackendCoreInfrastructureStack",
+        "VRPBackendEcsServiceStack.assets"
+      ],
+      "metadata": {
+        "/VRPBackendEcsServiceStack/VRPBackendFargateService/LB/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VRPBackendFargateServiceLB527E1B78"
+          }
+        ],
+        "/VRPBackendEcsServiceStack/VRPBackendFargateService/LB/SecurityGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VRPBackendFargateServiceLBSecurityGroup379A95EA"
+          }
+        ],
+        "/VRPBackendEcsServiceStack/VRPBackendFargateService/LB/SecurityGroup/to VRPBackendEcsServiceStackVRPBackendFargateServiceSecurityGroup8B1E0020:80": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VRPBackendFargateServiceLBSecurityGrouptoVRPBackendEcsServiceStackVRPBackendFargateServiceSecurityGroup8B1E002080B41014E2"
+          }
+        ],
+        "/VRPBackendEcsServiceStack/VRPBackendFargateService/LB/PublicListener/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VRPBackendFargateServiceLBPublicListenerD5357440"
+          }
+        ],
+        "/VRPBackendEcsServiceStack/VRPBackendFargateService/LB/PublicListener/ECSGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VRPBackendFargateServiceLBPublicListenerECSGroup67273753"
+          }
+        ],
+        "/VRPBackendEcsServiceStack/VRPBackendFargateService/LoadBalancerDNS": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VRPBackendFargateServiceLoadBalancerDNS77350889"
+          }
+        ],
+        "/VRPBackendEcsServiceStack/VRPBackendFargateService/ServiceURL": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VRPBackendFargateServiceServiceURL49420402"
+          }
+        ],
+        "/VRPBackendEcsServiceStack/VRPBackendFargateService/TaskDef/TaskRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VRPBackendFargateServiceTaskDefTaskRole0D13EE8D"
+          }
+        ],
+        "/VRPBackendEcsServiceStack/VRPBackendFargateService/TaskDef/TaskRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VRPBackendFargateServiceTaskDefTaskRoleDefaultPolicyDC3CEB10"
+          }
+        ],
+        "/VRPBackendEcsServiceStack/VRPBackendFargateService/TaskDef/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VRPBackendFargateServiceTaskDef9EC6EC0B"
+          }
+        ],
+        "/VRPBackendEcsServiceStack/VRPBackendFargateService/TaskDef/vrp-backend-container/LogGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VRPBackendFargateServiceTaskDefvrpbackendcontainerLogGroup3B6CB1DB"
+          }
+        ],
+        "/VRPBackendEcsServiceStack/VRPBackendFargateService/TaskDef/ExecutionRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VRPBackendFargateServiceTaskDefExecutionRole8F79EEFB"
+          }
+        ],
+        "/VRPBackendEcsServiceStack/VRPBackendFargateService/TaskDef/ExecutionRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VRPBackendFargateServiceTaskDefExecutionRoleDefaultPolicy955AF0A5"
+          }
+        ],
+        "/VRPBackendEcsServiceStack/VRPBackendFargateService/Service/Service": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VRPBackendFargateService1F47BB8A"
+          }
+        ],
+        "/VRPBackendEcsServiceStack/VRPBackendFargateService/Service/SecurityGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VRPBackendFargateServiceSecurityGroup2259DAE6"
+          }
+        ],
+        "/VRPBackendEcsServiceStack/VRPBackendFargateService/Service/SecurityGroup/from VRPBackendEcsServiceStackVRPBackendFargateServiceLBSecurityGroup8CEE28B9:80": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VRPBackendFargateServiceSecurityGroupfromVRPBackendEcsServiceStackVRPBackendFargateServiceLBSecurityGroup8CEE28B9802F214199"
+          }
+        ],
+        "/VRPBackendEcsServiceStack/VRPBackendFargateService/Service/TaskCount/Target/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VRPBackendFargateServiceTaskCountTargetBD28B261"
+          }
+        ],
+        "/VRPBackendEcsServiceStack/VRPBackendFargateService/Service/TaskCount/Target/CpuScaling/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VRPBackendFargateServiceTaskCountTargetCpuScalingB6F27914"
+          }
+        ],
+        "/VRPBackendEcsServiceStack/Http5xxAlarm/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "Http5xxAlarm2F844FC7"
+          }
+        ],
+        "/VRPBackendEcsServiceStack/VRPBackendEcsServiceName": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VRPBackendEcsServiceName"
+          }
+        ],
+        "/VRPBackendEcsServiceStack/VRPBackendLoadBalancerDNS": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VRPBackendLoadBalancerDNS"
+          }
+        ],
+        "/VRPBackendEcsServiceStack/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/VRPBackendEcsServiceStack/CDKMetadata/Condition": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadataAvailable"
+          }
+        ],
+        "/VRPBackendEcsServiceStack/Exports/Output{\"Fn::GetAtt\":[\"VRPBackendFargateService1F47BB8A\",\"Name\"]}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputFnGetAttVRPBackendFargateService1F47BB8ANameD023DB5E"
+          }
+        ],
+        "/VRPBackendEcsServiceStack/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/VRPBackendEcsServiceStack/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "VRPBackendEcsServiceStack"
+    },
+    "VRPBackendIntegrationStack.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "VRPBackendIntegrationStack.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "VRPBackendIntegrationStack": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://unknown-account/unknown-region",
+      "properties": {
+        "templateFile": "VRPBackendIntegrationStack.template.json",
+        "terminationProtection": false,
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-${AWS::Region}",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-${AWS::Region}",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/81f59c646311c307ca06679d0a023759466885ef43e77c57f45b8eca49f79082.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "VRPBackendIntegrationStack.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-lookup-role-${AWS::AccountId}-${AWS::Region}",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        }
+      },
+      "dependencies": [
+        "VRPBackendIntegrationStack.assets"
+      ],
+      "metadata": {
+        "/VRPBackendIntegrationStack/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/VRPBackendIntegrationStack/CDKMetadata/Condition": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadataAvailable"
+          }
+        ],
+        "/VRPBackendIntegrationStack/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/VRPBackendIntegrationStack/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "VRPBackendIntegrationStack"
+    },
+    "VRPBackendCICDPipelineStack.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "VRPBackendCICDPipelineStack.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "VRPBackendCICDPipelineStack": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://unknown-account/unknown-region",
+      "properties": {
+        "templateFile": "VRPBackendCICDPipelineStack.template.json",
+        "terminationProtection": false,
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-${AWS::Region}",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-${AWS::Region}",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/f6e2eab361b2f6cf5de1f1e5fb1a0c7527dc649a509627fc675261fe0c46ba62.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "VRPBackendCICDPipelineStack.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-lookup-role-${AWS::AccountId}-${AWS::Region}",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        }
+      },
+      "dependencies": [
+        "VRPBackendCoreInfrastructureStack",
+        "VRPBackendEcsServiceStack",
+        "VRPBackendCICDPipelineStack.assets"
+      ],
+      "metadata": {
+        "/VRPBackendCICDPipelineStack/BuildProject/Role/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BuildProjectRoleAA92C755"
+          }
+        ],
+        "/VRPBackendCICDPipelineStack/BuildProject/Role/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BuildProjectRoleDefaultPolicy3E9F248C"
+          }
+        ],
+        "/VRPBackendCICDPipelineStack/BuildProject/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BuildProject097C5DB7"
+          }
+        ],
+        "/VRPBackendCICDPipelineStack/Pipeline/ArtifactsBucket/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PipelineArtifactsBucket22248F97"
+          }
+        ],
+        "/VRPBackendCICDPipelineStack/Pipeline/ArtifactsBucket/Policy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PipelineArtifactsBucketPolicyD4F9712A"
+          }
+        ],
+        "/VRPBackendCICDPipelineStack/Pipeline/Role/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PipelineRoleD68726F7"
+          }
+        ],
+        "/VRPBackendCICDPipelineStack/Pipeline/Role/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PipelineRoleDefaultPolicyC7A05455"
+          }
+        ],
+        "/VRPBackendCICDPipelineStack/Pipeline/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PipelineC660917D"
+          }
+        ],
+        "/VRPBackendCICDPipelineStack/Pipeline/Source/GitHub_Source/WebhookResource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PipelineSourceGitHubSourceWebhookResource8EECEFFF"
+          }
+        ],
+        "/VRPBackendCICDPipelineStack/Pipeline/Build/Build/CodePipelineActionRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PipelineBuildCodePipelineActionRoleD77A08E6"
+          }
+        ],
+        "/VRPBackendCICDPipelineStack/Pipeline/Build/Build/CodePipelineActionRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PipelineBuildCodePipelineActionRoleDefaultPolicyC9CB73F8"
+          }
+        ],
+        "/VRPBackendCICDPipelineStack/Pipeline/Approve/Approve/CodePipelineActionRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PipelineApproveCodePipelineActionRole6E3F114D"
+          }
+        ],
+        "/VRPBackendCICDPipelineStack/Pipeline/Deploy/DeployToECS/CodePipelineActionRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PipelineDeployDeployToECSCodePipelineActionRole895B27C5"
+          }
+        ],
+        "/VRPBackendCICDPipelineStack/Pipeline/Deploy/DeployToECS/CodePipelineActionRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PipelineDeployDeployToECSCodePipelineActionRoleDefaultPolicy4F358851"
+          }
+        ],
+        "/VRPBackendCICDPipelineStack/PipelineFailureAlarm/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PipelineFailureAlarm20CC1062"
+          }
+        ],
+        "/VRPBackendCICDPipelineStack/EcsClusterName": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "EcsClusterName"
+          }
+        ],
+        "/VRPBackendCICDPipelineStack/EcsServiceName": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "EcsServiceName"
+          }
+        ],
+        "/VRPBackendCICDPipelineStack/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/VRPBackendCICDPipelineStack/CDKMetadata/Condition": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadataAvailable"
+          }
+        ],
+        "/VRPBackendCICDPipelineStack/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/VRPBackendCICDPipelineStack/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "VRPBackendCICDPipelineStack"
+    },
+    "Tree": {
+      "type": "cdk:tree",
+      "properties": {
+        "file": "tree.json"
+      }
+    }
+  }
+}

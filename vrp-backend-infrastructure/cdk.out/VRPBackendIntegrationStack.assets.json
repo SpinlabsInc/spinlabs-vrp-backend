@@ -1,0 +1,19 @@
+{
+  "version": "36.3.0",
+  "files": {
+    "81f59c646311c307ca06679d0a023759466885ef43e77c57f45b8eca49f79082": {
+      "source": {
+        "path": "VRPBackendIntegrationStack.template.json",
+        "packaging": "file"
+      },
+      "destinations": {
+        "current_account-current_region": {
+          "bucketName": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}",
+          "objectKey": "81f59c646311c307ca06679d0a023759466885ef43e77c57f45b8eca49f79082.json",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-file-publishing-role-${AWS::AccountId}-${AWS::Region}"
+        }
+      }
+    }
+  },
+  "dockerImages": {}
+}
