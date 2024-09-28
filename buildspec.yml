@@ -9,25 +9,28 @@ phases:
       - export DOCKER_USERNAME=$(aws secretsmanager get-secret-value --secret-id DockerHubCredentials --query SecretString --output text | jq -r .DOCKERHUB_USERNAME)
       - export DOCKER_PASSWORD=$(aws secretsmanager get-secret-value --secret-id DockerHubCredentials --query SecretString --output text | jq -r .DOCKERHUB_TOKEN)
       - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+
   pre_build:
     commands:
       - echo "Logging into Amazon ECR..."
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $ECR_REPO_URI
       - IMAGE_TAG=$(date +%Y%m%d%H%M%S)
       - echo "IMAGE_TAG: $IMAGE_TAG"
+
   build:
     commands:
-      - echo Build started on `date`
-      - echo Building the Docker image...
-      - docker build -t $ECR_REPO_URI:$IMAGE_TAG -f Services/Dockerfile vrp-services/
+      - echo "Build started on $(date)"
+      - echo "Building the Docker image..."
+      - docker build -t $ECR_REPO_URI:$IMAGE_TAG -f vrp-services/Dockerfile vrp-services/
       - docker tag $ECR_REPO_URI:$IMAGE_TAG $ECR_REPO_URI:latest
+
   post_build:
     commands:
-      - echo Build completed on `date`
-      - echo Pushing the Docker image...
+      - echo "Build completed on $(date)"
+      - echo "Pushing the Docker image..."
       - docker push $ECR_REPO_URI:$IMAGE_TAG
       - docker push $ECR_REPO_URI:latest
-      - echo Writing image definitions file...
+      - echo "Writing image definitions file..."
       - echo '{"ImageURI":"'$ECR_REPO_URI:$IMAGE_TAG'"}' > imageDetail.json
       - cat imageDetail.json
 
