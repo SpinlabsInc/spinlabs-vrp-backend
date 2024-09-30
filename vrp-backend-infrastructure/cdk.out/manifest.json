@@ -601,7 +601,7 @@
         "validateOnSynth": false,
         "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-${AWS::Region}",
         "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-${AWS::Region}",
-        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/4c429ea42a4caf40e5f825e5001e1f07b47102901507d4893228ee404934a412.json",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/77800be79740da99fa05bc3e3f5e911fe3878c71d5c12dd5ec310e85ce1624dd.json",
         "requiresBootstrapStackVersion": 6,
         "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
         "additionalDependencies": [
@@ -730,6 +730,36 @@
           {
             "type": "aws:cdk:logicalId",
             "data": "Http5xxAlarm2F844FC7"
+          }
+        ],
+        "/VRPBackendEcsServiceStack/BatchServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BatchServiceRole57930367"
+          }
+        ],
+        "/VRPBackendEcsServiceStack/SolverSecurityGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SolverSecurityGroup9F3BDB51"
+          }
+        ],
+        "/VRPBackendEcsServiceStack/SolverComputeEnvironment": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SolverComputeEnvironment"
+          }
+        ],
+        "/VRPBackendEcsServiceStack/SolverJobDefinition": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SolverJobDefinition"
+          }
+        ],
+        "/VRPBackendEcsServiceStack/SolverJobQueue": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SolverJobQueue"
           }
         ],
         "/VRPBackendEcsServiceStack/VRPBackendEcsServiceName": [

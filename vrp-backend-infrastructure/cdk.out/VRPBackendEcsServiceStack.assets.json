@@ -1,7 +1,7 @@
 {
   "version": "36.3.0",
   "files": {
-    "4c429ea42a4caf40e5f825e5001e1f07b47102901507d4893228ee404934a412": {
+    "77800be79740da99fa05bc3e3f5e911fe3878c71d5c12dd5ec310e85ce1624dd": {
       "source": {
         "path": "VRPBackendEcsServiceStack.template.json",
         "packaging": "file"
@@ -9,7 +9,7 @@
       "destinations": {
         "current_account-current_region": {
           "bucketName": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}",
-          "objectKey": "4c429ea42a4caf40e5f825e5001e1f07b47102901507d4893228ee404934a412.json",
+          "objectKey": "77800be79740da99fa05bc3e3f5e911fe3878c71d5c12dd5ec310e85ce1624dd.json",
           "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-file-publishing-role-${AWS::AccountId}-${AWS::Region}"
         }
       }

@@ -1726,6 +1726,18 @@
                             ":iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
                           ]
                         ]
+                      },
+                      {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":iam::aws:policy/AmazonS3FullAccess"
+                          ]
+                        ]
                       }
                     ]
                   }
@@ -2087,7 +2099,7 @@
                             "attributes": {
                               "aws:cdk:cloudformation:type": "AWS::ElasticLoadBalancingV2::TargetGroup",
                               "aws:cdk:cloudformation:props": {
-                                "healthCheckPath": "/",
+                                "healthCheckPath": "/api/health",
                                 "matcher": {
                                   "httpCode": "200-399"
                                 },
@@ -2231,6 +2243,14 @@
                                 "value": {
                                   "Fn::ImportValue": "VRPBackendCoreInfrastructureStack:ExportsOutputRefVRPSolutionsBucket21695A78557379F5"
                                 }
+                              },
+                              {
+                                "name": "VRP_SOLVER_JOB_DEFINITION",
+                                "value": "solver-job-definition"
+                              },
+                              {
+                                "name": "VRP_SOLVER_JOB_QUEUE",
+                                "value": "solver-job-queue"
                               }
                             ]
                           }
@@ -2589,6 +2609,238 @@
             },
             "constructInfo": {
               "fqn": "aws-cdk-lib.aws_cloudwatch.Alarm",
+              "version": "2.158.0"
+            }
+          },
+          "BatchServiceRole": {
+            "id": "BatchServiceRole",
+            "path": "VRPBackendEcsServiceStack/BatchServiceRole",
+            "children": {
+              "ImportBatchServiceRole": {
+                "id": "ImportBatchServiceRole",
+                "path": "VRPBackendEcsServiceStack/BatchServiceRole/ImportBatchServiceRole",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.Resource",
+                  "version": "2.158.0"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "VRPBackendEcsServiceStack/BatchServiceRole/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                  "aws:cdk:cloudformation:props": {
+                    "assumeRolePolicyDocument": {
+                      "Statement": [
+                        {
+                          "Action": "sts:AssumeRole",
+                          "Effect": "Allow",
+                          "Principal": {
+                            "Service": "batch.amazonaws.com"
+                          }
+                        }
+                      ],
+                      "Version": "2012-10-17"
+                    },
+                    "managedPolicyArns": [
+                      {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":iam::aws:policy/service-role/AWSBatchServiceRole"
+                          ]
+                        ]
+                      }
+                    ]
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                  "version": "2.158.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_iam.Role",
+              "version": "2.158.0"
+            }
+          },
+          "SolverSecurityGroup": {
+            "id": "SolverSecurityGroup",
+            "path": "VRPBackendEcsServiceStack/SolverSecurityGroup",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "VRPBackendEcsServiceStack/SolverSecurityGroup/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::EC2::SecurityGroup",
+                  "aws:cdk:cloudformation:props": {
+                    "groupDescription": "Security group for Solver Compute Environment",
+                    "groupName": "solver-security-group",
+                    "securityGroupEgress": [
+                      {
+                        "cidrIp": "0.0.0.0/0",
+                        "description": "Allow all outbound traffic by default",
+                        "ipProtocol": "-1"
+                      }
+                    ],
+                    "vpcId": {
+                      "Fn::ImportValue": "VRPBackendCoreInfrastructureStack:ExportsOutputRefVRPBackendVPC60C6D0EE92200239"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_ec2.CfnSecurityGroup",
+                  "version": "2.158.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_ec2.SecurityGroup",
+              "version": "2.158.0"
+            }
+          },
+          "SolverComputeEnvironment": {
+            "id": "SolverComputeEnvironment",
+            "path": "VRPBackendEcsServiceStack/SolverComputeEnvironment",
+            "attributes": {
+              "aws:cdk:cloudformation:type": "AWS::Batch::ComputeEnvironment",
+              "aws:cdk:cloudformation:props": {
+                "computeEnvironmentName": "solver-compute-environment-dev",
+                "computeResources": {
+                  "type": "FARGATE",
+                  "maxvCpus": 4,
+                  "securityGroupIds": [
+                    {
+                      "Fn::GetAtt": [
+                        "SolverSecurityGroup9F3BDB51",
+                        "GroupId"
+                      ]
+                    }
+                  ],
+                  "subnets": [
+                    {
+                      "Fn::ImportValue": "VRPBackendCoreInfrastructureStack:ExportsOutputRefVRPBackendVPCPublicSubnet1SubnetFF176F3E850C58ED"
+                    },
+                    {
+                      "Fn::ImportValue": "VRPBackendCoreInfrastructureStack:ExportsOutputRefVRPBackendVPCPublicSubnet2Subnet8CF671C6CBD073DE"
+                    }
+                  ]
+                },
+                "serviceRole": {
+                  "Fn::GetAtt": [
+                    "BatchServiceRole57930367",
+                    "Arn"
+                  ]
+                },
+                "state": "ENABLED",
+                "type": "MANAGED"
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_batch.CfnComputeEnvironment",
+              "version": "2.158.0"
+            }
+          },
+          "SolverJobDefinition": {
+            "id": "SolverJobDefinition",
+            "path": "VRPBackendEcsServiceStack/SolverJobDefinition",
+            "attributes": {
+              "aws:cdk:cloudformation:type": "AWS::Batch::JobDefinition",
+              "aws:cdk:cloudformation:props": {
+                "containerProperties": {
+                  "image": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        {
+                          "Fn::Select": [
+                            4,
+                            {
+                              "Fn::Split": [
+                                ":",
+                                {
+                                  "Fn::ImportValue": "VRPBackendCoreInfrastructureStack:ExportsOutputFnGetAttVRPBackendRepo8233BB19ArnE15220AD"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        ".dkr.ecr.",
+                        {
+                          "Fn::Select": [
+                            3,
+                            {
+                              "Fn::Split": [
+                                ":",
+                                {
+                                  "Fn::ImportValue": "VRPBackendCoreInfrastructureStack:ExportsOutputFnGetAttVRPBackendRepo8233BB19ArnE15220AD"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        ".",
+                        {
+                          "Ref": "AWS::URLSuffix"
+                        },
+                        "/",
+                        {
+                          "Fn::ImportValue": "VRPBackendCoreInfrastructureStack:ExportsOutputRefVRPBackendRepo8233BB19CBDECBE0"
+                        }
+                      ]
+                    ]
+                  },
+                  "vcpus": 1,
+                  "memory": 1024,
+                  "environment": [
+                    {
+                      "name": "VRP_DATA_TABLE",
+                      "value": {
+                        "Fn::ImportValue": "VRPBackendCoreInfrastructureStack:ExportsOutputRefVRPDataTable3E5097EDBDCB015C"
+                      }
+                    },
+                    {
+                      "name": "VRP_SOLUTIONS_BUCKET",
+                      "value": {
+                        "Fn::ImportValue": "VRPBackendCoreInfrastructureStack:ExportsOutputRefVRPSolutionsBucket21695A78557379F5"
+                      }
+                    }
+                  ]
+                },
+                "jobDefinitionName": "solver-job-definition",
+                "type": "container"
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_batch.CfnJobDefinition",
+              "version": "2.158.0"
+            }
+          },
+          "SolverJobQueue": {
+            "id": "SolverJobQueue",
+            "path": "VRPBackendEcsServiceStack/SolverJobQueue",
+            "attributes": {
+              "aws:cdk:cloudformation:type": "AWS::Batch::JobQueue",
+              "aws:cdk:cloudformation:props": {
+                "computeEnvironmentOrder": [
+                  {
+                    "order": 1,
+                    "computeEnvironment": {
+                      "Ref": "SolverComputeEnvironment"
+                    }
+                  }
+                ],
+                "jobQueueName": "solver-job-queue",
+                "priority": 1
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_batch.CfnJobQueue",
               "version": "2.158.0"
             }
           },
