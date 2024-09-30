@@ -32,8 +32,9 @@ phases:
       - docker push $ECR_REPO_URI:$IMAGE_TAG
       - docker push $ECR_REPO_URI:latest
       - echo "Writing image definitions file..."
-      - echo '{"ImageURI":"'$ECR_REPO_URI:$IMAGE_TAG'"}' > imageDetail.json
+      - printf '[{"name":"vrp-backend-container","imageUri":"%s"}]' "$ECR_REPO_URI:$IMAGE_TAG" > imageDetail.json
       - cat imageDetail.json
+
 
 artifacts:
   files:
