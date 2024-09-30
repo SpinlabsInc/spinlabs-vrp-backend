@@ -3,7 +3,7 @@
   "CDKMetadata": {
    "Type": "AWS::CDK::Metadata",
    "Properties": {
-    "Analytics": "v2:deflate64:H4sIAAAAAAAA/zPSMzS10DNQTCwv1k1OydbNyUzSqw4uSUzO1nFOywtKLc4vLUpOBbGd8/NSMksy8/NqdfLyU1L1sor1y4yM9Ez1DBWzijMzdYtK80oyc1P1giA0ANbrSgxZAAAA"
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/zPSMzS10DNQTCwv1k1OydbNyUzSqw4uSUzO1nFOywtKLc4vLUpOBbGd8/NSMksy8/NqdfLyU1L1sor1ywwt9AzNgbqzijMzdYtK80oyc1P1giA0ADIrBrlaAAAA"
    },
    "Metadata": {
     "aws:cdk:path": "VRPBackendIntegrationStack/CDKMetadata/Default"
