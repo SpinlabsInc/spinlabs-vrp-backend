@@ -4,5 +4,6 @@ boto3==1.18.0
 ortools==9.0.9048
 geopy==2.2.0
 gunicorn==20.1.0
-moto==2.0.0
+moto>=2.2.8  # Ensure the moto version is updated to avoid the MarkupSafe conflict
 pytest==6.2.4
+MarkupSafe==2.0.1  # Pin MarkupSafe version to avoid conflicts

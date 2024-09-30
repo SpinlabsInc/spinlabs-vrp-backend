@@ -4,6 +4,9 @@ WORKDIR /app
 # Copy the requirements file from the correct directory
 COPY requirements.txt /app/
 
+# Upgrade pip to the latest version to resolve dependencies properly
+RUN pip install --upgrade pip
+
 # Install dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
