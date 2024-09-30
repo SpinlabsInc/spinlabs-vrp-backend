@@ -21,7 +21,7 @@ phases:
     commands:
       - echo "Build started on $(date)"  # Ensure proper quoting around the command
       - echo "Building the Docker image..."
-      - docker build -t $ECR_REPO_URI:$IMAGE_TAG -f vrp-services/Dockerfile .
+      - docker build -t $ECR_REPO_URI:$IMAGE_TAG -f vrp-services/Dockerfile vrp-services/
       - docker tag $ECR_REPO_URI:$IMAGE_TAG $ECR_REPO_URI:latest
 
   post_build:
