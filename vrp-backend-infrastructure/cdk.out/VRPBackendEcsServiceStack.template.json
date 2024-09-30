@@ -1,5 +1,182 @@
 {
  "Resources": {
+  "EcsTaskExecutionRoleC0B6A84D": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "ecs-tasks.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendEcsServiceStack/EcsTaskExecutionRole/Resource"
+   }
+  },
+  "EcsTaskExecutionRoleDefaultPolicyDCEEFDC3": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "ecr:BatchCheckLayerAvailability",
+        "ecr:BatchGetImage",
+        "ecr:GetDownloadUrlForLayer"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::ImportValue": "VRPBackendCoreInfrastructureStack:ExportsOutputFnGetAttVRPBackendRepo8233BB19ArnE15220AD"
+       }
+      },
+      {
+       "Action": "ecr:GetAuthorizationToken",
+       "Effect": "Allow",
+       "Resource": "*"
+      },
+      {
+       "Action": [
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "VRPBackendFargateServiceTaskDefvrpbackendcontainerLogGroup3B6CB1DB",
+         "Arn"
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "EcsTaskExecutionRoleDefaultPolicyDCEEFDC3",
+    "Roles": [
+     {
+      "Ref": "EcsTaskExecutionRoleC0B6A84D"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendEcsServiceStack/EcsTaskExecutionRole/DefaultPolicy/Resource"
+   }
+  },
+  "EcsTaskRole8DFA0181": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "ecs-tasks.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendEcsServiceStack/EcsTaskRole/Resource"
+   }
+  },
+  "EcsTaskRoleDefaultPolicy50882C77": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "dynamodb:BatchGetItem",
+        "dynamodb:BatchWriteItem",
+        "dynamodb:ConditionCheckItem",
+        "dynamodb:DeleteItem",
+        "dynamodb:DescribeTable",
+        "dynamodb:GetItem",
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator",
+        "dynamodb:PutItem",
+        "dynamodb:Query",
+        "dynamodb:Scan",
+        "dynamodb:UpdateItem"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::ImportValue": "VRPBackendCoreInfrastructureStack:ExportsOutputFnGetAttVRPDataTable3E5097EDArn9B713839"
+        },
+        {
+         "Ref": "AWS::NoValue"
+        }
+       ]
+      },
+      {
+       "Action": [
+        "s3:Abort*",
+        "s3:DeleteObject*",
+        "s3:GetBucket*",
+        "s3:GetObject*",
+        "s3:List*",
+        "s3:PutObject",
+        "s3:PutObjectLegalHold",
+        "s3:PutObjectRetention",
+        "s3:PutObjectTagging",
+        "s3:PutObjectVersionTagging"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::ImportValue": "VRPBackendCoreInfrastructureStack:ExportsOutputFnGetAttVRPSolutionsBucket21695A78Arn9EC44865"
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::ImportValue": "VRPBackendCoreInfrastructureStack:ExportsOutputFnGetAttVRPSolutionsBucket21695A78Arn9EC44865"
+           },
+           "/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "EcsTaskRoleDefaultPolicy50882C77",
+    "Roles": [
+     {
+      "Ref": "EcsTaskRole8DFA0181"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendEcsServiceStack/EcsTaskRole/DefaultPolicy/Resource"
+   }
+  },
   "VRPBackendFargateServiceLB527E1B78": {
    "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
    "Properties": {
@@ -122,101 +299,6 @@
     "aws:cdk:path": "VRPBackendEcsServiceStack/VRPBackendFargateService/LB/PublicListener/ECSGroup/Resource"
    }
   },
-  "VRPBackendFargateServiceTaskDefTaskRole0D13EE8D": {
-   "Type": "AWS::IAM::Role",
-   "Properties": {
-    "AssumeRolePolicyDocument": {
-     "Statement": [
-      {
-       "Action": "sts:AssumeRole",
-       "Effect": "Allow",
-       "Principal": {
-        "Service": "ecs-tasks.amazonaws.com"
-       }
-      }
-     ],
-     "Version": "2012-10-17"
-    }
-   },
-   "Metadata": {
-    "aws:cdk:path": "VRPBackendEcsServiceStack/VRPBackendFargateService/TaskDef/TaskRole/Resource"
-   }
-  },
-  "VRPBackendFargateServiceTaskDefTaskRoleDefaultPolicyDC3CEB10": {
-   "Type": "AWS::IAM::Policy",
-   "Properties": {
-    "PolicyDocument": {
-     "Statement": [
-      {
-       "Action": [
-        "dynamodb:BatchGetItem",
-        "dynamodb:BatchWriteItem",
-        "dynamodb:ConditionCheckItem",
-        "dynamodb:DeleteItem",
-        "dynamodb:DescribeTable",
-        "dynamodb:GetItem",
-        "dynamodb:GetRecords",
-        "dynamodb:GetShardIterator",
-        "dynamodb:PutItem",
-        "dynamodb:Query",
-        "dynamodb:Scan",
-        "dynamodb:UpdateItem"
-       ],
-       "Effect": "Allow",
-       "Resource": [
-        {
-         "Fn::ImportValue": "VRPBackendCoreInfrastructureStack:ExportsOutputFnGetAttVRPDataTable3E5097EDArn9B713839"
-        },
-        {
-         "Ref": "AWS::NoValue"
-        }
-       ]
-      },
-      {
-       "Action": [
-        "s3:Abort*",
-        "s3:DeleteObject*",
-        "s3:GetBucket*",
-        "s3:GetObject*",
-        "s3:List*",
-        "s3:PutObject",
-        "s3:PutObjectLegalHold",
-        "s3:PutObjectRetention",
-        "s3:PutObjectTagging",
-        "s3:PutObjectVersionTagging"
-       ],
-       "Effect": "Allow",
-       "Resource": [
-        {
-         "Fn::ImportValue": "VRPBackendCoreInfrastructureStack:ExportsOutputFnGetAttVRPSolutionsBucket21695A78Arn9EC44865"
-        },
-        {
-         "Fn::Join": [
-          "",
-          [
-           {
-            "Fn::ImportValue": "VRPBackendCoreInfrastructureStack:ExportsOutputFnGetAttVRPSolutionsBucket21695A78Arn9EC44865"
-           },
-           "/*"
-          ]
-         ]
-        }
-       ]
-      }
-     ],
-     "Version": "2012-10-17"
-    },
-    "PolicyName": "VRPBackendFargateServiceTaskDefTaskRoleDefaultPolicyDC3CEB10",
-    "Roles": [
-     {
-      "Ref": "VRPBackendFargateServiceTaskDefTaskRole0D13EE8D"
-     }
-    ]
-   },
-   "Metadata": {
-    "aws:cdk:path": "VRPBackendEcsServiceStack/VRPBackendFargateService/TaskDef/TaskRole/DefaultPolicy/Resource"
-   }
-  },
   "VRPBackendFargateServiceTaskDef9EC6EC0B": {
    "Type": "AWS::ECS::TaskDefinition",
    "Properties": {
@@ -237,7 +319,49 @@
        }
       ],
       "Essential": true,
-      "Image": "public.ecr.aws/nginx/nginx:latest",
+      "Image": {
+       "Fn::Join": [
+        "",
+        [
+         {
+          "Fn::Select": [
+           4,
+           {
+            "Fn::Split": [
+             ":",
+             {
+              "Fn::ImportValue": "VRPBackendCoreInfrastructureStack:ExportsOutputFnGetAttVRPBackendRepo8233BB19ArnE15220AD"
+             }
+            ]
+           }
+          ]
+         },
+         ".dkr.ecr.",
+         {
+          "Fn::Select": [
+           3,
+           {
+            "Fn::Split": [
+             ":",
+             {
+              "Fn::ImportValue": "VRPBackendCoreInfrastructureStack:ExportsOutputFnGetAttVRPBackendRepo8233BB19ArnE15220AD"
+             }
+            ]
+           }
+          ]
+         },
+         ".",
+         {
+          "Ref": "AWS::URLSuffix"
+         },
+         "/",
+         {
+          "Fn::ImportValue": "VRPBackendCoreInfrastructureStack:ExportsOutputRefVRPBackendRepo8233BB19CBDECBE0"
+         },
+         ":latest"
+        ]
+       ]
+      },
       "LogConfiguration": {
        "LogDriver": "awslogs",
        "Options": {
@@ -262,7 +386,7 @@
     "Cpu": "256",
     "ExecutionRoleArn": {
      "Fn::GetAtt": [
-      "VRPBackendFargateServiceTaskDefExecutionRole8F79EEFB",
+      "EcsTaskExecutionRoleC0B6A84D",
       "Arn"
      ]
     },
@@ -274,7 +398,7 @@
     ],
     "TaskRoleArn": {
      "Fn::GetAtt": [
-      "VRPBackendFargateServiceTaskDefTaskRole0D13EE8D",
+      "EcsTaskRole8DFA0181",
       "Arn"
      ]
     }
@@ -289,58 +413,6 @@
    "DeletionPolicy": "Retain",
    "Metadata": {
     "aws:cdk:path": "VRPBackendEcsServiceStack/VRPBackendFargateService/TaskDef/vrp-backend-container/LogGroup/Resource"
-   }
-  },
-  "VRPBackendFargateServiceTaskDefExecutionRole8F79EEFB": {
-   "Type": "AWS::IAM::Role",
-   "Properties": {
-    "AssumeRolePolicyDocument": {
-     "Statement": [
-      {
-       "Action": "sts:AssumeRole",
-       "Effect": "Allow",
-       "Principal": {
-        "Service": "ecs-tasks.amazonaws.com"
-       }
-      }
-     ],
-     "Version": "2012-10-17"
-    }
-   },
-   "Metadata": {
-    "aws:cdk:path": "VRPBackendEcsServiceStack/VRPBackendFargateService/TaskDef/ExecutionRole/Resource"
-   }
-  },
-  "VRPBackendFargateServiceTaskDefExecutionRoleDefaultPolicy955AF0A5": {
-   "Type": "AWS::IAM::Policy",
-   "Properties": {
-    "PolicyDocument": {
-     "Statement": [
-      {
-       "Action": [
-        "logs:CreateLogStream",
-        "logs:PutLogEvents"
-       ],
-       "Effect": "Allow",
-       "Resource": {
-        "Fn::GetAtt": [
-         "VRPBackendFargateServiceTaskDefvrpbackendcontainerLogGroup3B6CB1DB",
-         "Arn"
-        ]
-       }
-      }
-     ],
-     "Version": "2012-10-17"
-    },
-    "PolicyName": "VRPBackendFargateServiceTaskDefExecutionRoleDefaultPolicy955AF0A5",
-    "Roles": [
-     {
-      "Ref": "VRPBackendFargateServiceTaskDefExecutionRole8F79EEFB"
-     }
-    ]
-   },
-   "Metadata": {
-    "aws:cdk:path": "VRPBackendEcsServiceStack/VRPBackendFargateService/TaskDef/ExecutionRole/DefaultPolicy/Resource"
    }
   },
   "VRPBackendFargateService1F47BB8A": {
@@ -392,10 +464,10 @@
     }
    },
    "DependsOn": [
+    "EcsTaskRoleDefaultPolicy50882C77",
+    "EcsTaskRole8DFA0181",
     "VRPBackendFargateServiceLBPublicListenerECSGroup67273753",
-    "VRPBackendFargateServiceLBPublicListenerD5357440",
-    "VRPBackendFargateServiceTaskDefTaskRoleDefaultPolicyDC3CEB10",
-    "VRPBackendFargateServiceTaskDefTaskRole0D13EE8D"
+    "VRPBackendFargateServiceLBPublicListenerD5357440"
    ],
    "Metadata": {
     "aws:cdk:path": "VRPBackendEcsServiceStack/VRPBackendFargateService/Service/Service"
@@ -417,8 +489,8 @@
     }
    },
    "DependsOn": [
-    "VRPBackendFargateServiceTaskDefTaskRoleDefaultPolicyDC3CEB10",
-    "VRPBackendFargateServiceTaskDefTaskRole0D13EE8D"
+    "EcsTaskRoleDefaultPolicy50882C77",
+    "EcsTaskRole8DFA0181"
    ],
    "Metadata": {
     "aws:cdk:path": "VRPBackendEcsServiceStack/VRPBackendFargateService/Service/SecurityGroup/Resource"
@@ -445,8 +517,8 @@
     "ToPort": 80
    },
    "DependsOn": [
-    "VRPBackendFargateServiceTaskDefTaskRoleDefaultPolicyDC3CEB10",
-    "VRPBackendFargateServiceTaskDefTaskRole0D13EE8D"
+    "EcsTaskRoleDefaultPolicy50882C77",
+    "EcsTaskRole8DFA0181"
    ],
    "Metadata": {
     "aws:cdk:path": "VRPBackendEcsServiceStack/VRPBackendFargateService/Service/SecurityGroup/from VRPBackendEcsServiceStackVRPBackendFargateServiceLBSecurityGroup8CEE28B9:80"
@@ -495,8 +567,8 @@
     "ServiceNamespace": "ecs"
    },
    "DependsOn": [
-    "VRPBackendFargateServiceTaskDefTaskRoleDefaultPolicyDC3CEB10",
-    "VRPBackendFargateServiceTaskDefTaskRole0D13EE8D"
+    "EcsTaskRoleDefaultPolicy50882C77",
+    "EcsTaskRole8DFA0181"
    ],
    "Metadata": {
     "aws:cdk:path": "VRPBackendEcsServiceStack/VRPBackendFargateService/Service/TaskCount/Target/Resource"
@@ -520,8 +592,8 @@
     }
    },
    "DependsOn": [
-    "VRPBackendFargateServiceTaskDefTaskRoleDefaultPolicyDC3CEB10",
-    "VRPBackendFargateServiceTaskDefTaskRole0D13EE8D"
+    "EcsTaskRoleDefaultPolicy50882C77",
+    "EcsTaskRole8DFA0181"
    ],
    "Metadata": {
     "aws:cdk:path": "VRPBackendEcsServiceStack/VRPBackendFargateService/Service/TaskCount/Target/CpuScaling/Resource"
@@ -557,7 +629,7 @@
   "CDKMetadata": {
    "Type": "AWS::CDK::Metadata",
    "Properties": {
-    "Analytics": "v2:deflate64:H4sIAAAAAAAA/31QXW/CMAz8LbyHbFRC2itjH5qEtInyjkzqZaYhqRIHhKL+96kpH2Wb9uTz5eKzr5CT6YO8H8EhjFVVjw1tZCoZVC3gENYJVVg3wIzeBjlrGkMKmJxdOKgewYBVWL2A18BYot+TQoEGApMyDqpNVpDV+0Kmv397Mf+87Yc6Coz2pDnjwfsKvEZ+9S42nWTQtgJVIVOJKnri40XyP/GsPYbwi36zme9mBplO564g1E/4SZa6TXr7W8ZZBrLoB9yPqLJRD0sFBjYmj527aLkVBDuZls5kXa4fzpA6dm2PWmGcDjItnL4cdMatgGtQENkFBYaslulq1cWVl7hl+rLyoGqyuuz/Xb1viFYo42J1AFZfMs0M+F2nyaBtO/geuYkslhhc9P3RQzx3tsrhtMK6CuU23O2LQk7lZLQNRGMfLdMO5bKv3/FQ7ZaxAgAA"
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/31R227CMAz9Ft5DNioh7ZWxiyYhbaK8I5N6mWlwqlxAKOq/T025lG3ak49Pjn1sp5CT6YO8H8HBj1VVjw1tZCoDqFrAwa8TwU6mpTUo5p+c44c1pI5d2qNWoPLrBkJAx17OmsaQgkCWFxaqRzDACqsXcBoCluj2pFCgAR9IGQvVJiuI9b6Q6e9q17nd5EMd+YB80pzx4H0FTmN4dTY2nWSQdpMXMpWooqNwvEj+J561Q+9/0W+c+XwNmU7rrsDXT/hJTN0kvf0tYzkAMboB9+NU2aiHpQIDG5Pbzm3k0ApjtZdpYfVl2DNuBVyPADFYr8AQa5mubbpTZINbpg8rB6om1mVfd/33G6IVythYHSCoL5lmBtyu02TQtmKJ3kbXr/EeQxOz35CdW67y4q1gW6Hc+rt9UcipnIy2nmjsIgfaoVz28Rvg1s5EsQIAAA=="
    },
    "Metadata": {
     "aws:cdk:path": "VRPBackendEcsServiceStack/CDKMetadata/Default"

@@ -8,6 +8,7 @@ import { Construct } from 'constructs';
 import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import * as elbv2 from 'aws-cdk-lib/aws-elasticloadbalancingv2';
+import * as iam from 'aws-cdk-lib/aws-iam';
 
 interface EcsServiceStackProps extends cdk.StackProps {
   cluster: ecs.ICluster;
@@ -23,29 +24,43 @@ export class VRPBackendEcsServiceStack extends cdk.Stack {
 
   constructor(scope: Construct, id: string, props: EcsServiceStackProps) {
     super(scope, id, props);
-    const placeholderImage = ecs.ContainerImage.fromRegistry('public.ecr.aws/nginx/nginx:latest');
 
-    // Create ECS Fargate Service
+    // Create ECS Task Execution Role (to pull images from ECR and send logs to CloudWatch)
+    const executionRole = new iam.Role(this, 'EcsTaskExecutionRole', {
+      assumedBy: new iam.ServicePrincipal('ecs-tasks.amazonaws.com'),
+      managedPolicies: [
+        iam.ManagedPolicy.fromAwsManagedPolicyName('service-role/AmazonECSTaskExecutionRolePolicy')
+      ],
+    });
+
+    // Create ECS Task Role (for accessing AWS resources like DynamoDB, S3, etc.)
+    const taskRole = new iam.Role(this, 'EcsTaskRole', {
+      assumedBy: new iam.ServicePrincipal('ecs-tasks.amazonaws.com'),
+    });
+
+    // Grant necessary permissions to task role
+    props.vrpDataTable.grantReadWriteData(taskRole); // DynamoDB permissions
+    props.vrpSolutionsBucket.grantReadWrite(taskRole); // S3 permissions
+
+    // Create ECS Fargate Service with Application Load Balancer
     const loadBalancedFargateService = new ecs_patterns.ApplicationLoadBalancedFargateService(this, 'VRPBackendFargateService', {
       cluster: props.cluster,
       cpu: 256,
       memoryLimitMiB: 512,
       desiredCount: 1,
       taskImageOptions: {
-        image: placeholderImage,
+        image: ecs.ContainerImage.fromEcrRepository(props.repository), // Replace placeholder image with ECR repository image
         containerName: 'vrp-backend-container',
         containerPort: 80,
         environment: {
           VRP_DATA_TABLE: props.vrpDataTable.tableName,
           VRP_SOLUTIONS_BUCKET: props.vrpSolutionsBucket.bucketName,
         },
+        executionRole: executionRole, // Assign the execution role
+        taskRole: taskRole, // Assign the task role
       },
       publicLoadBalancer: true,
     });
-
-    // Grant permissions to the ECS task
-    props.vrpDataTable.grantReadWriteData(loadBalancedFargateService.taskDefinition.taskRole);
-    props.vrpSolutionsBucket.grantReadWrite(loadBalancedFargateService.taskDefinition.taskRole);
 
     // Configure health check
     loadBalancedFargateService.targetGroup.configureHealthCheck({
@@ -88,6 +103,7 @@ export class VRPBackendEcsServiceStack extends cdk.Stack {
     });
   }
 }
+
 // import * as cdk from 'aws-cdk-lib';
 // import * as ecs from 'aws-cdk-lib/aws-ecs';
 // import * as ecs_patterns from 'aws-cdk-lib/aws-ecs-patterns';
