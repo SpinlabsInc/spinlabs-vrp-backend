@@ -18,7 +18,7 @@
         "validateOnSynth": false,
         "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-${AWS::Region}",
         "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-${AWS::Region}",
-        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/b5e9b3f767ac52d7f1032e12d6bc28abd23171c60521b884a782e007aa8bdf3d.json",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/206d39fa39aa278d5567053d9dda41f7eeba00cb43c0efe3b145f91464a95339.json",
         "requiresBootstrapStackVersion": 6,
         "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
         "additionalDependencies": [
@@ -310,6 +310,24 @@
             "data": "CDKMetadataAvailable"
           }
         ],
+        "/VRPBackendCoreInfrastructureStack/Exports/Output{\"Fn::GetAtt\":[\"VRPBackendRepo8233BB19\",\"Arn\"]}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputFnGetAttVRPBackendRepo8233BB19ArnE15220AD"
+          }
+        ],
+        "/VRPBackendCoreInfrastructureStack/Exports/Output{\"Fn::GetAtt\":[\"VRPDataTable3E5097ED\",\"Arn\"]}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputFnGetAttVRPDataTable3E5097EDArn9B713839"
+          }
+        ],
+        "/VRPBackendCoreInfrastructureStack/Exports/Output{\"Fn::GetAtt\":[\"VRPSolutionsBucket21695A78\",\"Arn\"]}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputFnGetAttVRPSolutionsBucket21695A78Arn9EC44865"
+          }
+        ],
         "/VRPBackendCoreInfrastructureStack/Exports/Output{\"Ref\":\"VRPBackendVPCPublicSubnet1SubnetFF176F3E\"}": [
           {
             "type": "aws:cdk:logicalId",
@@ -328,16 +346,10 @@
             "data": "ExportsOutputRefVRPBackendVPC60C6D0EE92200239"
           }
         ],
-        "/VRPBackendCoreInfrastructureStack/Exports/Output{\"Fn::GetAtt\":[\"VRPDataTable3E5097ED\",\"Arn\"]}": [
+        "/VRPBackendCoreInfrastructureStack/Exports/Output{\"Ref\":\"VRPBackendRepo8233BB19\"}": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "ExportsOutputFnGetAttVRPDataTable3E5097EDArn9B713839"
-          }
-        ],
-        "/VRPBackendCoreInfrastructureStack/Exports/Output{\"Fn::GetAtt\":[\"VRPSolutionsBucket21695A78\",\"Arn\"]}": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "ExportsOutputFnGetAttVRPSolutionsBucket21695A78Arn9EC44865"
+            "data": "ExportsOutputRefVRPBackendRepo8233BB19CBDECBE0"
           }
         ],
         "/VRPBackendCoreInfrastructureStack/Exports/Output{\"Ref\":\"VRPDataTable3E5097ED\"}": [
@@ -368,18 +380,6 @@
           {
             "type": "aws:cdk:logicalId",
             "data": "ExportsOutputRefVRPBackendVPCPrivateSubnet2Subnet5AAFB2AF7F3BB99B"
-          }
-        ],
-        "/VRPBackendCoreInfrastructureStack/Exports/Output{\"Fn::GetAtt\":[\"VRPBackendRepo8233BB19\",\"Arn\"]}": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "ExportsOutputFnGetAttVRPBackendRepo8233BB19ArnE15220AD"
-          }
-        ],
-        "/VRPBackendCoreInfrastructureStack/Exports/Output{\"Ref\":\"VRPBackendRepo8233BB19\"}": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "ExportsOutputRefVRPBackendRepo8233BB19CBDECBE0"
           }
         ],
         "/VRPBackendCoreInfrastructureStack/BootstrapVersion": [
@@ -601,7 +601,7 @@
         "validateOnSynth": false,
         "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-${AWS::Region}",
         "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-${AWS::Region}",
-        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/1252c3148c78d26ec9f8f1c478049476655f688d2f6c4371bd56dbcb0319ae7f.json",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/2c8bc1c9598f3af1f58a9a3df79f751612c330d5282accefeda40ab816372825.json",
         "requiresBootstrapStackVersion": 6,
         "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
         "additionalDependencies": [
@@ -618,6 +618,30 @@
         "VRPBackendEcsServiceStack.assets"
       ],
       "metadata": {
+        "/VRPBackendEcsServiceStack/EcsTaskExecutionRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "EcsTaskExecutionRoleC0B6A84D"
+          }
+        ],
+        "/VRPBackendEcsServiceStack/EcsTaskExecutionRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "EcsTaskExecutionRoleDefaultPolicyDCEEFDC3"
+          }
+        ],
+        "/VRPBackendEcsServiceStack/EcsTaskRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "EcsTaskRole8DFA0181"
+          }
+        ],
+        "/VRPBackendEcsServiceStack/EcsTaskRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "EcsTaskRoleDefaultPolicy50882C77"
+          }
+        ],
         "/VRPBackendEcsServiceStack/VRPBackendFargateService/LB/Resource": [
           {
             "type": "aws:cdk:logicalId",
@@ -660,18 +684,6 @@
             "data": "VRPBackendFargateServiceServiceURL49420402"
           }
         ],
-        "/VRPBackendEcsServiceStack/VRPBackendFargateService/TaskDef/TaskRole/Resource": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "VRPBackendFargateServiceTaskDefTaskRole0D13EE8D"
-          }
-        ],
-        "/VRPBackendEcsServiceStack/VRPBackendFargateService/TaskDef/TaskRole/DefaultPolicy/Resource": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "VRPBackendFargateServiceTaskDefTaskRoleDefaultPolicyDC3CEB10"
-          }
-        ],
         "/VRPBackendEcsServiceStack/VRPBackendFargateService/TaskDef/Resource": [
           {
             "type": "aws:cdk:logicalId",
@@ -682,18 +694,6 @@
           {
             "type": "aws:cdk:logicalId",
             "data": "VRPBackendFargateServiceTaskDefvrpbackendcontainerLogGroup3B6CB1DB"
-          }
-        ],
-        "/VRPBackendEcsServiceStack/VRPBackendFargateService/TaskDef/ExecutionRole/Resource": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "VRPBackendFargateServiceTaskDefExecutionRole8F79EEFB"
-          }
-        ],
-        "/VRPBackendEcsServiceStack/VRPBackendFargateService/TaskDef/ExecutionRole/DefaultPolicy/Resource": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "VRPBackendFargateServiceTaskDefExecutionRoleDefaultPolicy955AF0A5"
           }
         ],
         "/VRPBackendEcsServiceStack/VRPBackendFargateService/Service/Service": [

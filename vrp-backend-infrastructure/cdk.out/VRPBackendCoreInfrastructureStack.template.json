@@ -1094,6 +1094,39 @@
     "Ref": "VRPSolutionsBucket21695A78"
    }
   },
+  "ExportsOutputFnGetAttVRPBackendRepo8233BB19ArnE15220AD": {
+   "Value": {
+    "Fn::GetAtt": [
+     "VRPBackendRepo8233BB19",
+     "Arn"
+    ]
+   },
+   "Export": {
+    "Name": "VRPBackendCoreInfrastructureStack:ExportsOutputFnGetAttVRPBackendRepo8233BB19ArnE15220AD"
+   }
+  },
+  "ExportsOutputFnGetAttVRPDataTable3E5097EDArn9B713839": {
+   "Value": {
+    "Fn::GetAtt": [
+     "VRPDataTable3E5097ED",
+     "Arn"
+    ]
+   },
+   "Export": {
+    "Name": "VRPBackendCoreInfrastructureStack:ExportsOutputFnGetAttVRPDataTable3E5097EDArn9B713839"
+   }
+  },
+  "ExportsOutputFnGetAttVRPSolutionsBucket21695A78Arn9EC44865": {
+   "Value": {
+    "Fn::GetAtt": [
+     "VRPSolutionsBucket21695A78",
+     "Arn"
+    ]
+   },
+   "Export": {
+    "Name": "VRPBackendCoreInfrastructureStack:ExportsOutputFnGetAttVRPSolutionsBucket21695A78Arn9EC44865"
+   }
+  },
   "ExportsOutputRefVRPBackendVPCPublicSubnet1SubnetFF176F3E850C58ED": {
    "Value": {
     "Ref": "VRPBackendVPCPublicSubnet1SubnetFF176F3E"
@@ -1118,26 +1151,12 @@
     "Name": "VRPBackendCoreInfrastructureStack:ExportsOutputRefVRPBackendVPC60C6D0EE92200239"
    }
   },
-  "ExportsOutputFnGetAttVRPDataTable3E5097EDArn9B713839": {
+  "ExportsOutputRefVRPBackendRepo8233BB19CBDECBE0": {
    "Value": {
-    "Fn::GetAtt": [
-     "VRPDataTable3E5097ED",
-     "Arn"
-    ]
+    "Ref": "VRPBackendRepo8233BB19"
    },
    "Export": {
-    "Name": "VRPBackendCoreInfrastructureStack:ExportsOutputFnGetAttVRPDataTable3E5097EDArn9B713839"
-   }
-  },
-  "ExportsOutputFnGetAttVRPSolutionsBucket21695A78Arn9EC44865": {
-   "Value": {
-    "Fn::GetAtt": [
-     "VRPSolutionsBucket21695A78",
-     "Arn"
-    ]
-   },
-   "Export": {
-    "Name": "VRPBackendCoreInfrastructureStack:ExportsOutputFnGetAttVRPSolutionsBucket21695A78Arn9EC44865"
+    "Name": "VRPBackendCoreInfrastructureStack:ExportsOutputRefVRPBackendRepo8233BB19CBDECBE0"
    }
   },
   "ExportsOutputRefVRPDataTable3E5097EDBDCB015C": {
@@ -1178,25 +1197,6 @@
    },
    "Export": {
     "Name": "VRPBackendCoreInfrastructureStack:ExportsOutputRefVRPBackendVPCPrivateSubnet2Subnet5AAFB2AF7F3BB99B"
-   }
-  },
-  "ExportsOutputFnGetAttVRPBackendRepo8233BB19ArnE15220AD": {
-   "Value": {
-    "Fn::GetAtt": [
-     "VRPBackendRepo8233BB19",
-     "Arn"
-    ]
-   },
-   "Export": {
-    "Name": "VRPBackendCoreInfrastructureStack:ExportsOutputFnGetAttVRPBackendRepo8233BB19ArnE15220AD"
-   }
-  },
-  "ExportsOutputRefVRPBackendRepo8233BB19CBDECBE0": {
-   "Value": {
-    "Ref": "VRPBackendRepo8233BB19"
-   },
-   "Export": {
-    "Name": "VRPBackendCoreInfrastructureStack:ExportsOutputRefVRPBackendRepo8233BB19CBDECBE0"
    }
   }
  },
