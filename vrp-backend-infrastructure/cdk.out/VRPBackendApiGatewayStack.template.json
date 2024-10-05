@@ -104,7 +104,7 @@
   "CDKMetadata": {
    "Type": "AWS::CDK::Metadata",
    "Properties": {
-    "Analytics": "v2:deflate64:H4sIAAAAAAAA/1WMQQuCQBBGf0t33VIQupZdo1A6x6ajjtmO7MwmFf33WEys07z3GL5YRclarRZ64LAor2GHF/XKRRfXQA981j3WWmDQD/XKgGXTY5BWZsId9B09bmDE1x/LRdfg2wgZMDlbwFbzLN+hkfcgDZU+TUS1QaETgz0Sdbxx0pDFJ1j/NNvb68FJ7+RvMK1MSqZEQTLvwFAJquXlPY5VoqJFy4ihdUbwBiob7weShGieCwEAAA=="
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/1WPyw6CMBBFv8U9VDExsvWxNRqNa1NhxAHsNO1UgsR/tw0SdDXnntzcZOYiWaRiNpGNjbO8imu8iu7EMqsiry5SYyEZGtmK7giWVxqjzU0NuAVdU/sAxcH+JL9QQHA9+D45k8Fa2jF8h3reAd8pD2ogKhQynS2YA1FtV85rgy8woTSmd4h7x9rx36DnDakcGUm9I0U5iNJOn0kqkqX/t7SIsXGK8QHi2N8P1IwlyAwBAAA="
    },
    "Metadata": {
     "aws:cdk:path": "VRPBackendApiGatewayStack/CDKMetadata/Default"

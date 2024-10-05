@@ -50,7 +50,7 @@
   "CDKMetadata": {
    "Type": "AWS::CDK::Metadata",
    "Properties": {
-    "Analytics": "v2:deflate64:H4sIAAAAAAAA/zXHQQrCMBBA0bN0n4w2UHDfAygV1xKTKNPWmZKZ2EXp3SWIq/++g7Y7wbHxq9gQJzvjA7ar+jAZv8o98ItQGbabpHxhnk3/pL/3OueiS9GqIQmXHFJ1zxRRkWk3xDHBKIePc9BB24yCaHMhxXeC4dcvAK+CVYYAAAA="
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/zXNwQ6CMBAE0G/x3q7WxMidD9BgPBtsq1nAXdLdwoHw79IYT/NmLnMEd6rgsGtnsT70dsAnLDdtfW+26eH5TagMy11iujIPpn7R32spl6xj1qImCufkY3HNFFCRaTXEIUIn+8lV4M7bVSeINmVS/ERofvkFl5Tv1ocAAAA="
    },
    "Metadata": {
     "aws:cdk:path": "VRPBackendCognitoStack/CDKMetadata/Default"

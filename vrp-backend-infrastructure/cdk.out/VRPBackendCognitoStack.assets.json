@@ -1,7 +1,7 @@
 {
   "version": "36.3.0",
   "files": {
-    "f70a7dc11681f9948b755303070ae02c5db06dc215e0e93555829124c03a4dea": {
+    "13e70d4ef99a69bb40d6b9a00d2e81fdc9f83e0050a7c012d0d33904b9a4042c": {
       "source": {
         "path": "VRPBackendCognitoStack.template.json",
         "packaging": "file"
@@ -9,7 +9,7 @@
       "destinations": {
         "current_account-current_region": {
           "bucketName": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}",
-          "objectKey": "f70a7dc11681f9948b755303070ae02c5db06dc215e0e93555829124c03a4dea.json",
+          "objectKey": "13e70d4ef99a69bb40d6b9a00d2e81fdc9f83e0050a7c012d0d33904b9a4042c.json",
           "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-file-publishing-role-${AWS::AccountId}-${AWS::Region}"
         }
       }

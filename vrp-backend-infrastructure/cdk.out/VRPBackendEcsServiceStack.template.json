@@ -27,6 +27,18 @@
         ":iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
        ]
       ]
+     },
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/AmazonS3FullAccess"
+       ]
+      ]
      }
     ]
    },
@@ -278,7 +290,7 @@
   "VRPBackendFargateServiceLBPublicListenerECSGroup67273753": {
    "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
    "Properties": {
-    "HealthCheckPath": "/",
+    "HealthCheckPath": "/api/health",
     "Matcher": {
      "HttpCode": "200-399"
     },
@@ -316,6 +328,14 @@
         "Value": {
          "Fn::ImportValue": "VRPBackendCoreInfrastructureStack:ExportsOutputRefVRPSolutionsBucket21695A78557379F5"
         }
+       },
+       {
+        "Name": "VRP_SOLVER_JOB_DEFINITION",
+        "Value": "solver-job-definition"
+       },
+       {
+        "Name": "VRP_SOLVER_JOB_QUEUE",
+        "Value": "solver-job-queue"
        }
       ],
       "Essential": true,
@@ -626,10 +646,192 @@
     "aws:cdk:path": "VRPBackendEcsServiceStack/Http5xxAlarm/Resource"
    }
   },
+  "BatchServiceRole57930367": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "batch.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSBatchServiceRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendEcsServiceStack/BatchServiceRole/Resource"
+   }
+  },
+  "SolverSecurityGroup9F3BDB51": {
+   "Type": "AWS::EC2::SecurityGroup",
+   "Properties": {
+    "GroupDescription": "Security group for Solver Compute Environment",
+    "GroupName": "solver-security-group",
+    "SecurityGroupEgress": [
+     {
+      "CidrIp": "0.0.0.0/0",
+      "Description": "Allow all outbound traffic by default",
+      "IpProtocol": "-1"
+     }
+    ],
+    "VpcId": {
+     "Fn::ImportValue": "VRPBackendCoreInfrastructureStack:ExportsOutputRefVRPBackendVPC60C6D0EE92200239"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendEcsServiceStack/SolverSecurityGroup/Resource"
+   }
+  },
+  "SolverComputeEnvironment": {
+   "Type": "AWS::Batch::ComputeEnvironment",
+   "Properties": {
+    "ComputeEnvironmentName": "solver-compute-environment-dev",
+    "ComputeResources": {
+     "MaxvCpus": 4,
+     "SecurityGroupIds": [
+      {
+       "Fn::GetAtt": [
+        "SolverSecurityGroup9F3BDB51",
+        "GroupId"
+       ]
+      }
+     ],
+     "Subnets": [
+      {
+       "Fn::ImportValue": "VRPBackendCoreInfrastructureStack:ExportsOutputRefVRPBackendVPCPublicSubnet1SubnetFF176F3E850C58ED"
+      },
+      {
+       "Fn::ImportValue": "VRPBackendCoreInfrastructureStack:ExportsOutputRefVRPBackendVPCPublicSubnet2Subnet8CF671C6CBD073DE"
+      }
+     ],
+     "Type": "FARGATE"
+    },
+    "ServiceRole": {
+     "Fn::GetAtt": [
+      "BatchServiceRole57930367",
+      "Arn"
+     ]
+    },
+    "State": "ENABLED",
+    "Type": "MANAGED"
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendEcsServiceStack/SolverComputeEnvironment"
+   }
+  },
+  "SolverJobDefinition": {
+   "Type": "AWS::Batch::JobDefinition",
+   "Properties": {
+    "ContainerProperties": {
+     "Environment": [
+      {
+       "Name": "VRP_DATA_TABLE",
+       "Value": {
+        "Fn::ImportValue": "VRPBackendCoreInfrastructureStack:ExportsOutputRefVRPDataTable3E5097EDBDCB015C"
+       }
+      },
+      {
+       "Name": "VRP_SOLUTIONS_BUCKET",
+       "Value": {
+        "Fn::ImportValue": "VRPBackendCoreInfrastructureStack:ExportsOutputRefVRPSolutionsBucket21695A78557379F5"
+       }
+      }
+     ],
+     "Image": {
+      "Fn::Join": [
+       "",
+       [
+        {
+         "Fn::Select": [
+          4,
+          {
+           "Fn::Split": [
+            ":",
+            {
+             "Fn::ImportValue": "VRPBackendCoreInfrastructureStack:ExportsOutputFnGetAttVRPBackendRepo8233BB19ArnE15220AD"
+            }
+           ]
+          }
+         ]
+        },
+        ".dkr.ecr.",
+        {
+         "Fn::Select": [
+          3,
+          {
+           "Fn::Split": [
+            ":",
+            {
+             "Fn::ImportValue": "VRPBackendCoreInfrastructureStack:ExportsOutputFnGetAttVRPBackendRepo8233BB19ArnE15220AD"
+            }
+           ]
+          }
+         ]
+        },
+        ".",
+        {
+         "Ref": "AWS::URLSuffix"
+        },
+        "/",
+        {
+         "Fn::ImportValue": "VRPBackendCoreInfrastructureStack:ExportsOutputRefVRPBackendRepo8233BB19CBDECBE0"
+        }
+       ]
+      ]
+     },
+     "Memory": 1024,
+     "Vcpus": 1
+    },
+    "JobDefinitionName": "solver-job-definition",
+    "Type": "container"
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendEcsServiceStack/SolverJobDefinition"
+   }
+  },
+  "SolverJobQueue": {
+   "Type": "AWS::Batch::JobQueue",
+   "Properties": {
+    "ComputeEnvironmentOrder": [
+     {
+      "ComputeEnvironment": {
+       "Ref": "SolverComputeEnvironment"
+      },
+      "Order": 1
+     }
+    ],
+    "JobQueueName": "solver-job-queue",
+    "Priority": 1
+   },
+   "DependsOn": [
+    "SolverComputeEnvironment"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendEcsServiceStack/SolverJobQueue"
+   }
+  },
   "CDKMetadata": {
    "Type": "AWS::CDK::Metadata",
    "Properties": {
-    "Analytics": "v2:deflate64:H4sIAAAAAAAA/31R227CMAz9Ft5DNioh7ZWxiyYhbaK8I5N6mWlwqlxAKOq/T025lG3ak49Pjn1sp5CT6YO8H8HBj1VVjw1tZCoDqFrAwa8TwU6mpTUo5p+c44c1pI5d2qNWoPLrBkJAx17OmsaQgkCWFxaqRzDACqsXcBoCluj2pFCgAR9IGQvVJiuI9b6Q6e9q17nd5EMd+YB80pzx4H0FTmN4dTY2nWSQdpMXMpWooqNwvEj+J561Q+9/0W+c+XwNmU7rrsDXT/hJTN0kvf0tYzkAMboB9+NU2aiHpQIDG5Pbzm3k0ApjtZdpYfVl2DNuBVyPADFYr8AQa5mubbpTZINbpg8rB6om1mVfd/33G6IVythYHSCoL5lmBtyu02TQtmKJ3kbXr/EeQxOz35CdW67y4q1gW6Hc+rt9UcipnIy2nmjsIgfaoVz28Rvg1s5EsQIAAA=="
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/32SX0/CMBTFP4vvpQqJkVdFNBoSlfFO7rrLLHTt0j8Qsuy7e9cCbmp86u1v5+7cnnbCx7dTfnMFBzcSxW6kZM6bzIPYMULrRkLFm6VRyGYbHdd3o6Q4dttUtQyFW9fgPVrt+H1dEwUvjV4YKB5AgRZYPIEtwWOGdi8FMlTgvBSKFHlUSF3uJ7z5u9t2boN9XyedR33SnOve9xU5o3+2JtSdpLftJifPDEWw0h8vkv/BvLTo3C/8oiOPafDmdNwVuN0jbqSW3STJfkiM9iBp4h77EVU0SmUm6Py5ir+dmaB9y5QpyW5hysuw57pl8B0CBG8cdVPMdODLb7ooosGQpGVl6RVQQ5b6vu99AFpGtxiKA3jxSfenwFadJhYtyxMmMDNVHTzO9V5aoyvU0fjV5MN8CHwEDNi2bInOBJsSeAueuuMb7FFKr4idLdOmQL511/vxlI/v6EFvnZQjSxnJCvkyrV/3n5XF7QIAAA=="
    },
    "Metadata": {
     "aws:cdk:path": "VRPBackendEcsServiceStack/CDKMetadata/Default"
