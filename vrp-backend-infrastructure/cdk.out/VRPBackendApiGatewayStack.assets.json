@@ -1,7 +1,7 @@
 {
   "version": "36.3.0",
   "files": {
-    "f89f000bc157ba2a48b8eef62eb943c465dca5114868a14bda43e7c7837ec1a1": {
+    "1ede153131812ae11f1ad33973155c9dbd810dcce4194a7a14e6fc366b302fb3": {
       "source": {
         "path": "VRPBackendApiGatewayStack.template.json",
         "packaging": "file"
@@ -9,7 +9,7 @@
       "destinations": {
         "current_account-current_region": {
           "bucketName": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}",
-          "objectKey": "f89f000bc157ba2a48b8eef62eb943c465dca5114868a14bda43e7c7837ec1a1.json",
+          "objectKey": "1ede153131812ae11f1ad33973155c9dbd810dcce4194a7a14e6fc366b302fb3.json",
           "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-file-publishing-role-${AWS::AccountId}-${AWS::Region}"
         }
       }

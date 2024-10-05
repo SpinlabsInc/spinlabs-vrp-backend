@@ -9,38 +9,60 @@ import { VRPBackendIntegrationStack } from "../lib/vrp-backend-integration-stack
 
 const app = new cdk.App();
 
-// Deploy the core infrastructure stack
-const coreStack = new VRPBackendCoreInfrastructureStack(app, "VRPBackendCoreInfrastructureStack");
+// List of environments
+const environments = ['dev', 'test', 'prod'];
 
-// Deploy the Cognito stack
-const cognitoStack = new VRPBackendCognitoStack(app, "VRPBackendCognitoStack");
+// Iterate over environments and deploy stacks
+environments.forEach(env => {
+  const envConfig = { account: process.env.CDK_DEFAULT_ACCOUNT, region: process.env.CDK_DEFAULT_REGION };
 
-// Deploy the API Gateway stack, passing the Cognito User Pool
-const apiGatewayStack = new VRPBackendApiGatewayStack(app, "VRPBackendApiGatewayStack", {
-  cognitoUserPool: cognitoStack.userPool,
-});
+  // Deploy the core infrastructure stack
+  const coreStack = new VRPBackendCoreInfrastructureStack(app, `VRPBackendCoreInfrastructureStack-${env}`, {
+    env: envConfig,
+    environment: env,
+  });
 
-// Deploy the ECS service stack, utilizing resources from the core stack
-const ecsServiceStack = new VRPBackendEcsServiceStack(app, "VRPBackendEcsServiceStack", {
-  cluster: coreStack.ecsCluster,
-  repository: coreStack.ecrRepository,
-  vrpDataTable: coreStack.vrpDataTable,
-  vrpSolutionsBucket: coreStack.vrpSolutionsBucket,
-  vpc: coreStack.vpc,
-});
+  // Deploy the Cognito stack
+  const cognitoStack = new VRPBackendCognitoStack(app, `VRPBackendCognitoStack-${env}`, {
+    env: envConfig,
+    environment: env,
+  });
 
-// Deploy the Integration stack
-new VRPBackendIntegrationStack(app, "VRPBackendIntegrationStack", {
-  api: apiGatewayStack.api,
-  authorizer: apiGatewayStack.authorizer,
-  loadBalancer: ecsServiceStack.loadBalancer,
-});
+  // Deploy the API Gateway stack, passing the Cognito User Pool
+  const apiGatewayStack = new VRPBackendApiGatewayStack(app, `VRPBackendApiGatewayStack-${env}`, {
+    cognitoUserPool: cognitoStack.userPool,
+    env: envConfig,
+    environment: env,
+  });
 
-// Deploy the CICD pipeline stack
-new VRPBackendCICDPipelineStack(app, "VRPBackendCICDPipelineStack", {
-  ecrRepository: coreStack.ecrRepository,
-  ecsCluster: coreStack.ecsCluster,
-  ecsService: ecsServiceStack.fargateService,
+  // Deploy the ECS service stack, utilizing resources from the core stack
+  const ecsServiceStack = new VRPBackendEcsServiceStack(app, `VRPBackendEcsServiceStack-${env}`, {
+    cluster: coreStack.ecsCluster,
+    repository: coreStack.ecrRepository,
+    vrpDataTable: coreStack.vrpDataTable,
+    vrpSolutionsBucket: coreStack.vrpSolutionsBucket,
+    vpc: coreStack.vpc,
+    env: envConfig,
+    environment: env,
+  });
+
+  // Deploy the Integration stack
+  new VRPBackendIntegrationStack(app, `VRPBackendIntegrationStack-${env}`, {
+    api: apiGatewayStack.api,
+    authorizer: apiGatewayStack.authorizer,
+    loadBalancer: ecsServiceStack.loadBalancer,
+    env: envConfig,
+    environment: env,
+  });
+
+  // Deploy the CICD pipeline stack
+  new VRPBackendCICDPipelineStack(app, `VRPBackendCICDPipelineStack-${env}`, {
+    ecrRepository: coreStack.ecrRepository,
+    ecsCluster: coreStack.ecsCluster,
+    ecsService: ecsServiceStack.fargateService,
+    env: envConfig,
+    environment: env,
+  });
 });
 
 app.synth();
