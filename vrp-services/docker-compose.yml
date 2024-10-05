@@ -1,0 +1,31 @@
+version: "3.8"
+services:
+  localstack:
+    image: localstack/localstack
+    container_name: localstack
+    environment:
+      - SERVICES=dynamodb,s3,sqs
+      - AWS_DEFAULT_REGION=us-east-1
+      - DOCKER_HOST=unix:///var/run/docker.sock
+    ports:
+      - "4566:4566"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+
+  vrp_app:
+    build: .
+    ports:
+      - "80:80"
+    environment:
+      - USE_LOCAL_DB=True
+      - VRP_DATA_TABLE=vrp_data_table_name
+      - VRP_SOLUTIONS_BUCKET=my-local-bucket
+      - SQS_QUEUE_URL=http://localhost:4566/000000000000/vrp-sqs
+      - LOCALSTACK_ENDPOINT=http://localstack:4566
+      - AWS_ACCESS_KEY_ID=dummy
+      - AWS_SECRET_ACCESS_KEY=dummy
+      - AWS_DEFAULT_REGION=us-east-1
+    command: >
+      sh -c "python src/vrp_data.py && gunicorn -b 0.0.0.0:80 main:app"
+    depends_on:
+      - localstack

@@ -11,11 +11,13 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the source code into the container
 COPY src/ /app/src/
 
-# Set the default AWS region (replace 'us-east-1' with your preferred region)
+# Set the PYTHONPATH to include the src directory
+ENV PYTHONPATH="/app/src"
+
+# Set the default AWS region
 ENV AWS_DEFAULT_REGION us-east-1
 
-# Expose port 80
+# Expose port 80 for Flask app
 EXPOSE 80
 
-# Define the Gunicorn command to run the app
-CMD ["gunicorn", "-b", "0.0.0.0:80", "src.main:app"]
+# Command will be provided by docker-compose.yml
