@@ -5,6 +5,7 @@ import { Construct } from 'constructs';
 
 interface ApiGatewayStackProps extends cdk.StackProps {
   cognitoUserPool: cognito.IUserPool;  // Pass the User Pool from Cognito stack
+  environment: string; 
 }
 
 export class VRPBackendApiGatewayStack extends cdk.Stack {
@@ -32,6 +33,7 @@ export class VRPBackendApiGatewayStack extends cdk.Stack {
       authorizer: this.authorizer,
       authorizationType: apigateway.AuthorizationType.COGNITO,
     });
+    cdk.Tags.of(this).add('Environment', props.environment);
 
     // Outputs
     new cdk.CfnOutput(this, 'VRPBackendApiUrl', {

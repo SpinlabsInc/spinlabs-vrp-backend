@@ -27,7 +27,7 @@
         }
       }
     },
-    "f5937d2cd56c7576070a1be7f02ea71b0fc79ea9e5831e132d6f2e4dd610506c": {
+    "206d39fa39aa278d5567053d9dda41f7eeba00cb43c0efe3b145f91464a95339": {
       "source": {
         "path": "VRPBackendCoreInfrastructureStack.template.json",
         "packaging": "file"
@@ -35,7 +35,7 @@
       "destinations": {
         "current_account-current_region": {
           "bucketName": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}",
-          "objectKey": "f5937d2cd56c7576070a1be7f02ea71b0fc79ea9e5831e132d6f2e4dd610506c.json",
+          "objectKey": "206d39fa39aa278d5567053d9dda41f7eeba00cb43c0efe3b145f91464a95339.json",
           "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-file-publishing-role-${AWS::AccountId}-${AWS::Region}"
         }
       }

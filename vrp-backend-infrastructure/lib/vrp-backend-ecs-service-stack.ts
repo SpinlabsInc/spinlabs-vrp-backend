@@ -17,6 +17,7 @@ interface EcsServiceStackProps extends cdk.StackProps {
   vrpDataTable: dynamodb.Table;
   vrpSolutionsBucket: s3.Bucket;
   vpc: ec2.IVpc;
+  environment: string;  // Add environment property
 }
 
 export class VRPBackendEcsServiceStack extends cdk.Stack {
@@ -29,7 +30,7 @@ export class VRPBackendEcsServiceStack extends cdk.Stack {
     super(scope, id, props);
 
     // Create ECS Task Execution Role (to pull images from ECR and send logs to CloudWatch)
-    const executionRole = new iam.Role(this, 'EcsTaskExecutionRole', {
+    const executionRole = new iam.Role(this, `EcsTaskExecutionRole-${props.environment}`, {
       assumedBy: new iam.ServicePrincipal('ecs-tasks.amazonaws.com'),
       managedPolicies: [
         iam.ManagedPolicy.fromAwsManagedPolicyName('service-role/AmazonECSTaskExecutionRolePolicy'),
@@ -38,7 +39,7 @@ export class VRPBackendEcsServiceStack extends cdk.Stack {
     });
 
     // Create ECS Task Role (for accessing AWS resources like DynamoDB, S3, etc.)
-    const taskRole = new iam.Role(this, 'EcsTaskRole', {
+    const taskRole = new iam.Role(this, `EcsTaskRole-${props.environment}`, {
       assumedBy: new iam.ServicePrincipal('ecs-tasks.amazonaws.com'),
     });
 
@@ -47,20 +48,20 @@ export class VRPBackendEcsServiceStack extends cdk.Stack {
     props.vrpSolutionsBucket.grantReadWrite(taskRole); // S3 permissions
 
     // Create ECS Fargate Service with Application Load Balancer
-    const loadBalancedFargateService = new ecs_patterns.ApplicationLoadBalancedFargateService(this, 'VRPBackendFargateService', {
+    const loadBalancedFargateService = new ecs_patterns.ApplicationLoadBalancedFargateService(this, `VRPBackendFargateService-${props.environment}`, {
       cluster: props.cluster,
       cpu: 256,
       memoryLimitMiB: 512,
       desiredCount: 1,
       taskImageOptions: {
         image: ecs.ContainerImage.fromEcrRepository(props.repository, 'latest'), // Replace placeholder image with ECR repository image
-        containerName: 'vrp-backend-container',
+        containerName: `vrp-backend-container-${props.environment}`,
         containerPort: 80,
         environment: {
           VRP_DATA_TABLE: props.vrpDataTable.tableName,
           VRP_SOLUTIONS_BUCKET: props.vrpSolutionsBucket.bucketName,
-          VRP_SOLVER_JOB_DEFINITION: 'solver-job-definition',
-          VRP_SOLVER_JOB_QUEUE: 'solver-job-queue',
+          VRP_SOLVER_JOB_DEFINITION: `solver-job-definition-${props.environment}`,
+          VRP_SOLVER_JOB_QUEUE: `solver-job-queue-${props.environment}`,
         },
         executionRole: executionRole, // Assign the execution role
         taskRole: taskRole, // Assign the task role
@@ -80,56 +81,52 @@ export class VRPBackendEcsServiceStack extends cdk.Stack {
       maxCapacity: 2,
     });
 
-    scaling.scaleOnCpuUtilization('CpuScaling', {
+    scaling.scaleOnCpuUtilization(`CpuScaling-${props.environment}`, {
       targetUtilizationPercent: 70,
       scaleInCooldown: cdk.Duration.seconds(60),
       scaleOutCooldown: cdk.Duration.seconds(60),
     });
 
     // Create a CloudWatch alarm for HTTP 5xx errors
-    new cloudwatch.Alarm(this, 'Http5xxAlarm', {
+    new cloudwatch.Alarm(this, `Http5xxAlarm-${props.environment}`, {
       metric: loadBalancedFargateService.loadBalancer.metrics.httpCodeTarget(elbv2.HttpCodeTarget.TARGET_5XX_COUNT),
       threshold: 10,
       evaluationPeriods: 1,
-      alarmDescription: 'HTTP 5xx errors > 10',
+      alarmDescription: `HTTP 5xx errors > 10 in ${props.environment} environment`,
     });
 
-  
-// Create the service role for the Batch Compute Environment
-  const batchServiceRole = new iam.Role(this, 'BatchServiceRole', {
-    assumedBy: new iam.ServicePrincipal('batch.amazonaws.com'),
-    managedPolicies: [
-      iam.ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSBatchServiceRole'),
-    // Add more policies if your job needs access to other AWS services
-    ],
-  });
-
-    
+    // Create the service role for the Batch Compute Environment
+    const batchServiceRole = new iam.Role(this, `BatchServiceRole-${props.environment}`, {
+      assumedBy: new iam.ServicePrincipal('batch.amazonaws.com'),
+      managedPolicies: [
+        iam.ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSBatchServiceRole'),
+      ],
+    });
 
     // Define a new Security Group for the Batch Compute Environment
-    const securityGroup = new ec2.SecurityGroup(this, 'SolverSecurityGroup', {
+    const securityGroup = new ec2.SecurityGroup(this, `SolverSecurityGroup-${props.environment}`, {
       vpc: props.vpc,
       allowAllOutbound: true,
-      securityGroupName: 'solver-security-group',
-      description: 'Security group for Solver Compute Environment',
+      securityGroupName: `solver-security-group-${props.environment}`,
+      description: `Security group for Solver Compute Environment in ${props.environment} environment`,
     });
 
     // Create AWS Batch Compute Environment
-    const batchComputeEnvironment = new batch.CfnComputeEnvironment(this, 'SolverComputeEnvironment', {
-      computeEnvironmentName: 'solver-compute-environment-dev',
+    const batchComputeEnvironment = new batch.CfnComputeEnvironment(this, `SolverComputeEnvironment-${props.environment}`, {
+      computeEnvironmentName: `solver-compute-environment-${props.environment}`,
       type: 'MANAGED',
       computeResources: {
-        type: 'FARGATE', // Use Fargate as the compute resource
+        type: 'FARGATE',
         maxvCpus: 4,
-        securityGroupIds: [securityGroup.securityGroupId], // Use the security group
+        securityGroupIds: [securityGroup.securityGroupId],
         subnets: props.vpc.publicSubnets.map(subnet => subnet.subnetId),
       },
-      serviceRole: batchServiceRole.roleArn, // Batch needs a role
+      serviceRole: batchServiceRole.roleArn,
       state: 'ENABLED',
     });
 
     // AWS Batch Job Definition
-    this.batchJobDefinition = new batch.CfnJobDefinition(this, 'SolverJobDefinition', {
+    this.batchJobDefinition = new batch.CfnJobDefinition(this, `SolverJobDefinition-${props.environment}`, {
       type: 'container',
       containerProperties: {
         image: props.repository.repositoryUri,
@@ -140,19 +137,19 @@ export class VRPBackendEcsServiceStack extends cdk.Stack {
           { name: 'VRP_SOLUTIONS_BUCKET', value: props.vrpSolutionsBucket.bucketName },
         ],
       },
-      jobDefinitionName: 'solver-job-definition',
+      jobDefinitionName: `solver-job-definition-${props.environment}`,
     });
 
     // AWS Batch Job Queue
-    this.batchJobQueue = new batch.CfnJobQueue(this, 'SolverJobQueue', {
+    this.batchJobQueue = new batch.CfnJobQueue(this, `SolverJobQueue-${props.environment}`, {
       computeEnvironmentOrder: [
         {
           order: 1,
-          computeEnvironment: batchComputeEnvironment.ref, // Ensure reference to compute environment
+          computeEnvironment: batchComputeEnvironment.ref,
         },
       ],
       priority: 1,
-      jobQueueName: 'solver-job-queue',
+      jobQueueName: `solver-job-queue-${props.environment}`,
     });
 
     // Ensure Job Queue is created after the Compute Environment
@@ -162,14 +159,14 @@ export class VRPBackendEcsServiceStack extends cdk.Stack {
     this.loadBalancer = loadBalancedFargateService.loadBalancer;
 
     // Outputs
-    new cdk.CfnOutput(this, "VRPBackendEcsServiceName", {
+    new cdk.CfnOutput(this, `VRPBackendEcsServiceName-${props.environment}`, {
       value: loadBalancedFargateService.service.serviceName,
-      description: "VRPBackend ECS Service Name",
+      description: `VRPBackend ECS Service Name for ${props.environment} environment`,
     });
 
-    new cdk.CfnOutput(this, "VRPBackendLoadBalancerDNS", {
+    new cdk.CfnOutput(this, `VRPBackendLoadBalancerDNS-${props.environment}`, {
       value: this.loadBalancer.loadBalancerDnsName,
-      description: "VRPBackend Load Balancer DNS Name",
+      description: `VRPBackend Load Balancer DNS Name for ${props.environment} environment`,
     });
   }
 }
