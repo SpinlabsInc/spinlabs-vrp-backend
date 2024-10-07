@@ -1,0 +1,810 @@
+{
+ "Resources": {
+  "BuildProjectdevelopRoleE6D0DC97": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "codebuild.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendCICDPipelineStack-develop/BuildProject-develop/Role/Resource"
+   }
+  },
+  "BuildProjectdevelopRoleDefaultPolicy8019EC12": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:aws:logs:us-east-1:448049814374:log-group:/aws/codebuild/",
+           {
+            "Ref": "BuildProjectdevelop5068A1E5"
+           },
+           ":*"
+          ]
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:aws:logs:us-east-1:448049814374:log-group:/aws/codebuild/",
+           {
+            "Ref": "BuildProjectdevelop5068A1E5"
+           }
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "Action": [
+        "codebuild:BatchPutCodeCoverages",
+        "codebuild:BatchPutTestCases",
+        "codebuild:CreateReport",
+        "codebuild:CreateReportGroup",
+        "codebuild:UpdateReport"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          "arn:aws:codebuild:us-east-1:448049814374:report-group/",
+          {
+           "Ref": "BuildProjectdevelop5068A1E5"
+          },
+          "-*"
+         ]
+        ]
+       }
+      },
+      {
+       "Action": [
+        "ecr:BatchCheckLayerAvailability",
+        "ecr:BatchGetImage",
+        "ecr:CompleteLayerUpload",
+        "ecr:GetDownloadUrlForLayer",
+        "ecr:InitiateLayerUpload",
+        "ecr:PutImage",
+        "ecr:UploadLayerPart"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::ImportValue": "VRPBackendCoreInfrastructureStack-develop:ExportsOutputFnGetAttVRPBackendRepodevelopC5E95E5CArn1B79F943"
+       }
+      },
+      {
+       "Action": [
+        "ecr:BatchCheckLayerAvailability",
+        "ecr:BatchGetImage",
+        "ecr:CompleteLayerUpload",
+        "ecr:DescribeRepositories",
+        "ecr:GetAuthorizationToken",
+        "ecr:GetDownloadUrlForLayer",
+        "ecr:InitiateLayerUpload",
+        "ecr:ListImages",
+        "ecr:PutImage",
+        "ecr:UploadLayerPart"
+       ],
+       "Effect": "Allow",
+       "Resource": "*"
+      },
+      {
+       "Action": "secretsmanager:GetSecretValue",
+       "Effect": "Allow",
+       "Resource": "arn:aws:secretsmanager:us-east-1:448049814374:secret:DockerHubCredentials-HH2LVS"
+      },
+      {
+       "Action": [
+        "s3:Abort*",
+        "s3:DeleteObject*",
+        "s3:GetBucket*",
+        "s3:GetObject*",
+        "s3:List*",
+        "s3:PutObject",
+        "s3:PutObjectLegalHold",
+        "s3:PutObjectRetention",
+        "s3:PutObjectTagging",
+        "s3:PutObjectVersionTagging"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "PipelinedevelopArtifactsBucketEAA4ED04",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "PipelinedevelopArtifactsBucketEAA4ED04",
+             "Arn"
+            ]
+           },
+           "/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "BuildProjectdevelopRoleDefaultPolicy8019EC12",
+    "Roles": [
+     {
+      "Ref": "BuildProjectdevelopRoleE6D0DC97"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendCICDPipelineStack-develop/BuildProject-develop/Role/DefaultPolicy/Resource"
+   }
+  },
+  "BuildProjectdevelop5068A1E5": {
+   "Type": "AWS::CodeBuild::Project",
+   "Properties": {
+    "Artifacts": {
+     "Type": "CODEPIPELINE"
+    },
+    "Cache": {
+     "Type": "NO_CACHE"
+    },
+    "EncryptionKey": "alias/aws/s3",
+    "Environment": {
+     "ComputeType": "BUILD_GENERAL1_SMALL",
+     "EnvironmentVariables": [
+      {
+       "Name": "ECR_REPO_URI",
+       "Type": "PLAINTEXT",
+       "Value": {
+        "Fn::Join": [
+         "",
+         [
+          {
+           "Fn::Select": [
+            4,
+            {
+             "Fn::Split": [
+              ":",
+              {
+               "Fn::ImportValue": "VRPBackendCoreInfrastructureStack-develop:ExportsOutputFnGetAttVRPBackendRepodevelopC5E95E5CArn1B79F943"
+              }
+             ]
+            }
+           ]
+          },
+          ".dkr.ecr.",
+          {
+           "Fn::Select": [
+            3,
+            {
+             "Fn::Split": [
+              ":",
+              {
+               "Fn::ImportValue": "VRPBackendCoreInfrastructureStack-develop:ExportsOutputFnGetAttVRPBackendRepodevelopC5E95E5CArn1B79F943"
+              }
+             ]
+            }
+           ]
+          },
+          ".",
+          {
+           "Ref": "AWS::URLSuffix"
+          },
+          "/",
+          {
+           "Fn::ImportValue": "VRPBackendCoreInfrastructureStack-develop:ExportsOutputRefVRPBackendRepodevelopC5E95E5CFBF51DA4"
+          }
+         ]
+        ]
+       }
+      },
+      {
+       "Name": "AWS_DEFAULT_REGION",
+       "Type": "PLAINTEXT",
+       "Value": "us-east-1"
+      },
+      {
+       "Name": "ENVIRONMENT",
+       "Type": "PLAINTEXT",
+       "Value": "develop"
+      }
+     ],
+     "Image": "aws/codebuild/standard:5.0",
+     "ImagePullCredentialsType": "CODEBUILD",
+     "PrivilegedMode": true,
+     "Type": "LINUX_CONTAINER"
+    },
+    "ServiceRole": {
+     "Fn::GetAtt": [
+      "BuildProjectdevelopRoleE6D0DC97",
+      "Arn"
+     ]
+    },
+    "Source": {
+     "BuildSpec": "buildspec.yml",
+     "Type": "CODEPIPELINE"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendCICDPipelineStack-develop/BuildProject-develop/Resource"
+   }
+  },
+  "PipelinedevelopArtifactsBucketEAA4ED04": {
+   "Type": "AWS::S3::Bucket",
+   "Properties": {
+    "BucketEncryption": {
+     "ServerSideEncryptionConfiguration": [
+      {
+       "ServerSideEncryptionByDefault": {
+        "SSEAlgorithm": "aws:kms"
+       }
+      }
+     ]
+    },
+    "PublicAccessBlockConfiguration": {
+     "BlockPublicAcls": true,
+     "BlockPublicPolicy": true,
+     "IgnorePublicAcls": true,
+     "RestrictPublicBuckets": true
+    }
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendCICDPipelineStack-develop/Pipeline-develop/ArtifactsBucket/Resource"
+   }
+  },
+  "PipelinedevelopArtifactsBucketPolicy6E6D65E9": {
+   "Type": "AWS::S3::BucketPolicy",
+   "Properties": {
+    "Bucket": {
+     "Ref": "PipelinedevelopArtifactsBucketEAA4ED04"
+    },
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "s3:*",
+       "Condition": {
+        "Bool": {
+         "aws:SecureTransport": "false"
+        }
+       },
+       "Effect": "Deny",
+       "Principal": {
+        "AWS": "*"
+       },
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "PipelinedevelopArtifactsBucketEAA4ED04",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "PipelinedevelopArtifactsBucketEAA4ED04",
+             "Arn"
+            ]
+           },
+           "/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendCICDPipelineStack-develop/Pipeline-develop/ArtifactsBucket/Policy/Resource"
+   }
+  },
+  "PipelinedevelopRole8D936B53": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "codepipeline.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendCICDPipelineStack-develop/Pipeline-develop/Role/Resource"
+   }
+  },
+  "PipelinedevelopRoleDefaultPolicy2D2CBE46": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "s3:Abort*",
+        "s3:DeleteObject*",
+        "s3:GetBucket*",
+        "s3:GetObject*",
+        "s3:List*",
+        "s3:PutObject",
+        "s3:PutObjectLegalHold",
+        "s3:PutObjectRetention",
+        "s3:PutObjectTagging",
+        "s3:PutObjectVersionTagging"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "PipelinedevelopArtifactsBucketEAA4ED04",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "PipelinedevelopArtifactsBucketEAA4ED04",
+             "Arn"
+            ]
+           },
+           "/*"
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "PipelinedevelopBuilddevelopCodePipelineActionRole4E2019D9",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::GetAtt": [
+          "PipelinedevelopDeploydevelopDeployToECSdevelopCodePipelineActionRole24BB9282",
+          "Arn"
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "PipelinedevelopRoleDefaultPolicy2D2CBE46",
+    "Roles": [
+     {
+      "Ref": "PipelinedevelopRole8D936B53"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendCICDPipelineStack-develop/Pipeline-develop/Role/DefaultPolicy/Resource"
+   }
+  },
+  "Pipelinedevelop355AA7C6": {
+   "Type": "AWS::CodePipeline::Pipeline",
+   "Properties": {
+    "ArtifactStore": {
+     "Location": {
+      "Ref": "PipelinedevelopArtifactsBucketEAA4ED04"
+     },
+     "Type": "S3"
+    },
+    "Name": "VRPBackendPipeline-develop",
+    "PipelineType": "V2",
+    "RoleArn": {
+     "Fn::GetAtt": [
+      "PipelinedevelopRole8D936B53",
+      "Arn"
+     ]
+    },
+    "Stages": [
+     {
+      "Actions": [
+       {
+        "ActionTypeId": {
+         "Category": "Source",
+         "Owner": "ThirdParty",
+         "Provider": "GitHub",
+         "Version": "1"
+        },
+        "Configuration": {
+         "Owner": "SpinlabsInc",
+         "Repo": "spinlabs-vrp-backend",
+         "Branch": "develop",
+         "OAuthToken": "{{resolve:secretsmanager:arn:aws:secretsmanager:us-east-1:448049814374:secret:GithubToken:SecretString:GithubToken::}}",
+         "PollForSourceChanges": false
+        },
+        "Name": "GitHub_Source_develop",
+        "OutputArtifacts": [
+         {
+          "Name": "SourceOutput"
+         }
+        ],
+        "RunOrder": 1
+       }
+      ],
+      "Name": "Source_develop"
+     },
+     {
+      "Actions": [
+       {
+        "ActionTypeId": {
+         "Category": "Build",
+         "Owner": "AWS",
+         "Provider": "CodeBuild",
+         "Version": "1"
+        },
+        "Configuration": {
+         "ProjectName": {
+          "Ref": "BuildProjectdevelop5068A1E5"
+         }
+        },
+        "InputArtifacts": [
+         {
+          "Name": "SourceOutput"
+         }
+        ],
+        "Name": "Build_develop",
+        "OutputArtifacts": [
+         {
+          "Name": "BuildOutput"
+         }
+        ],
+        "RoleArn": {
+         "Fn::GetAtt": [
+          "PipelinedevelopBuilddevelopCodePipelineActionRole4E2019D9",
+          "Arn"
+         ]
+        },
+        "RunOrder": 1
+       }
+      ],
+      "Name": "Build_develop"
+     },
+     {
+      "Actions": [
+       {
+        "ActionTypeId": {
+         "Category": "Deploy",
+         "Owner": "AWS",
+         "Provider": "ECS",
+         "Version": "1"
+        },
+        "Configuration": {
+         "ClusterName": {
+          "Fn::ImportValue": "VRPBackendCoreInfrastructureStack-develop:ExportsOutputRefVRPBackendClusterdevelop02B7E991A255BEDD"
+         },
+         "ServiceName": {
+          "Fn::ImportValue": "VRPBackendEcsServiceStack-develop:ExportsOutputFnGetAttVRPBackendFargateServicedevelopServiceC7EBD001Name0C9911AC"
+         },
+         "FileName": "imageDetail.json",
+         "DeploymentTimeout": 60
+        },
+        "InputArtifacts": [
+         {
+          "Name": "BuildOutput"
+         }
+        ],
+        "Name": "DeployToECS_develop",
+        "RoleArn": {
+         "Fn::GetAtt": [
+          "PipelinedevelopDeploydevelopDeployToECSdevelopCodePipelineActionRole24BB9282",
+          "Arn"
+         ]
+        },
+        "RunOrder": 2
+       }
+      ],
+      "Name": "Deploy_develop"
+     }
+    ]
+   },
+   "DependsOn": [
+    "PipelinedevelopRoleDefaultPolicy2D2CBE46",
+    "PipelinedevelopRole8D936B53"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendCICDPipelineStack-develop/Pipeline-develop/Resource"
+   }
+  },
+  "PipelinedevelopSourcedevelopGitHubSourcedevelopWebhookResourceF5BAB10B": {
+   "Type": "AWS::CodePipeline::Webhook",
+   "Properties": {
+    "Authentication": "GITHUB_HMAC",
+    "AuthenticationConfiguration": {
+     "SecretToken": "{{resolve:secretsmanager:arn:aws:secretsmanager:us-east-1:448049814374:secret:GithubToken:SecretString:GithubToken::}}"
+    },
+    "Filters": [
+     {
+      "JsonPath": "$.ref",
+      "MatchEquals": "refs/heads/{Branch}"
+     }
+    ],
+    "RegisterWithThirdParty": true,
+    "TargetAction": "GitHub_Source_develop",
+    "TargetPipeline": {
+     "Ref": "Pipelinedevelop355AA7C6"
+    },
+    "TargetPipelineVersion": 1
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendCICDPipelineStack-develop/Pipeline-develop/Source_develop/GitHub_Source_develop/WebhookResource"
+   }
+  },
+  "PipelinedevelopBuilddevelopCodePipelineActionRole4E2019D9": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "AWS": "arn:aws:iam::448049814374:root"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendCICDPipelineStack-develop/Pipeline-develop/Build_develop/Build_develop/CodePipelineActionRole/Resource"
+   }
+  },
+  "PipelinedevelopBuilddevelopCodePipelineActionRoleDefaultPolicy57C07DA4": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "codebuild:BatchGetBuilds",
+        "codebuild:StartBuild",
+        "codebuild:StopBuild"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "BuildProjectdevelop5068A1E5",
+         "Arn"
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "PipelinedevelopBuilddevelopCodePipelineActionRoleDefaultPolicy57C07DA4",
+    "Roles": [
+     {
+      "Ref": "PipelinedevelopBuilddevelopCodePipelineActionRole4E2019D9"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendCICDPipelineStack-develop/Pipeline-develop/Build_develop/Build_develop/CodePipelineActionRole/DefaultPolicy/Resource"
+   }
+  },
+  "PipelinedevelopDeploydevelopDeployToECSdevelopCodePipelineActionRole24BB9282": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "AWS": "arn:aws:iam::448049814374:root"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendCICDPipelineStack-develop/Pipeline-develop/Deploy_develop/DeployToECS_develop/CodePipelineActionRole/Resource"
+   }
+  },
+  "PipelinedevelopDeploydevelopDeployToECSdevelopCodePipelineActionRoleDefaultPolicyD931CD50": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "ecs:DescribeServices",
+        "ecs:DescribeTaskDefinition",
+        "ecs:DescribeTasks",
+        "ecs:ListTasks",
+        "ecs:RegisterTaskDefinition",
+        "ecs:TagResource",
+        "ecs:UpdateService"
+       ],
+       "Effect": "Allow",
+       "Resource": "*"
+      },
+      {
+       "Action": "iam:PassRole",
+       "Condition": {
+        "StringEqualsIfExists": {
+         "iam:PassedToService": [
+          "ec2.amazonaws.com",
+          "ecs-tasks.amazonaws.com"
+         ]
+        }
+       },
+       "Effect": "Allow",
+       "Resource": "*"
+      },
+      {
+       "Action": [
+        "s3:GetBucket*",
+        "s3:GetObject*",
+        "s3:List*"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "PipelinedevelopArtifactsBucketEAA4ED04",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "PipelinedevelopArtifactsBucketEAA4ED04",
+             "Arn"
+            ]
+           },
+           "/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "PipelinedevelopDeploydevelopDeployToECSdevelopCodePipelineActionRoleDefaultPolicyD931CD50",
+    "Roles": [
+     {
+      "Ref": "PipelinedevelopDeploydevelopDeployToECSdevelopCodePipelineActionRole24BB9282"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendCICDPipelineStack-develop/Pipeline-develop/Deploy_develop/DeployToECS_develop/CodePipelineActionRole/DefaultPolicy/Resource"
+   }
+  },
+  "PipelineFailureAlarmdevelopB8CC24AF": {
+   "Type": "AWS::CloudWatch::Alarm",
+   "Properties": {
+    "AlarmDescription": "Pipeline has failed in develop environment",
+    "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+    "Dimensions": [
+     {
+      "Name": "PipelineName",
+      "Value": {
+       "Ref": "Pipelinedevelop355AA7C6"
+      }
+     }
+    ],
+    "EvaluationPeriods": 1,
+    "MetricName": "PipelineExecutionFailure",
+    "Namespace": "AWS/CodePipeline",
+    "Period": 300,
+    "Statistic": "Average",
+    "Threshold": 1
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendCICDPipelineStack-develop/PipelineFailureAlarm-develop/Resource"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/02PQQ6CMBBFz+K+jFYTdaseQIILl6aUMQ4USmgrMU3vLhQMrv5r+/NmugW+58BXojeJLKpEUQ7+ZoWsWIZGu04iG94eXuoCc0eqAJ9Si4oaTDtdorTs8mxmDIxEDT7TCsfbmKlWJD+xFCmwUdXOjsUWG398x/yldRWY2YE/O1lhnDTTFIv7/zxMUNoVvbDyBf6kRFePlQghjHh1tnVR9/tkYM2wFZRm/eZH4AfYrEpDlHSusVQjZFN+AR7IhFAvAQAA"
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendCICDPipelineStack-develop/CDKMetadata/Default"
+   }
+  }
+ },
+ "Outputs": {
+  "EcsClusterNamedevelop": {
+   "Description": "Name of the ECS Cluster in develop environment",
+   "Value": {
+    "Fn::ImportValue": "VRPBackendCoreInfrastructureStack-develop:ExportsOutputRefVRPBackendClusterdevelop02B7E991A255BEDD"
+   }
+  },
+  "EcsServiceNamedevelop": {
+   "Description": "Name of the ECS Service in develop environment",
+   "Value": {
+    "Fn::ImportValue": "VRPBackendEcsServiceStack-develop:ExportsOutputFnGetAttVRPBackendFargateServicedevelopServiceC7EBD001Name0C9911AC"
+   }
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}

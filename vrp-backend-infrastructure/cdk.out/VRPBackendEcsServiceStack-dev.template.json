@@ -1,0 +1,913 @@
+{
+ "Resources": {
+  "EcsTaskExecutionRoledev8AD052B0": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "ecs-tasks.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+       ]
+      ]
+     },
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/AmazonS3FullAccess"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendEcsServiceStack-dev/EcsTaskExecutionRole-dev/Resource"
+   }
+  },
+  "EcsTaskExecutionRoledevDefaultPolicy6CFDF658": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "ecr:BatchCheckLayerAvailability",
+        "ecr:BatchGetImage",
+        "ecr:GetDownloadUrlForLayer"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::ImportValue": "VRPBackendCoreInfrastructureStack-dev:ExportsOutputFnGetAttVRPBackendRepodev5718D43EArn67A21312"
+       }
+      },
+      {
+       "Action": "ecr:GetAuthorizationToken",
+       "Effect": "Allow",
+       "Resource": "*"
+      },
+      {
+       "Action": [
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "VRPBackendFargateServicedevTaskDefvrpbackendcontainerdevLogGroupA6B55371",
+         "Arn"
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "EcsTaskExecutionRoledevDefaultPolicy6CFDF658",
+    "Roles": [
+     {
+      "Ref": "EcsTaskExecutionRoledev8AD052B0"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendEcsServiceStack-dev/EcsTaskExecutionRole-dev/DefaultPolicy/Resource"
+   }
+  },
+  "EcsTaskRoledevC20EEEE7": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "ecs-tasks.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendEcsServiceStack-dev/EcsTaskRole-dev/Resource"
+   }
+  },
+  "EcsTaskRoledevDefaultPolicy8C74D666": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "dynamodb:BatchGetItem",
+        "dynamodb:BatchWriteItem",
+        "dynamodb:ConditionCheckItem",
+        "dynamodb:DeleteItem",
+        "dynamodb:DescribeTable",
+        "dynamodb:GetItem",
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator",
+        "dynamodb:PutItem",
+        "dynamodb:Query",
+        "dynamodb:Scan",
+        "dynamodb:UpdateItem"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::ImportValue": "VRPBackendCoreInfrastructureStack-dev:ExportsOutputFnGetAttVRPDataTabledev17295C7BArn4C8A846E"
+        },
+        {
+         "Ref": "AWS::NoValue"
+        }
+       ]
+      },
+      {
+       "Action": [
+        "s3:Abort*",
+        "s3:DeleteObject*",
+        "s3:GetBucket*",
+        "s3:GetObject*",
+        "s3:List*",
+        "s3:PutObject",
+        "s3:PutObjectLegalHold",
+        "s3:PutObjectRetention",
+        "s3:PutObjectTagging",
+        "s3:PutObjectVersionTagging"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::ImportValue": "VRPBackendCoreInfrastructureStack-dev:ExportsOutputFnGetAttVRPSolutionsBucketdevA212CEE3ArnED1FA22C"
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::ImportValue": "VRPBackendCoreInfrastructureStack-dev:ExportsOutputFnGetAttVRPSolutionsBucketdevA212CEE3ArnED1FA22C"
+           },
+           "/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "EcsTaskRoledevDefaultPolicy8C74D666",
+    "Roles": [
+     {
+      "Ref": "EcsTaskRoledevC20EEEE7"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendEcsServiceStack-dev/EcsTaskRole-dev/DefaultPolicy/Resource"
+   }
+  },
+  "VRPBackendFargateServicedevLB4D1E814D": {
+   "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
+   "Properties": {
+    "LoadBalancerAttributes": [
+     {
+      "Key": "deletion_protection.enabled",
+      "Value": "false"
+     }
+    ],
+    "Scheme": "internet-facing",
+    "SecurityGroups": [
+     {
+      "Fn::GetAtt": [
+       "VRPBackendFargateServicedevLBSecurityGroupA5C97722",
+       "GroupId"
+      ]
+     }
+    ],
+    "Subnets": [
+     {
+      "Fn::ImportValue": "VRPBackendCoreInfrastructureStack-dev:ExportsOutputRefVRPBackendVPCdevPublicSubnet1Subnet70379AC80E051059"
+     },
+     {
+      "Fn::ImportValue": "VRPBackendCoreInfrastructureStack-dev:ExportsOutputRefVRPBackendVPCdevPublicSubnet2Subnet72F41815D8F33986"
+     }
+    ],
+    "Type": "application"
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendEcsServiceStack-dev/VRPBackendFargateService-dev/LB/Resource"
+   }
+  },
+  "VRPBackendFargateServicedevLBSecurityGroupA5C97722": {
+   "Type": "AWS::EC2::SecurityGroup",
+   "Properties": {
+    "GroupDescription": "Automatically created Security Group for ELB VRPBackendEcsServiceStackdevVRPBackendFargateServicedevLB55198F1D",
+    "SecurityGroupIngress": [
+     {
+      "CidrIp": "0.0.0.0/0",
+      "Description": "Allow from anyone on port 80",
+      "FromPort": 80,
+      "IpProtocol": "tcp",
+      "ToPort": 80
+     }
+    ],
+    "VpcId": {
+     "Fn::ImportValue": "VRPBackendCoreInfrastructureStack-dev:ExportsOutputRefVRPBackendVPCdev4ED3A190EA2DB3B5"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendEcsServiceStack-dev/VRPBackendFargateService-dev/LB/SecurityGroup/Resource"
+   }
+  },
+  "VRPBackendFargateServicedevLBSecurityGrouptoVRPBackendEcsServiceStackdevVRPBackendFargateServicedevServiceSecurityGroup36C703FF80B11AF69D": {
+   "Type": "AWS::EC2::SecurityGroupEgress",
+   "Properties": {
+    "Description": "Load balancer to target",
+    "DestinationSecurityGroupId": {
+     "Fn::GetAtt": [
+      "VRPBackendFargateServicedevServiceSecurityGroup0202FF8F",
+      "GroupId"
+     ]
+    },
+    "FromPort": 80,
+    "GroupId": {
+     "Fn::GetAtt": [
+      "VRPBackendFargateServicedevLBSecurityGroupA5C97722",
+      "GroupId"
+     ]
+    },
+    "IpProtocol": "tcp",
+    "ToPort": 80
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendEcsServiceStack-dev/VRPBackendFargateService-dev/LB/SecurityGroup/to VRPBackendEcsServiceStackdevVRPBackendFargateServicedevServiceSecurityGroup36C703FF:80"
+   }
+  },
+  "VRPBackendFargateServicedevLBPublicListener41C14D08": {
+   "Type": "AWS::ElasticLoadBalancingV2::Listener",
+   "Properties": {
+    "DefaultActions": [
+     {
+      "TargetGroupArn": {
+       "Ref": "VRPBackendFargateServicedevLBPublicListenerECSGroupE6B999DE"
+      },
+      "Type": "forward"
+     }
+    ],
+    "LoadBalancerArn": {
+     "Ref": "VRPBackendFargateServicedevLB4D1E814D"
+    },
+    "Port": 80,
+    "Protocol": "HTTP"
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendEcsServiceStack-dev/VRPBackendFargateService-dev/LB/PublicListener/Resource"
+   }
+  },
+  "VRPBackendFargateServicedevLBPublicListenerECSGroupE6B999DE": {
+   "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+   "Properties": {
+    "HealthCheckPath": "/api/health",
+    "Matcher": {
+     "HttpCode": "200-399"
+    },
+    "Port": 80,
+    "Protocol": "HTTP",
+    "TargetGroupAttributes": [
+     {
+      "Key": "stickiness.enabled",
+      "Value": "false"
+     }
+    ],
+    "TargetType": "ip",
+    "VpcId": {
+     "Fn::ImportValue": "VRPBackendCoreInfrastructureStack-dev:ExportsOutputRefVRPBackendVPCdev4ED3A190EA2DB3B5"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendEcsServiceStack-dev/VRPBackendFargateService-dev/LB/PublicListener/ECSGroup/Resource"
+   }
+  },
+  "VRPBackendFargateServicedevTaskDefAC84FB09": {
+   "Type": "AWS::ECS::TaskDefinition",
+   "Properties": {
+    "ContainerDefinitions": [
+     {
+      "Environment": [
+       {
+        "Name": "VRP_DATA_TABLE",
+        "Value": {
+         "Fn::ImportValue": "VRPBackendCoreInfrastructureStack-dev:ExportsOutputRefVRPDataTabledev17295C7BABB84BF1"
+        }
+       },
+       {
+        "Name": "VRP_SOLUTIONS_BUCKET",
+        "Value": {
+         "Fn::ImportValue": "VRPBackendCoreInfrastructureStack-dev:ExportsOutputRefVRPSolutionsBucketdevA212CEE3D5A0871C"
+        }
+       },
+       {
+        "Name": "VRP_SOLVER_JOB_DEFINITION",
+        "Value": "solver-job-definition-dev"
+       },
+       {
+        "Name": "VRP_SOLVER_JOB_QUEUE",
+        "Value": "solver-job-queue-dev"
+       }
+      ],
+      "Essential": true,
+      "Image": {
+       "Fn::Join": [
+        "",
+        [
+         {
+          "Fn::Select": [
+           4,
+           {
+            "Fn::Split": [
+             ":",
+             {
+              "Fn::ImportValue": "VRPBackendCoreInfrastructureStack-dev:ExportsOutputFnGetAttVRPBackendRepodev5718D43EArn67A21312"
+             }
+            ]
+           }
+          ]
+         },
+         ".dkr.ecr.",
+         {
+          "Fn::Select": [
+           3,
+           {
+            "Fn::Split": [
+             ":",
+             {
+              "Fn::ImportValue": "VRPBackendCoreInfrastructureStack-dev:ExportsOutputFnGetAttVRPBackendRepodev5718D43EArn67A21312"
+             }
+            ]
+           }
+          ]
+         },
+         ".",
+         {
+          "Ref": "AWS::URLSuffix"
+         },
+         "/",
+         {
+          "Fn::ImportValue": "VRPBackendCoreInfrastructureStack-dev:ExportsOutputRefVRPBackendRepodev5718D43E27A7D026"
+         },
+         ":latest"
+        ]
+       ]
+      },
+      "LogConfiguration": {
+       "LogDriver": "awslogs",
+       "Options": {
+        "awslogs-group": {
+         "Ref": "VRPBackendFargateServicedevTaskDefvrpbackendcontainerdevLogGroupA6B55371"
+        },
+        "awslogs-stream-prefix": "VRPBackendFargateService-dev",
+        "awslogs-region": "us-east-1"
+       }
+      },
+      "Name": "vrp-backend-container-dev",
+      "PortMappings": [
+       {
+        "ContainerPort": 80,
+        "Protocol": "tcp"
+       }
+      ]
+     }
+    ],
+    "Cpu": "256",
+    "ExecutionRoleArn": {
+     "Fn::GetAtt": [
+      "EcsTaskExecutionRoledev8AD052B0",
+      "Arn"
+     ]
+    },
+    "Family": "VRPBackendEcsServiceStackdevVRPBackendFargateServicedevTaskDef79D9E1FB",
+    "Memory": "512",
+    "NetworkMode": "awsvpc",
+    "RequiresCompatibilities": [
+     "FARGATE"
+    ],
+    "TaskRoleArn": {
+     "Fn::GetAtt": [
+      "EcsTaskRoledevC20EEEE7",
+      "Arn"
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendEcsServiceStack-dev/VRPBackendFargateService-dev/TaskDef/Resource"
+   }
+  },
+  "VRPBackendFargateServicedevTaskDefvrpbackendcontainerdevLogGroupA6B55371": {
+   "Type": "AWS::Logs::LogGroup",
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendEcsServiceStack-dev/VRPBackendFargateService-dev/TaskDef/vrp-backend-container-dev/LogGroup/Resource"
+   }
+  },
+  "VRPBackendFargateServicedevServiceC64BFA87": {
+   "Type": "AWS::ECS::Service",
+   "Properties": {
+    "Cluster": {
+     "Fn::ImportValue": "VRPBackendCoreInfrastructureStack-dev:ExportsOutputRefVRPBackendClusterdev787EE744196B8B0A"
+    },
+    "DeploymentConfiguration": {
+     "MaximumPercent": 200,
+     "MinimumHealthyPercent": 50
+    },
+    "DesiredCount": 1,
+    "EnableECSManagedTags": false,
+    "HealthCheckGracePeriodSeconds": 60,
+    "LaunchType": "FARGATE",
+    "LoadBalancers": [
+     {
+      "ContainerName": "vrp-backend-container-dev",
+      "ContainerPort": 80,
+      "TargetGroupArn": {
+       "Ref": "VRPBackendFargateServicedevLBPublicListenerECSGroupE6B999DE"
+      }
+     }
+    ],
+    "NetworkConfiguration": {
+     "AwsvpcConfiguration": {
+      "AssignPublicIp": "DISABLED",
+      "SecurityGroups": [
+       {
+        "Fn::GetAtt": [
+         "VRPBackendFargateServicedevServiceSecurityGroup0202FF8F",
+         "GroupId"
+        ]
+       }
+      ],
+      "Subnets": [
+       {
+        "Fn::ImportValue": "VRPBackendCoreInfrastructureStack-dev:ExportsOutputRefVRPBackendVPCdevPrivateSubnet1SubnetF4E7B1178B065E34"
+       },
+       {
+        "Fn::ImportValue": "VRPBackendCoreInfrastructureStack-dev:ExportsOutputRefVRPBackendVPCdevPrivateSubnet2Subnet4C2B20B4E9643AA6"
+       }
+      ]
+     }
+    },
+    "TaskDefinition": {
+     "Ref": "VRPBackendFargateServicedevTaskDefAC84FB09"
+    }
+   },
+   "DependsOn": [
+    "EcsTaskRoledevDefaultPolicy8C74D666",
+    "EcsTaskRoledevC20EEEE7",
+    "VRPBackendFargateServicedevLBPublicListenerECSGroupE6B999DE",
+    "VRPBackendFargateServicedevLBPublicListener41C14D08"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendEcsServiceStack-dev/VRPBackendFargateService-dev/Service/Service"
+   }
+  },
+  "VRPBackendFargateServicedevServiceSecurityGroup0202FF8F": {
+   "Type": "AWS::EC2::SecurityGroup",
+   "Properties": {
+    "GroupDescription": "VRPBackendEcsServiceStack-dev/VRPBackendFargateService-dev/Service/SecurityGroup",
+    "SecurityGroupEgress": [
+     {
+      "CidrIp": "0.0.0.0/0",
+      "Description": "Allow all outbound traffic by default",
+      "IpProtocol": "-1"
+     }
+    ],
+    "VpcId": {
+     "Fn::ImportValue": "VRPBackendCoreInfrastructureStack-dev:ExportsOutputRefVRPBackendVPCdev4ED3A190EA2DB3B5"
+    }
+   },
+   "DependsOn": [
+    "EcsTaskRoledevDefaultPolicy8C74D666",
+    "EcsTaskRoledevC20EEEE7"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendEcsServiceStack-dev/VRPBackendFargateService-dev/Service/SecurityGroup/Resource"
+   }
+  },
+  "VRPBackendFargateServicedevServiceSecurityGroupfromVRPBackendEcsServiceStackdevVRPBackendFargateServicedevLBSecurityGroupC7B5E488803A61C638": {
+   "Type": "AWS::EC2::SecurityGroupIngress",
+   "Properties": {
+    "Description": "Load balancer to target",
+    "FromPort": 80,
+    "GroupId": {
+     "Fn::GetAtt": [
+      "VRPBackendFargateServicedevServiceSecurityGroup0202FF8F",
+      "GroupId"
+     ]
+    },
+    "IpProtocol": "tcp",
+    "SourceSecurityGroupId": {
+     "Fn::GetAtt": [
+      "VRPBackendFargateServicedevLBSecurityGroupA5C97722",
+      "GroupId"
+     ]
+    },
+    "ToPort": 80
+   },
+   "DependsOn": [
+    "EcsTaskRoledevDefaultPolicy8C74D666",
+    "EcsTaskRoledevC20EEEE7"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendEcsServiceStack-dev/VRPBackendFargateService-dev/Service/SecurityGroup/from VRPBackendEcsServiceStackdevVRPBackendFargateServicedevLBSecurityGroupC7B5E488:80"
+   }
+  },
+  "VRPBackendFargateServicedevServiceTaskCountTarget6B141E05": {
+   "Type": "AWS::ApplicationAutoScaling::ScalableTarget",
+   "Properties": {
+    "MaxCapacity": 2,
+    "MinCapacity": 1,
+    "ResourceId": {
+     "Fn::Join": [
+      "",
+      [
+       "service/",
+       {
+        "Fn::ImportValue": "VRPBackendCoreInfrastructureStack-dev:ExportsOutputRefVRPBackendClusterdev787EE744196B8B0A"
+       },
+       "/",
+       {
+        "Fn::GetAtt": [
+         "VRPBackendFargateServicedevServiceC64BFA87",
+         "Name"
+        ]
+       }
+      ]
+     ]
+    },
+    "RoleARN": "arn:aws:iam::448049814374:role/aws-service-role/ecs.application-autoscaling.amazonaws.com/AWSServiceRoleForApplicationAutoScaling_ECSService",
+    "ScalableDimension": "ecs:service:DesiredCount",
+    "ServiceNamespace": "ecs"
+   },
+   "DependsOn": [
+    "EcsTaskRoledevDefaultPolicy8C74D666",
+    "EcsTaskRoledevC20EEEE7"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendEcsServiceStack-dev/VRPBackendFargateService-dev/Service/TaskCount/Target/Resource"
+   }
+  },
+  "VRPBackendFargateServicedevServiceTaskCountTargetCpuScalingdev34409CC3": {
+   "Type": "AWS::ApplicationAutoScaling::ScalingPolicy",
+   "Properties": {
+    "PolicyName": "VRPBackendEcsServiceStackdevVRPBackendFargateServicedevServiceTaskCountTargetCpuScalingdev117093CF",
+    "PolicyType": "TargetTrackingScaling",
+    "ScalingTargetId": {
+     "Ref": "VRPBackendFargateServicedevServiceTaskCountTarget6B141E05"
+    },
+    "TargetTrackingScalingPolicyConfiguration": {
+     "PredefinedMetricSpecification": {
+      "PredefinedMetricType": "ECSServiceAverageCPUUtilization"
+     },
+     "ScaleInCooldown": 60,
+     "ScaleOutCooldown": 60,
+     "TargetValue": 70
+    }
+   },
+   "DependsOn": [
+    "EcsTaskRoledevDefaultPolicy8C74D666",
+    "EcsTaskRoledevC20EEEE7"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendEcsServiceStack-dev/VRPBackendFargateService-dev/Service/TaskCount/Target/CpuScaling-dev/Resource"
+   }
+  },
+  "Http5xxAlarmdevB109117B": {
+   "Type": "AWS::CloudWatch::Alarm",
+   "Properties": {
+    "AlarmDescription": "HTTP 5xx errors > 10 in dev environment",
+    "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+    "Dimensions": [
+     {
+      "Name": "LoadBalancer",
+      "Value": {
+       "Fn::GetAtt": [
+        "VRPBackendFargateServicedevLB4D1E814D",
+        "LoadBalancerFullName"
+       ]
+      }
+     }
+    ],
+    "EvaluationPeriods": 1,
+    "MetricName": "HTTPCode_Target_5XX_Count",
+    "Namespace": "AWS/ApplicationELB",
+    "Period": 300,
+    "Statistic": "Sum",
+    "Threshold": 10
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendEcsServiceStack-dev/Http5xxAlarm-dev/Resource"
+   }
+  },
+  "BatchServiceRoledev6F357510": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "batch.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSBatchServiceRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendEcsServiceStack-dev/BatchServiceRole-dev/Resource"
+   }
+  },
+  "SolverSecurityGroupdev35858D23": {
+   "Type": "AWS::EC2::SecurityGroup",
+   "Properties": {
+    "GroupDescription": "Security group for Solver Compute Environment in dev environment",
+    "GroupName": "solver-security-group-dev",
+    "SecurityGroupEgress": [
+     {
+      "CidrIp": "0.0.0.0/0",
+      "Description": "Allow all outbound traffic by default",
+      "IpProtocol": "-1"
+     }
+    ],
+    "VpcId": {
+     "Fn::ImportValue": "VRPBackendCoreInfrastructureStack-dev:ExportsOutputRefVRPBackendVPCdev4ED3A190EA2DB3B5"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendEcsServiceStack-dev/SolverSecurityGroup-dev/Resource"
+   }
+  },
+  "SolverComputeEnvironmentdev": {
+   "Type": "AWS::Batch::ComputeEnvironment",
+   "Properties": {
+    "ComputeEnvironmentName": "solver-compute-environment-dev",
+    "ComputeResources": {
+     "MaxvCpus": 4,
+     "SecurityGroupIds": [
+      {
+       "Fn::GetAtt": [
+        "SolverSecurityGroupdev35858D23",
+        "GroupId"
+       ]
+      }
+     ],
+     "Subnets": [
+      {
+       "Fn::ImportValue": "VRPBackendCoreInfrastructureStack-dev:ExportsOutputRefVRPBackendVPCdevPublicSubnet1Subnet70379AC80E051059"
+      },
+      {
+       "Fn::ImportValue": "VRPBackendCoreInfrastructureStack-dev:ExportsOutputRefVRPBackendVPCdevPublicSubnet2Subnet72F41815D8F33986"
+      }
+     ],
+     "Type": "FARGATE"
+    },
+    "ServiceRole": {
+     "Fn::GetAtt": [
+      "BatchServiceRoledev6F357510",
+      "Arn"
+     ]
+    },
+    "State": "ENABLED",
+    "Type": "MANAGED"
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendEcsServiceStack-dev/SolverComputeEnvironment-dev"
+   }
+  },
+  "SolverJobDefinitiondev": {
+   "Type": "AWS::Batch::JobDefinition",
+   "Properties": {
+    "ContainerProperties": {
+     "Environment": [
+      {
+       "Name": "VRP_DATA_TABLE",
+       "Value": {
+        "Fn::ImportValue": "VRPBackendCoreInfrastructureStack-dev:ExportsOutputRefVRPDataTabledev17295C7BABB84BF1"
+       }
+      },
+      {
+       "Name": "VRP_SOLUTIONS_BUCKET",
+       "Value": {
+        "Fn::ImportValue": "VRPBackendCoreInfrastructureStack-dev:ExportsOutputRefVRPSolutionsBucketdevA212CEE3D5A0871C"
+       }
+      }
+     ],
+     "Image": {
+      "Fn::Join": [
+       "",
+       [
+        {
+         "Fn::Select": [
+          4,
+          {
+           "Fn::Split": [
+            ":",
+            {
+             "Fn::ImportValue": "VRPBackendCoreInfrastructureStack-dev:ExportsOutputFnGetAttVRPBackendRepodev5718D43EArn67A21312"
+            }
+           ]
+          }
+         ]
+        },
+        ".dkr.ecr.",
+        {
+         "Fn::Select": [
+          3,
+          {
+           "Fn::Split": [
+            ":",
+            {
+             "Fn::ImportValue": "VRPBackendCoreInfrastructureStack-dev:ExportsOutputFnGetAttVRPBackendRepodev5718D43EArn67A21312"
+            }
+           ]
+          }
+         ]
+        },
+        ".",
+        {
+         "Ref": "AWS::URLSuffix"
+        },
+        "/",
+        {
+         "Fn::ImportValue": "VRPBackendCoreInfrastructureStack-dev:ExportsOutputRefVRPBackendRepodev5718D43E27A7D026"
+        }
+       ]
+      ]
+     },
+     "Memory": 1024,
+     "Vcpus": 1
+    },
+    "JobDefinitionName": "solver-job-definition-dev",
+    "Type": "container"
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendEcsServiceStack-dev/SolverJobDefinition-dev"
+   }
+  },
+  "SolverJobQueuedev": {
+   "Type": "AWS::Batch::JobQueue",
+   "Properties": {
+    "ComputeEnvironmentOrder": [
+     {
+      "ComputeEnvironment": {
+       "Ref": "SolverComputeEnvironmentdev"
+      },
+      "Order": 1
+     }
+    ],
+    "JobQueueName": "solver-job-queue-dev",
+    "Priority": 1
+   },
+   "DependsOn": [
+    "SolverComputeEnvironmentdev"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendEcsServiceStack-dev/SolverJobQueue-dev"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/31RXU/DMAz8LbxnASoh8QrjQyAkYN07clOveEvtKh+bUNT/jpoytgLiyefLOedcCn1+canPTmDnZ6bezCxVOpUBzEbBzr8lglanhVhU8xXn+iKWzMfQjqhXaPxbByGgY6+vus6SgUDCTwL1NVhgg/UduAYClui2ZFChBR/IWIG6ygriZlvo9Pe0G9wm/bGOfED+0uzx0fkSXIPh3knsBslRO2xe6FSiiY7Cx7fkf+K2cej9L/qBM5/T0OnruUvwmxtcEdOwyWg/ZYQDEKM74n5ElY1GWBqwUNl87Vwih15ZabxOT9J8L7vHvYJDCBCDeAOWuNHpcM0QRTaYMmNZOjAb4qYc5w7/PiF6ZazEegfBvOt0ZcG1gyaDXlUjPV/xXNouBrzlLTnhFjkbP0o1zedRqteIEfteLdBLdGMCzzF0MU/s2V6x1KjX/nRbFPpCn5+sPdHMRQ7Uol6M9ROHXvC13wIAAA=="
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendEcsServiceStack-dev/CDKMetadata/Default"
+   }
+  }
+ },
+ "Outputs": {
+  "VRPBackendFargateServicedevLoadBalancerDNSBCC7CF9D": {
+   "Value": {
+    "Fn::GetAtt": [
+     "VRPBackendFargateServicedevLB4D1E814D",
+     "DNSName"
+    ]
+   }
+  },
+  "VRPBackendFargateServicedevServiceURL8A9075A7": {
+   "Value": {
+    "Fn::Join": [
+     "",
+     [
+      "http://",
+      {
+       "Fn::GetAtt": [
+        "VRPBackendFargateServicedevLB4D1E814D",
+        "DNSName"
+       ]
+      }
+     ]
+    ]
+   }
+  },
+  "VRPBackendEcsServiceNamedev": {
+   "Description": "VRPBackend ECS Service Name for dev environment",
+   "Value": {
+    "Fn::GetAtt": [
+     "VRPBackendFargateServicedevServiceC64BFA87",
+     "Name"
+    ]
+   }
+  },
+  "VRPBackendLoadBalancerDNSdev": {
+   "Description": "VRPBackend Load Balancer DNS Name for dev environment",
+   "Value": {
+    "Fn::GetAtt": [
+     "VRPBackendFargateServicedevLB4D1E814D",
+     "DNSName"
+    ]
+   }
+  },
+  "ExportsOutputFnGetAttVRPBackendFargateServicedevServiceC64BFA87Name37DFD2A8": {
+   "Value": {
+    "Fn::GetAtt": [
+     "VRPBackendFargateServicedevServiceC64BFA87",
+     "Name"
+    ]
+   },
+   "Export": {
+    "Name": "VRPBackendEcsServiceStack-dev:ExportsOutputFnGetAttVRPBackendFargateServicedevServiceC64BFA87Name37DFD2A8"
+   }
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}

@@ -14,10 +14,12 @@ s3 = boto3.client('s3')
 batch = boto3.client('batch')
 
 # Get environment variables
-VRP_DATA_TABLE = os.environ['VRP_DATA_TABLE']
-VRP_SOLUTIONS_BUCKET = os.environ['VRP_SOLUTIONS_BUCKET']
-VRP_SOLVER_JOB_DEFINITION = os.environ['VRP_SOLVER_JOB_DEFINITION']
-VRP_SOLVER_JOB_QUEUE = os.environ['VRP_SOLVER_JOB_QUEUE']
+ENVIRONMENT = os.getenv('ENVIRONMENT', 'develop')
+VRP_DATA_TABLE = os.getenv('VRP_DATA_TABLE', f'vrp-data-table-{ENVIRONMENT}')
+VRP_SOLUTIONS_BUCKET = os.getenv('VRP_SOLUTIONS_BUCKET', f'vrp-solutions-bucket-{ENVIRONMENT}')
+VRP_SOLVER_JOB_DEFINITION = os.getenv('VRP_SOLVER_JOB_DEFINITION', f'vrp-solver-job-definition-{ENVIRONMENT}')
+VRP_SOLVER_JOB_QUEUE = os.getenv('VRP_SOLVER_JOB_QUEUE', f'vrp-solver-job-queue-{ENVIRONMENT}')
+
 
 table = dynamodb.Table(VRP_DATA_TABLE)
 

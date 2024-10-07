@@ -1,0 +1,857 @@
+{
+ "Resources": {
+  "BuildProjectprodRoleB663BA92": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "codebuild.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendCICDPipelineStack-prod/BuildProject-prod/Role/Resource"
+   }
+  },
+  "BuildProjectprodRoleDefaultPolicyCD60F3B9": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:aws:logs:us-east-1:448049814374:log-group:/aws/codebuild/",
+           {
+            "Ref": "BuildProjectprodC3541DCA"
+           },
+           ":*"
+          ]
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:aws:logs:us-east-1:448049814374:log-group:/aws/codebuild/",
+           {
+            "Ref": "BuildProjectprodC3541DCA"
+           }
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "Action": [
+        "codebuild:BatchPutCodeCoverages",
+        "codebuild:BatchPutTestCases",
+        "codebuild:CreateReport",
+        "codebuild:CreateReportGroup",
+        "codebuild:UpdateReport"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          "arn:aws:codebuild:us-east-1:448049814374:report-group/",
+          {
+           "Ref": "BuildProjectprodC3541DCA"
+          },
+          "-*"
+         ]
+        ]
+       }
+      },
+      {
+       "Action": [
+        "ecr:BatchCheckLayerAvailability",
+        "ecr:BatchGetImage",
+        "ecr:CompleteLayerUpload",
+        "ecr:GetDownloadUrlForLayer",
+        "ecr:InitiateLayerUpload",
+        "ecr:PutImage",
+        "ecr:UploadLayerPart"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::ImportValue": "VRPBackendCoreInfrastructureStack-prod:ExportsOutputFnGetAttVRPBackendRepoprod306857DCArnF949F9AF"
+       }
+      },
+      {
+       "Action": [
+        "ecr:BatchCheckLayerAvailability",
+        "ecr:BatchGetImage",
+        "ecr:CompleteLayerUpload",
+        "ecr:DescribeRepositories",
+        "ecr:GetAuthorizationToken",
+        "ecr:GetDownloadUrlForLayer",
+        "ecr:InitiateLayerUpload",
+        "ecr:ListImages",
+        "ecr:PutImage",
+        "ecr:UploadLayerPart"
+       ],
+       "Effect": "Allow",
+       "Resource": "*"
+      },
+      {
+       "Action": "secretsmanager:GetSecretValue",
+       "Effect": "Allow",
+       "Resource": "arn:aws:secretsmanager:us-east-1:448049814374:secret:DockerHubCredentials-HH2LVS"
+      },
+      {
+       "Action": [
+        "s3:Abort*",
+        "s3:DeleteObject*",
+        "s3:GetBucket*",
+        "s3:GetObject*",
+        "s3:List*",
+        "s3:PutObject",
+        "s3:PutObjectLegalHold",
+        "s3:PutObjectRetention",
+        "s3:PutObjectTagging",
+        "s3:PutObjectVersionTagging"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "PipelineprodArtifactsBucketA5921C51",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "PipelineprodArtifactsBucketA5921C51",
+             "Arn"
+            ]
+           },
+           "/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "BuildProjectprodRoleDefaultPolicyCD60F3B9",
+    "Roles": [
+     {
+      "Ref": "BuildProjectprodRoleB663BA92"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendCICDPipelineStack-prod/BuildProject-prod/Role/DefaultPolicy/Resource"
+   }
+  },
+  "BuildProjectprodC3541DCA": {
+   "Type": "AWS::CodeBuild::Project",
+   "Properties": {
+    "Artifacts": {
+     "Type": "CODEPIPELINE"
+    },
+    "Cache": {
+     "Type": "NO_CACHE"
+    },
+    "EncryptionKey": "alias/aws/s3",
+    "Environment": {
+     "ComputeType": "BUILD_GENERAL1_SMALL",
+     "EnvironmentVariables": [
+      {
+       "Name": "ECR_REPO_URI",
+       "Type": "PLAINTEXT",
+       "Value": {
+        "Fn::Join": [
+         "",
+         [
+          {
+           "Fn::Select": [
+            4,
+            {
+             "Fn::Split": [
+              ":",
+              {
+               "Fn::ImportValue": "VRPBackendCoreInfrastructureStack-prod:ExportsOutputFnGetAttVRPBackendRepoprod306857DCArnF949F9AF"
+              }
+             ]
+            }
+           ]
+          },
+          ".dkr.ecr.",
+          {
+           "Fn::Select": [
+            3,
+            {
+             "Fn::Split": [
+              ":",
+              {
+               "Fn::ImportValue": "VRPBackendCoreInfrastructureStack-prod:ExportsOutputFnGetAttVRPBackendRepoprod306857DCArnF949F9AF"
+              }
+             ]
+            }
+           ]
+          },
+          ".",
+          {
+           "Ref": "AWS::URLSuffix"
+          },
+          "/",
+          {
+           "Fn::ImportValue": "VRPBackendCoreInfrastructureStack-prod:ExportsOutputRefVRPBackendRepoprod306857DCC5C16B9B"
+          }
+         ]
+        ]
+       }
+      },
+      {
+       "Name": "AWS_DEFAULT_REGION",
+       "Type": "PLAINTEXT",
+       "Value": "us-east-1"
+      },
+      {
+       "Name": "ENVIRONMENT",
+       "Type": "PLAINTEXT",
+       "Value": "prod"
+      }
+     ],
+     "Image": "aws/codebuild/standard:5.0",
+     "ImagePullCredentialsType": "CODEBUILD",
+     "PrivilegedMode": true,
+     "Type": "LINUX_CONTAINER"
+    },
+    "ServiceRole": {
+     "Fn::GetAtt": [
+      "BuildProjectprodRoleB663BA92",
+      "Arn"
+     ]
+    },
+    "Source": {
+     "BuildSpec": "buildspec.yml",
+     "Type": "CODEPIPELINE"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendCICDPipelineStack-prod/BuildProject-prod/Resource"
+   }
+  },
+  "PipelineprodArtifactsBucketA5921C51": {
+   "Type": "AWS::S3::Bucket",
+   "Properties": {
+    "BucketEncryption": {
+     "ServerSideEncryptionConfiguration": [
+      {
+       "ServerSideEncryptionByDefault": {
+        "SSEAlgorithm": "aws:kms"
+       }
+      }
+     ]
+    },
+    "PublicAccessBlockConfiguration": {
+     "BlockPublicAcls": true,
+     "BlockPublicPolicy": true,
+     "IgnorePublicAcls": true,
+     "RestrictPublicBuckets": true
+    }
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendCICDPipelineStack-prod/Pipeline-prod/ArtifactsBucket/Resource"
+   }
+  },
+  "PipelineprodArtifactsBucketPolicy67F73033": {
+   "Type": "AWS::S3::BucketPolicy",
+   "Properties": {
+    "Bucket": {
+     "Ref": "PipelineprodArtifactsBucketA5921C51"
+    },
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "s3:*",
+       "Condition": {
+        "Bool": {
+         "aws:SecureTransport": "false"
+        }
+       },
+       "Effect": "Deny",
+       "Principal": {
+        "AWS": "*"
+       },
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "PipelineprodArtifactsBucketA5921C51",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "PipelineprodArtifactsBucketA5921C51",
+             "Arn"
+            ]
+           },
+           "/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendCICDPipelineStack-prod/Pipeline-prod/ArtifactsBucket/Policy/Resource"
+   }
+  },
+  "PipelineprodRole4CF67912": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "codepipeline.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendCICDPipelineStack-prod/Pipeline-prod/Role/Resource"
+   }
+  },
+  "PipelineprodRoleDefaultPolicyE938671A": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "s3:Abort*",
+        "s3:DeleteObject*",
+        "s3:GetBucket*",
+        "s3:GetObject*",
+        "s3:List*",
+        "s3:PutObject",
+        "s3:PutObjectLegalHold",
+        "s3:PutObjectRetention",
+        "s3:PutObjectTagging",
+        "s3:PutObjectVersionTagging"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "PipelineprodArtifactsBucketA5921C51",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "PipelineprodArtifactsBucketA5921C51",
+             "Arn"
+            ]
+           },
+           "/*"
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "PipelineprodApproveprodCodePipelineActionRole84982B86",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::GetAtt": [
+          "PipelineprodBuildprodCodePipelineActionRole46BBCEA4",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::GetAtt": [
+          "PipelineprodDeployprodDeployToECSprodCodePipelineActionRoleC6743DDD",
+          "Arn"
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "PipelineprodRoleDefaultPolicyE938671A",
+    "Roles": [
+     {
+      "Ref": "PipelineprodRole4CF67912"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendCICDPipelineStack-prod/Pipeline-prod/Role/DefaultPolicy/Resource"
+   }
+  },
+  "Pipelineprod9AFCC87F": {
+   "Type": "AWS::CodePipeline::Pipeline",
+   "Properties": {
+    "ArtifactStore": {
+     "Location": {
+      "Ref": "PipelineprodArtifactsBucketA5921C51"
+     },
+     "Type": "S3"
+    },
+    "Name": "VRPBackendPipeline-prod",
+    "PipelineType": "V2",
+    "RoleArn": {
+     "Fn::GetAtt": [
+      "PipelineprodRole4CF67912",
+      "Arn"
+     ]
+    },
+    "Stages": [
+     {
+      "Actions": [
+       {
+        "ActionTypeId": {
+         "Category": "Source",
+         "Owner": "ThirdParty",
+         "Provider": "GitHub",
+         "Version": "1"
+        },
+        "Configuration": {
+         "Owner": "SpinlabsInc",
+         "Repo": "spinlabs-vrp-backend",
+         "Branch": "main",
+         "OAuthToken": "{{resolve:secretsmanager:arn:aws:secretsmanager:us-east-1:448049814374:secret:GithubToken:SecretString:GithubToken::}}",
+         "PollForSourceChanges": false
+        },
+        "Name": "GitHub_Source_prod",
+        "OutputArtifacts": [
+         {
+          "Name": "SourceOutput"
+         }
+        ],
+        "RunOrder": 1
+       }
+      ],
+      "Name": "Source_prod"
+     },
+     {
+      "Actions": [
+       {
+        "ActionTypeId": {
+         "Category": "Build",
+         "Owner": "AWS",
+         "Provider": "CodeBuild",
+         "Version": "1"
+        },
+        "Configuration": {
+         "ProjectName": {
+          "Ref": "BuildProjectprodC3541DCA"
+         }
+        },
+        "InputArtifacts": [
+         {
+          "Name": "SourceOutput"
+         }
+        ],
+        "Name": "Build_prod",
+        "OutputArtifacts": [
+         {
+          "Name": "BuildOutput"
+         }
+        ],
+        "RoleArn": {
+         "Fn::GetAtt": [
+          "PipelineprodBuildprodCodePipelineActionRole46BBCEA4",
+          "Arn"
+         ]
+        },
+        "RunOrder": 1
+       }
+      ],
+      "Name": "Build_prod"
+     },
+     {
+      "Actions": [
+       {
+        "ActionTypeId": {
+         "Category": "Approval",
+         "Owner": "AWS",
+         "Provider": "Manual",
+         "Version": "1"
+        },
+        "Name": "Approve_prod",
+        "RoleArn": {
+         "Fn::GetAtt": [
+          "PipelineprodApproveprodCodePipelineActionRole84982B86",
+          "Arn"
+         ]
+        },
+        "RunOrder": 1
+       }
+      ],
+      "Name": "Approve_prod"
+     },
+     {
+      "Actions": [
+       {
+        "ActionTypeId": {
+         "Category": "Deploy",
+         "Owner": "AWS",
+         "Provider": "ECS",
+         "Version": "1"
+        },
+        "Configuration": {
+         "ClusterName": {
+          "Fn::ImportValue": "VRPBackendCoreInfrastructureStack-prod:ExportsOutputRefVRPBackendClusterprod1AA6129C32E968CF"
+         },
+         "ServiceName": {
+          "Fn::ImportValue": "VRPBackendEcsServiceStack-prod:ExportsOutputFnGetAttVRPBackendFargateServiceprodService8B658761Name466ADF86"
+         },
+         "FileName": "imageDetail.json",
+         "DeploymentTimeout": 60
+        },
+        "InputArtifacts": [
+         {
+          "Name": "BuildOutput"
+         }
+        ],
+        "Name": "DeployToECS_prod",
+        "RoleArn": {
+         "Fn::GetAtt": [
+          "PipelineprodDeployprodDeployToECSprodCodePipelineActionRoleC6743DDD",
+          "Arn"
+         ]
+        },
+        "RunOrder": 2
+       }
+      ],
+      "Name": "Deploy_prod"
+     }
+    ]
+   },
+   "DependsOn": [
+    "PipelineprodRoleDefaultPolicyE938671A",
+    "PipelineprodRole4CF67912"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendCICDPipelineStack-prod/Pipeline-prod/Resource"
+   }
+  },
+  "PipelineprodSourceprodGitHubSourceprodWebhookResource7C40F3EA": {
+   "Type": "AWS::CodePipeline::Webhook",
+   "Properties": {
+    "Authentication": "GITHUB_HMAC",
+    "AuthenticationConfiguration": {
+     "SecretToken": "{{resolve:secretsmanager:arn:aws:secretsmanager:us-east-1:448049814374:secret:GithubToken:SecretString:GithubToken::}}"
+    },
+    "Filters": [
+     {
+      "JsonPath": "$.ref",
+      "MatchEquals": "refs/heads/{Branch}"
+     }
+    ],
+    "RegisterWithThirdParty": true,
+    "TargetAction": "GitHub_Source_prod",
+    "TargetPipeline": {
+     "Ref": "Pipelineprod9AFCC87F"
+    },
+    "TargetPipelineVersion": 1
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendCICDPipelineStack-prod/Pipeline-prod/Source_prod/GitHub_Source_prod/WebhookResource"
+   }
+  },
+  "PipelineprodBuildprodCodePipelineActionRole46BBCEA4": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "AWS": "arn:aws:iam::448049814374:root"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendCICDPipelineStack-prod/Pipeline-prod/Build_prod/Build_prod/CodePipelineActionRole/Resource"
+   }
+  },
+  "PipelineprodBuildprodCodePipelineActionRoleDefaultPolicy746EF67D": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "codebuild:BatchGetBuilds",
+        "codebuild:StartBuild",
+        "codebuild:StopBuild"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "BuildProjectprodC3541DCA",
+         "Arn"
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "PipelineprodBuildprodCodePipelineActionRoleDefaultPolicy746EF67D",
+    "Roles": [
+     {
+      "Ref": "PipelineprodBuildprodCodePipelineActionRole46BBCEA4"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendCICDPipelineStack-prod/Pipeline-prod/Build_prod/Build_prod/CodePipelineActionRole/DefaultPolicy/Resource"
+   }
+  },
+  "PipelineprodApproveprodCodePipelineActionRole84982B86": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "AWS": "arn:aws:iam::448049814374:root"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendCICDPipelineStack-prod/Pipeline-prod/Approve_prod/Approve_prod/CodePipelineActionRole/Resource"
+   }
+  },
+  "PipelineprodDeployprodDeployToECSprodCodePipelineActionRoleC6743DDD": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "AWS": "arn:aws:iam::448049814374:root"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendCICDPipelineStack-prod/Pipeline-prod/Deploy_prod/DeployToECS_prod/CodePipelineActionRole/Resource"
+   }
+  },
+  "PipelineprodDeployprodDeployToECSprodCodePipelineActionRoleDefaultPolicy6ACEAF9E": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "ecs:DescribeServices",
+        "ecs:DescribeTaskDefinition",
+        "ecs:DescribeTasks",
+        "ecs:ListTasks",
+        "ecs:RegisterTaskDefinition",
+        "ecs:TagResource",
+        "ecs:UpdateService"
+       ],
+       "Effect": "Allow",
+       "Resource": "*"
+      },
+      {
+       "Action": "iam:PassRole",
+       "Condition": {
+        "StringEqualsIfExists": {
+         "iam:PassedToService": [
+          "ec2.amazonaws.com",
+          "ecs-tasks.amazonaws.com"
+         ]
+        }
+       },
+       "Effect": "Allow",
+       "Resource": "*"
+      },
+      {
+       "Action": [
+        "s3:GetBucket*",
+        "s3:GetObject*",
+        "s3:List*"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "PipelineprodArtifactsBucketA5921C51",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "PipelineprodArtifactsBucketA5921C51",
+             "Arn"
+            ]
+           },
+           "/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "PipelineprodDeployprodDeployToECSprodCodePipelineActionRoleDefaultPolicy6ACEAF9E",
+    "Roles": [
+     {
+      "Ref": "PipelineprodDeployprodDeployToECSprodCodePipelineActionRoleC6743DDD"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendCICDPipelineStack-prod/Pipeline-prod/Deploy_prod/DeployToECS_prod/CodePipelineActionRole/DefaultPolicy/Resource"
+   }
+  },
+  "PipelineFailureAlarmprod45693195": {
+   "Type": "AWS::CloudWatch::Alarm",
+   "Properties": {
+    "AlarmDescription": "Pipeline has failed in prod environment",
+    "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+    "Dimensions": [
+     {
+      "Name": "PipelineName",
+      "Value": {
+       "Ref": "Pipelineprod9AFCC87F"
+      }
+     }
+    ],
+    "EvaluationPeriods": 1,
+    "MetricName": "PipelineExecutionFailure",
+    "Namespace": "AWS/CodePipeline",
+    "Period": 300,
+    "Statistic": "Average",
+    "Threshold": 1
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendCICDPipelineStack-prod/PipelineFailureAlarm-prod/Resource"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/02PQQ6CMBBFz+K+jFYTdaseQIILl6aUMQ4USmgrMU3vLhQMrv5r+/NmugW+58BXojeJLKpEUQ7+ZoWsWIZGu04iG94eXuoCc0eqAJ9Si4oaTDtdorTs8mxmDIxEDT7TCsfbmKlWJD+xFCmwUdXOjsUWG398x/yldRWY2YE/O1lhnDTTFIv7/zxMUNoVvbDyBf6kRFePlQghjHh1tnVR9/tkYM2wFZRm/eZH4AfYrEpDlHSusVQjZFN+AR7IhFAvAQAA"
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendCICDPipelineStack-prod/CDKMetadata/Default"
+   }
+  }
+ },
+ "Outputs": {
+  "EcsClusterNameprod": {
+   "Description": "Name of the ECS Cluster in prod environment",
+   "Value": {
+    "Fn::ImportValue": "VRPBackendCoreInfrastructureStack-prod:ExportsOutputRefVRPBackendClusterprod1AA6129C32E968CF"
+   }
+  },
+  "EcsServiceNameprod": {
+   "Description": "Name of the ECS Service in prod environment",
+   "Value": {
+    "Fn::ImportValue": "VRPBackendEcsServiceStack-prod:ExportsOutputFnGetAttVRPBackendFargateServiceprodService8B658761Name466ADF86"
+   }
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}
