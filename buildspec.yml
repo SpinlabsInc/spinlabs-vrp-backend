@@ -26,6 +26,8 @@ phases:
       - echo "Build started on $(date)"
       - echo "Building the Docker image for environment: $ENVIRONMENT"
       - docker build --build-arg ENVIRONMENT=$ENVIRONMENT -t $ECR_REPO_URI:$IMAGE_TAG -f vrp-services/Dockerfile vrp-services/
+      # Ensure that both $ECR_REPO_URI and $IMAGE_TAG are set correctly before tagging the image
+      - if [[ -z "$ECR_REPO_URI" || -z "$IMAGE_TAG" ]]; then echo "ECR_REPO_URI or IMAGE_TAG is empty"; exit 1; fi
       - docker tag $ECR_REPO_URI:$IMAGE_TAG $ECR_REPO_URI:latest
   post_build:
     commands:
