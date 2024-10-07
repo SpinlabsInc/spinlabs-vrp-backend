@@ -7,12 +7,18 @@ from geopy.distance import geodesic
 
 # Initialize AWS clients
 s3 = boto3.client('s3')
+dynamodb = boto3.resource('dynamodb')
 
 # Get environment variables
+ENVIRONMENT = os.getenv('ENVIRONMENT', 'develop')
+VRP_DATA_TABLE = os.environ['VRP_DATA_TABLE']
 VRP_SOLUTIONS_BUCKET = os.environ['VRP_SOLUTIONS_BUCKET']
 
-def create_data_model(vrp_data):
-    """Stores the data for the problem."""
+def create_data_model():
+    table = dynamodb.Table(VRP_DATA_TABLE)
+    response = table.get_item(Key={'id': 'current_data'})
+    vrp_data = response['Item']['data']
+
     data = {}
     data['locations'] = vrp_data['locations']
     data['time_windows'] = vrp_data['time_windows']
@@ -20,7 +26,6 @@ def create_data_model(vrp_data):
     data['num_vehicles'] = vrp_data.get('num_vehicles', 4)
     data['depot'] = 0
     
-    # Calculate distance matrix
     data['distance_matrix'] = [
         [int(geodesic(loc1, loc2).miles * 10) for loc2 in data['locations']]
         for loc1 in data['locations']
@@ -28,73 +33,57 @@ def create_data_model(vrp_data):
     
     return data
 
-def solve_vrp(data):
-    """Solve the VRP with time windows."""
-    # Create the routing index manager
+def solve_vrp():
+    data = create_data_model()
     manager = pywrapcp.RoutingIndexManager(len(data['locations']),
                                            data['num_vehicles'], data['depot'])
-
-    # Create Routing Model
     routing = pywrapcp.RoutingModel(manager)
 
-    # Create and register a transit callback
     def time_callback(from_index, to_index):
-        """Returns the travel time between the two nodes."""
-        # Convert from routing variable Index to time matrix NodeIndex
         from_node = manager.IndexToNode(from_index)
         to_node = manager.IndexToNode(to_index)
         return data['distance_matrix'][from_node][to_node] + data['service_times'][from_node]
 
     transit_callback_index = routing.RegisterTransitCallback(time_callback)
-
-    # Define cost of each arc
     routing.SetArcCostEvaluatorOfAllVehicles(transit_callback_index)
 
-    # Add Time Windows constraint
     time = 'Time'
     routing.AddDimension(
         transit_callback_index,
         30,  # allow waiting time
         1260,  # maximum time per vehicle
-        False,  # Don't force start cumul to zero
+        False,
         time)
     time_dimension = routing.GetDimensionOrDie(time)
 
-    # Add time window constraints for each location except depot
     for location_idx, time_window in enumerate(data['time_windows']):
         if location_idx == data['depot']:
             continue
         index = manager.NodeToIndex(location_idx)
         time_dimension.CumulVar(index).SetRange(time_window[0], time_window[1])
 
-    # Add time window constraints for each vehicle start node
     for vehicle_id in range(data['num_vehicles']):
         index = routing.Start(vehicle_id)
         time_dimension.CumulVar(index).SetRange(data['time_windows'][data['depot']][0],
                                                 data['time_windows'][data['depot']][1])
 
-    # Instantiate route start and end times to produce feasible times
     for i in range(data['num_vehicles']):
         routing.AddVariableMinimizedByFinalizer(
             time_dimension.CumulVar(routing.Start(i)))
         routing.AddVariableMinimizedByFinalizer(
             time_dimension.CumulVar(routing.End(i)))
 
-    # Setting first solution heuristic
     search_parameters = pywrapcp.DefaultRoutingSearchParameters()
     search_parameters.first_solution_strategy = (
         routing_enums_pb2.FirstSolutionStrategy.PATH_CHEAPEST_ARC)
 
-    # Solve the problem
     solution = routing.SolveWithParameters(search_parameters)
 
-    # Return the solution
     if solution:
         return get_solution(data, manager, routing, solution)
     return None
 
 def get_solution(data, manager, routing, solution):
-    """Extracts and formats the solution."""
     result = {}
     time_dimension = routing.GetDimensionOrDie('Time')
     total_time = 0
@@ -120,18 +109,15 @@ def get_solution(data, manager, routing, solution):
     return result
 
 if __name__ == '__main__':
-    # Get VRP data from environment variable
-    vrp_data = json.loads(os.environ['VRP_DATA'])
+    solution = solve_vrp()
     
-    # Solve VRP
-    data = create_data_model(vrp_data)
-    solution = solve_vrp(data)
-    
-    # Store solution in S3
-    s3.put_object(
-        Bucket=VRP_SOLUTIONS_BUCKET,
-        Key=f"solution_{os.environ['AWS_BATCH_JOB_ID']}.json",
-        Body=json.dumps(solution)
-    )
-
-    print(f"Solution stored in S3 bucket: {VRP_SOLUTIONS_BUCKET}")
+    if solution:
+        # Store solution in S3
+        s3.put_object(
+            Bucket=VRP_SOLUTIONS_BUCKET,
+            Key=f"solution_{os.environ['AWS_BATCH_JOB_ID']}.json",
+            Body=json.dumps(solution)
+        )
+        print(f"Solution stored in S3 bucket: {VRP_SOLUTIONS_BUCKET}")
+    else:
+        print("No solution found")
