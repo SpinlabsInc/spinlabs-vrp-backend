@@ -235,6 +235,26 @@
        "Name": "ENVIRONMENT",
        "Type": "PLAINTEXT",
        "Value": "test"
+      },
+      {
+       "Name": "VRP_DATA_TABLE",
+       "Type": "PLAINTEXT",
+       "Value": "vrp-data-table-test"
+      },
+      {
+       "Name": "VRP_SOLUTIONS_BUCKET",
+       "Type": "PLAINTEXT",
+       "Value": "vrp-solutions-bucket-test"
+      },
+      {
+       "Name": "VRP_SOLVER_JOB_DEFINITION",
+       "Type": "PLAINTEXT",
+       "Value": "vrp-solver-job-definition-test"
+      },
+      {
+       "Name": "VRP_SOLVER_JOB_QUEUE",
+       "Type": "PLAINTEXT",
+       "Value": "vrp-solver-job-queue-test"
       }
      ],
      "Image": "aws/codebuild/standard:5.0",

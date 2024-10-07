@@ -44,6 +44,10 @@ export class VRPBackendCICDPipelineStack extends cdk.Stack {
         ECR_REPO_URI: { value: props.ecrRepository.repositoryUri },
         AWS_DEFAULT_REGION: { value: this.region },
         ENVIRONMENT: { value: props.environment },  // Add environment as a build variable
+        VRP_DATA_TABLE: { value: `vrp-data-table-${props.environment}` },
+        VRP_SOLUTIONS_BUCKET: { value: `vrp-solutions-bucket-${props.environment}` },
+        VRP_SOLVER_JOB_DEFINITION: { value: `vrp-solver-job-definition-${props.environment}` },
+        VRP_SOLVER_JOB_QUEUE: { value: `vrp-solver-job-queue-${props.environment}` },
       },
       buildSpec: codebuild.BuildSpec.fromSourceFilename("buildspec.yml"),
     });
