@@ -1,5 +1,4 @@
 version: 0.2
-
 phases:
   install:
     runtime-versions:
@@ -11,7 +10,6 @@ phases:
       - export DOCKER_USERNAME=$(aws secretsmanager get-secret-value --secret-id DockerHubCredentials --query SecretString --output text | jq -r .DOCKERHUB_USERNAME)
       - export DOCKER_PASSWORD=$(aws secretsmanager get-secret-value --secret-id DockerHubCredentials --query SecretString --output text | jq -r .DOCKERHUB_TOKEN)
       - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-
   pre_build:
     commands:
       - echo "Logging into Amazon ECR for environment: $ENVIRONMENT"
@@ -23,14 +21,12 @@ phases:
       - export VRP_SOLUTIONS_BUCKET="vrp-solutions-bucket-$ENVIRONMENT"
       - export VRP_SOLVER_JOB_DEFINITION="vrp-solver-job-definition-$ENVIRONMENT"
       - export VRP_SOLVER_JOB_QUEUE="vrp-solver-job-queue-$ENVIRONMENT"
-
   build:
     commands:
       - echo "Build started on $(date)"
       - echo "Building the Docker image for environment: $ENVIRONMENT"
       - docker build --build-arg ENVIRONMENT=$ENVIRONMENT -t $ECR_REPO_URI:$IMAGE_TAG -f vrp-services/Dockerfile vrp-services/
       - docker tag $ECR_REPO_URI:$IMAGE_TAG $ECR_REPO_URI:latest
-
   post_build:
     commands:
       - echo "Build completed on $(date)"
@@ -40,7 +36,6 @@ phases:
       - echo "Writing image definitions file..."
       - printf '[{"name":"vrp-backend-container","imageUri":"%s"}]' "$ECR_REPO_URI:$IMAGE_TAG" > imageDetail.json
       - cat imageDetail.json
-
 artifacts:
   files:
     - imageDetail.json
