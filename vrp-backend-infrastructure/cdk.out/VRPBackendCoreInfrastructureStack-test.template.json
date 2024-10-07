@@ -1,0 +1,1068 @@
+{
+ "Resources": {
+  "VRPBackendVPCtest9E9F27E1": {
+   "Type": "AWS::EC2::VPC",
+   "Properties": {
+    "CidrBlock": "10.0.0.0/16",
+    "EnableDnsHostnames": true,
+    "EnableDnsSupport": true,
+    "InstanceTenancy": "default",
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "VRPBackendCoreInfrastructureStack-test/VRPBackendVPC-test"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendCoreInfrastructureStack-test/VRPBackendVPC-test/Resource"
+   }
+  },
+  "VRPBackendVPCtestPublicSubnet1Subnet6B1CE0B5": {
+   "Type": "AWS::EC2::Subnet",
+   "Properties": {
+    "AvailabilityZone": "us-east-1a",
+    "CidrBlock": "10.0.0.0/18",
+    "MapPublicIpOnLaunch": true,
+    "Tags": [
+     {
+      "Key": "aws-cdk:subnet-name",
+      "Value": "Public"
+     },
+     {
+      "Key": "aws-cdk:subnet-type",
+      "Value": "Public"
+     },
+     {
+      "Key": "Name",
+      "Value": "VRPBackendCoreInfrastructureStack-test/VRPBackendVPC-test/PublicSubnet1"
+     }
+    ],
+    "VpcId": {
+     "Ref": "VRPBackendVPCtest9E9F27E1"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendCoreInfrastructureStack-test/VRPBackendVPC-test/PublicSubnet1/Subnet"
+   }
+  },
+  "VRPBackendVPCtestPublicSubnet1RouteTable5B959FE8": {
+   "Type": "AWS::EC2::RouteTable",
+   "Properties": {
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "VRPBackendCoreInfrastructureStack-test/VRPBackendVPC-test/PublicSubnet1"
+     }
+    ],
+    "VpcId": {
+     "Ref": "VRPBackendVPCtest9E9F27E1"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendCoreInfrastructureStack-test/VRPBackendVPC-test/PublicSubnet1/RouteTable"
+   }
+  },
+  "VRPBackendVPCtestPublicSubnet1RouteTableAssociation7775628D": {
+   "Type": "AWS::EC2::SubnetRouteTableAssociation",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "VRPBackendVPCtestPublicSubnet1RouteTable5B959FE8"
+    },
+    "SubnetId": {
+     "Ref": "VRPBackendVPCtestPublicSubnet1Subnet6B1CE0B5"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendCoreInfrastructureStack-test/VRPBackendVPC-test/PublicSubnet1/RouteTableAssociation"
+   }
+  },
+  "VRPBackendVPCtestPublicSubnet1DefaultRoute602B7F68": {
+   "Type": "AWS::EC2::Route",
+   "Properties": {
+    "DestinationCidrBlock": "0.0.0.0/0",
+    "GatewayId": {
+     "Ref": "VRPBackendVPCtestIGWF38EBC8F"
+    },
+    "RouteTableId": {
+     "Ref": "VRPBackendVPCtestPublicSubnet1RouteTable5B959FE8"
+    }
+   },
+   "DependsOn": [
+    "VRPBackendVPCtestVPCGW8BE7D469"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendCoreInfrastructureStack-test/VRPBackendVPC-test/PublicSubnet1/DefaultRoute"
+   }
+  },
+  "VRPBackendVPCtestPublicSubnet1EIP214135C5": {
+   "Type": "AWS::EC2::EIP",
+   "Properties": {
+    "Domain": "vpc",
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "VRPBackendCoreInfrastructureStack-test/VRPBackendVPC-test/PublicSubnet1"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendCoreInfrastructureStack-test/VRPBackendVPC-test/PublicSubnet1/EIP"
+   }
+  },
+  "VRPBackendVPCtestPublicSubnet1NATGatewayF0747586": {
+   "Type": "AWS::EC2::NatGateway",
+   "Properties": {
+    "AllocationId": {
+     "Fn::GetAtt": [
+      "VRPBackendVPCtestPublicSubnet1EIP214135C5",
+      "AllocationId"
+     ]
+    },
+    "SubnetId": {
+     "Ref": "VRPBackendVPCtestPublicSubnet1Subnet6B1CE0B5"
+    },
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "VRPBackendCoreInfrastructureStack-test/VRPBackendVPC-test/PublicSubnet1"
+     }
+    ]
+   },
+   "DependsOn": [
+    "VRPBackendVPCtestPublicSubnet1DefaultRoute602B7F68",
+    "VRPBackendVPCtestPublicSubnet1RouteTableAssociation7775628D"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendCoreInfrastructureStack-test/VRPBackendVPC-test/PublicSubnet1/NATGateway"
+   }
+  },
+  "VRPBackendVPCtestPublicSubnet2Subnet2FD688A8": {
+   "Type": "AWS::EC2::Subnet",
+   "Properties": {
+    "AvailabilityZone": "us-east-1b",
+    "CidrBlock": "10.0.64.0/18",
+    "MapPublicIpOnLaunch": true,
+    "Tags": [
+     {
+      "Key": "aws-cdk:subnet-name",
+      "Value": "Public"
+     },
+     {
+      "Key": "aws-cdk:subnet-type",
+      "Value": "Public"
+     },
+     {
+      "Key": "Name",
+      "Value": "VRPBackendCoreInfrastructureStack-test/VRPBackendVPC-test/PublicSubnet2"
+     }
+    ],
+    "VpcId": {
+     "Ref": "VRPBackendVPCtest9E9F27E1"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendCoreInfrastructureStack-test/VRPBackendVPC-test/PublicSubnet2/Subnet"
+   }
+  },
+  "VRPBackendVPCtestPublicSubnet2RouteTable26772AFC": {
+   "Type": "AWS::EC2::RouteTable",
+   "Properties": {
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "VRPBackendCoreInfrastructureStack-test/VRPBackendVPC-test/PublicSubnet2"
+     }
+    ],
+    "VpcId": {
+     "Ref": "VRPBackendVPCtest9E9F27E1"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendCoreInfrastructureStack-test/VRPBackendVPC-test/PublicSubnet2/RouteTable"
+   }
+  },
+  "VRPBackendVPCtestPublicSubnet2RouteTableAssociation08D5947D": {
+   "Type": "AWS::EC2::SubnetRouteTableAssociation",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "VRPBackendVPCtestPublicSubnet2RouteTable26772AFC"
+    },
+    "SubnetId": {
+     "Ref": "VRPBackendVPCtestPublicSubnet2Subnet2FD688A8"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendCoreInfrastructureStack-test/VRPBackendVPC-test/PublicSubnet2/RouteTableAssociation"
+   }
+  },
+  "VRPBackendVPCtestPublicSubnet2DefaultRouteA33F5EF1": {
+   "Type": "AWS::EC2::Route",
+   "Properties": {
+    "DestinationCidrBlock": "0.0.0.0/0",
+    "GatewayId": {
+     "Ref": "VRPBackendVPCtestIGWF38EBC8F"
+    },
+    "RouteTableId": {
+     "Ref": "VRPBackendVPCtestPublicSubnet2RouteTable26772AFC"
+    }
+   },
+   "DependsOn": [
+    "VRPBackendVPCtestVPCGW8BE7D469"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendCoreInfrastructureStack-test/VRPBackendVPC-test/PublicSubnet2/DefaultRoute"
+   }
+  },
+  "VRPBackendVPCtestPublicSubnet2EIP362D6AD1": {
+   "Type": "AWS::EC2::EIP",
+   "Properties": {
+    "Domain": "vpc",
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "VRPBackendCoreInfrastructureStack-test/VRPBackendVPC-test/PublicSubnet2"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendCoreInfrastructureStack-test/VRPBackendVPC-test/PublicSubnet2/EIP"
+   }
+  },
+  "VRPBackendVPCtestPublicSubnet2NATGateway03A78082": {
+   "Type": "AWS::EC2::NatGateway",
+   "Properties": {
+    "AllocationId": {
+     "Fn::GetAtt": [
+      "VRPBackendVPCtestPublicSubnet2EIP362D6AD1",
+      "AllocationId"
+     ]
+    },
+    "SubnetId": {
+     "Ref": "VRPBackendVPCtestPublicSubnet2Subnet2FD688A8"
+    },
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "VRPBackendCoreInfrastructureStack-test/VRPBackendVPC-test/PublicSubnet2"
+     }
+    ]
+   },
+   "DependsOn": [
+    "VRPBackendVPCtestPublicSubnet2DefaultRouteA33F5EF1",
+    "VRPBackendVPCtestPublicSubnet2RouteTableAssociation08D5947D"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendCoreInfrastructureStack-test/VRPBackendVPC-test/PublicSubnet2/NATGateway"
+   }
+  },
+  "VRPBackendVPCtestPrivateSubnet1Subnet54DB19AF": {
+   "Type": "AWS::EC2::Subnet",
+   "Properties": {
+    "AvailabilityZone": "us-east-1a",
+    "CidrBlock": "10.0.128.0/18",
+    "MapPublicIpOnLaunch": false,
+    "Tags": [
+     {
+      "Key": "aws-cdk:subnet-name",
+      "Value": "Private"
+     },
+     {
+      "Key": "aws-cdk:subnet-type",
+      "Value": "Private"
+     },
+     {
+      "Key": "Name",
+      "Value": "VRPBackendCoreInfrastructureStack-test/VRPBackendVPC-test/PrivateSubnet1"
+     }
+    ],
+    "VpcId": {
+     "Ref": "VRPBackendVPCtest9E9F27E1"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendCoreInfrastructureStack-test/VRPBackendVPC-test/PrivateSubnet1/Subnet"
+   }
+  },
+  "VRPBackendVPCtestPrivateSubnet1RouteTableD8540F18": {
+   "Type": "AWS::EC2::RouteTable",
+   "Properties": {
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "VRPBackendCoreInfrastructureStack-test/VRPBackendVPC-test/PrivateSubnet1"
+     }
+    ],
+    "VpcId": {
+     "Ref": "VRPBackendVPCtest9E9F27E1"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendCoreInfrastructureStack-test/VRPBackendVPC-test/PrivateSubnet1/RouteTable"
+   }
+  },
+  "VRPBackendVPCtestPrivateSubnet1RouteTableAssociationAA20E249": {
+   "Type": "AWS::EC2::SubnetRouteTableAssociation",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "VRPBackendVPCtestPrivateSubnet1RouteTableD8540F18"
+    },
+    "SubnetId": {
+     "Ref": "VRPBackendVPCtestPrivateSubnet1Subnet54DB19AF"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendCoreInfrastructureStack-test/VRPBackendVPC-test/PrivateSubnet1/RouteTableAssociation"
+   }
+  },
+  "VRPBackendVPCtestPrivateSubnet1DefaultRoute42E169B1": {
+   "Type": "AWS::EC2::Route",
+   "Properties": {
+    "DestinationCidrBlock": "0.0.0.0/0",
+    "NatGatewayId": {
+     "Ref": "VRPBackendVPCtestPublicSubnet1NATGatewayF0747586"
+    },
+    "RouteTableId": {
+     "Ref": "VRPBackendVPCtestPrivateSubnet1RouteTableD8540F18"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendCoreInfrastructureStack-test/VRPBackendVPC-test/PrivateSubnet1/DefaultRoute"
+   }
+  },
+  "VRPBackendVPCtestPrivateSubnet2SubnetACEDACAA": {
+   "Type": "AWS::EC2::Subnet",
+   "Properties": {
+    "AvailabilityZone": "us-east-1b",
+    "CidrBlock": "10.0.192.0/18",
+    "MapPublicIpOnLaunch": false,
+    "Tags": [
+     {
+      "Key": "aws-cdk:subnet-name",
+      "Value": "Private"
+     },
+     {
+      "Key": "aws-cdk:subnet-type",
+      "Value": "Private"
+     },
+     {
+      "Key": "Name",
+      "Value": "VRPBackendCoreInfrastructureStack-test/VRPBackendVPC-test/PrivateSubnet2"
+     }
+    ],
+    "VpcId": {
+     "Ref": "VRPBackendVPCtest9E9F27E1"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendCoreInfrastructureStack-test/VRPBackendVPC-test/PrivateSubnet2/Subnet"
+   }
+  },
+  "VRPBackendVPCtestPrivateSubnet2RouteTableAB4B7829": {
+   "Type": "AWS::EC2::RouteTable",
+   "Properties": {
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "VRPBackendCoreInfrastructureStack-test/VRPBackendVPC-test/PrivateSubnet2"
+     }
+    ],
+    "VpcId": {
+     "Ref": "VRPBackendVPCtest9E9F27E1"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendCoreInfrastructureStack-test/VRPBackendVPC-test/PrivateSubnet2/RouteTable"
+   }
+  },
+  "VRPBackendVPCtestPrivateSubnet2RouteTableAssociationC4C5B6F8": {
+   "Type": "AWS::EC2::SubnetRouteTableAssociation",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "VRPBackendVPCtestPrivateSubnet2RouteTableAB4B7829"
+    },
+    "SubnetId": {
+     "Ref": "VRPBackendVPCtestPrivateSubnet2SubnetACEDACAA"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendCoreInfrastructureStack-test/VRPBackendVPC-test/PrivateSubnet2/RouteTableAssociation"
+   }
+  },
+  "VRPBackendVPCtestPrivateSubnet2DefaultRouteAA9E03C2": {
+   "Type": "AWS::EC2::Route",
+   "Properties": {
+    "DestinationCidrBlock": "0.0.0.0/0",
+    "NatGatewayId": {
+     "Ref": "VRPBackendVPCtestPublicSubnet2NATGateway03A78082"
+    },
+    "RouteTableId": {
+     "Ref": "VRPBackendVPCtestPrivateSubnet2RouteTableAB4B7829"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendCoreInfrastructureStack-test/VRPBackendVPC-test/PrivateSubnet2/DefaultRoute"
+   }
+  },
+  "VRPBackendVPCtestIGWF38EBC8F": {
+   "Type": "AWS::EC2::InternetGateway",
+   "Properties": {
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "VRPBackendCoreInfrastructureStack-test/VRPBackendVPC-test"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendCoreInfrastructureStack-test/VRPBackendVPC-test/IGW"
+   }
+  },
+  "VRPBackendVPCtestVPCGW8BE7D469": {
+   "Type": "AWS::EC2::VPCGatewayAttachment",
+   "Properties": {
+    "InternetGatewayId": {
+     "Ref": "VRPBackendVPCtestIGWF38EBC8F"
+    },
+    "VpcId": {
+     "Ref": "VRPBackendVPCtest9E9F27E1"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendCoreInfrastructureStack-test/VRPBackendVPC-test/VPCGW"
+   }
+  },
+  "VRPBackendVPCtestRestrictDefaultSecurityGroupCustomResource079A14F8": {
+   "Type": "Custom::VpcRestrictDefaultSG",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::GetAtt": [
+      "CustomVpcRestrictDefaultSGCustomResourceProviderHandlerDC833E5E",
+      "Arn"
+     ]
+    },
+    "DefaultSecurityGroupId": {
+     "Fn::GetAtt": [
+      "VRPBackendVPCtest9E9F27E1",
+      "DefaultSecurityGroup"
+     ]
+    },
+    "Account": "448049814374"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendCoreInfrastructureStack-test/VRPBackendVPC-test/RestrictDefaultSecurityGroupCustomResource/Default"
+   }
+  },
+  "CustomVpcRestrictDefaultSGCustomResourceProviderRole26592FE0": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Version": "2012-10-17",
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ]
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Sub": "arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+     }
+    ],
+    "Policies": [
+     {
+      "PolicyName": "Inline",
+      "PolicyDocument": {
+       "Version": "2012-10-17",
+       "Statement": [
+        {
+         "Effect": "Allow",
+         "Action": [
+          "ec2:AuthorizeSecurityGroupIngress",
+          "ec2:AuthorizeSecurityGroupEgress",
+          "ec2:RevokeSecurityGroupIngress",
+          "ec2:RevokeSecurityGroupEgress"
+         ],
+         "Resource": [
+          {
+           "Fn::Join": [
+            "",
+            [
+             "arn:aws:ec2:us-east-1:448049814374:security-group/",
+             {
+              "Fn::GetAtt": [
+               "VRPBackendVPCtest9E9F27E1",
+               "DefaultSecurityGroup"
+              ]
+             }
+            ]
+           ]
+          }
+         ]
+        }
+       ]
+      }
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendCoreInfrastructureStack-test/Custom::VpcRestrictDefaultSGCustomResourceProvider/Role"
+   }
+  },
+  "CustomVpcRestrictDefaultSGCustomResourceProviderHandlerDC833E5E": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-448049814374-us-east-1",
+     "S3Key": "ee7de53d64cc9d6248fa6aa550f92358f6c907b5efd6f3298aeab1b5e7ea358a.zip"
+    },
+    "Timeout": 900,
+    "MemorySize": 128,
+    "Handler": "__entrypoint__.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "CustomVpcRestrictDefaultSGCustomResourceProviderRole26592FE0",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs20.x",
+    "Description": "Lambda function for removing all inbound/outbound rules from the VPC default security group"
+   },
+   "DependsOn": [
+    "CustomVpcRestrictDefaultSGCustomResourceProviderRole26592FE0"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendCoreInfrastructureStack-test/Custom::VpcRestrictDefaultSGCustomResourceProvider/Handler",
+    "aws:asset:path": "asset.ee7de53d64cc9d6248fa6aa550f92358f6c907b5efd6f3298aeab1b5e7ea358a",
+    "aws:asset:property": "Code"
+   }
+  },
+  "VRPBackendRepotest19E9342A": {
+   "Type": "AWS::ECR::Repository",
+   "Properties": {
+    "RepositoryName": "vrp-backend-repo-test"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendCoreInfrastructureStack-test/VRPBackendRepo-test/Resource"
+   }
+  },
+  "VRPBackendClustertest29B32953": {
+   "Type": "AWS::ECS::Cluster",
+   "Properties": {
+    "ClusterName": "vrp-backend-cluster-test"
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendCoreInfrastructureStack-test/VRPBackendCluster-test/Resource"
+   }
+  },
+  "VRPBackendALBtest8706CB62": {
+   "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
+   "Properties": {
+    "LoadBalancerAttributes": [
+     {
+      "Key": "deletion_protection.enabled",
+      "Value": "false"
+     }
+    ],
+    "Scheme": "internet-facing",
+    "SecurityGroups": [
+     {
+      "Fn::GetAtt": [
+       "VRPBackendALBtestSecurityGroup8F7A0FA7",
+       "GroupId"
+      ]
+     }
+    ],
+    "Subnets": [
+     {
+      "Ref": "VRPBackendVPCtestPublicSubnet1Subnet6B1CE0B5"
+     },
+     {
+      "Ref": "VRPBackendVPCtestPublicSubnet2Subnet2FD688A8"
+     }
+    ],
+    "Type": "application"
+   },
+   "DependsOn": [
+    "VRPBackendVPCtestPublicSubnet1DefaultRoute602B7F68",
+    "VRPBackendVPCtestPublicSubnet1RouteTableAssociation7775628D",
+    "VRPBackendVPCtestPublicSubnet2DefaultRouteA33F5EF1",
+    "VRPBackendVPCtestPublicSubnet2RouteTableAssociation08D5947D"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendCoreInfrastructureStack-test/VRPBackendALB-test/Resource"
+   }
+  },
+  "VRPBackendALBtestSecurityGroup8F7A0FA7": {
+   "Type": "AWS::EC2::SecurityGroup",
+   "Properties": {
+    "GroupDescription": "Automatically created Security Group for ELB VRPBackendCoreInfrastructureStacktestVRPBackendALBtest0ED1E013",
+    "SecurityGroupEgress": [
+     {
+      "CidrIp": "255.255.255.255/32",
+      "Description": "Disallow all traffic",
+      "FromPort": 252,
+      "IpProtocol": "icmp",
+      "ToPort": 86
+     }
+    ],
+    "VpcId": {
+     "Ref": "VRPBackendVPCtest9E9F27E1"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendCoreInfrastructureStack-test/VRPBackendALB-test/SecurityGroup/Resource"
+   }
+  },
+  "VRPBackendAlbSecurityGrouptest9727C5D6": {
+   "Type": "AWS::EC2::SecurityGroup",
+   "Properties": {
+    "GroupDescription": "Security group for the VRPBackend ALB (test)",
+    "SecurityGroupEgress": [
+     {
+      "CidrIp": "0.0.0.0/0",
+      "Description": "Allow all outbound traffic by default",
+      "IpProtocol": "-1"
+     }
+    ],
+    "SecurityGroupIngress": [
+     {
+      "CidrIp": "0.0.0.0/0",
+      "Description": "from 0.0.0.0/0:80",
+      "FromPort": 80,
+      "IpProtocol": "tcp",
+      "ToPort": 80
+     }
+    ],
+    "VpcId": {
+     "Ref": "VRPBackendVPCtest9E9F27E1"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendCoreInfrastructureStack-test/VRPBackendAlbSecurityGroup-test/Resource"
+   }
+  },
+  "VRPDataTabletest218F75A5": {
+   "Type": "AWS::DynamoDB::Table",
+   "Properties": {
+    "AttributeDefinitions": [
+     {
+      "AttributeName": "id",
+      "AttributeType": "S"
+     }
+    ],
+    "BillingMode": "PAY_PER_REQUEST",
+    "KeySchema": [
+     {
+      "AttributeName": "id",
+      "KeyType": "HASH"
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendCoreInfrastructureStack-test/VRPDataTable-test/Resource"
+   }
+  },
+  "VRPSolutionsBuckettestD5B37E09": {
+   "Type": "AWS::S3::Bucket",
+   "Properties": {
+    "BucketEncryption": {
+     "ServerSideEncryptionConfiguration": [
+      {
+       "ServerSideEncryptionByDefault": {
+        "SSEAlgorithm": "AES256"
+       }
+      }
+     ]
+    },
+    "Tags": [
+     {
+      "Key": "aws-cdk:auto-delete-objects",
+      "Value": "true"
+     }
+    ],
+    "VersioningConfiguration": {
+     "Status": "Enabled"
+    }
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendCoreInfrastructureStack-test/VRPSolutionsBucket-test/Resource"
+   }
+  },
+  "VRPSolutionsBuckettestPolicy7DB0B3E0": {
+   "Type": "AWS::S3::BucketPolicy",
+   "Properties": {
+    "Bucket": {
+     "Ref": "VRPSolutionsBuckettestD5B37E09"
+    },
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "s3:DeleteObject*",
+        "s3:GetBucket*",
+        "s3:List*",
+        "s3:PutBucketPolicy"
+       ],
+       "Effect": "Allow",
+       "Principal": {
+        "AWS": {
+         "Fn::GetAtt": [
+          "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092",
+          "Arn"
+         ]
+        }
+       },
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "VRPSolutionsBuckettestD5B37E09",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "VRPSolutionsBuckettestD5B37E09",
+             "Arn"
+            ]
+           },
+           "/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendCoreInfrastructureStack-test/VRPSolutionsBucket-test/Policy/Resource"
+   }
+  },
+  "VRPSolutionsBuckettestAutoDeleteObjectsCustomResource3838981E": {
+   "Type": "Custom::S3AutoDeleteObjects",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::GetAtt": [
+      "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F",
+      "Arn"
+     ]
+    },
+    "BucketName": {
+     "Ref": "VRPSolutionsBuckettestD5B37E09"
+    }
+   },
+   "DependsOn": [
+    "VRPSolutionsBuckettestPolicy7DB0B3E0"
+   ],
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendCoreInfrastructureStack-test/VRPSolutionsBucket-test/AutoDeleteObjectsCustomResource/Default"
+   }
+  },
+  "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Version": "2012-10-17",
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ]
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Sub": "arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendCoreInfrastructureStack-test/Custom::S3AutoDeleteObjectsCustomResourceProvider/Role"
+   }
+  },
+  "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-448049814374-us-east-1",
+     "S3Key": "faa95a81ae7d7373f3e1f242268f904eb748d8d0fdd306e8a6fe515a1905a7d6.zip"
+    },
+    "Timeout": 900,
+    "MemorySize": 128,
+    "Handler": "index.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs20.x",
+    "Description": {
+     "Fn::Join": [
+      "",
+      [
+       "Lambda function for auto-deleting objects in ",
+       {
+        "Ref": "VRPSolutionsBuckettestD5B37E09"
+       },
+       " S3 bucket."
+      ]
+     ]
+    }
+   },
+   "DependsOn": [
+    "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendCoreInfrastructureStack-test/Custom::S3AutoDeleteObjectsCustomResourceProvider/Handler",
+    "aws:asset:path": "asset.faa95a81ae7d7373f3e1f242268f904eb748d8d0fdd306e8a6fe515a1905a7d6",
+    "aws:asset:property": "Code"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/21RzW7CMAx+Fu4hW5m07QpoQkjTVpWJ65SmhgXSpEqcoqrqu89pGeGwk78f27GdBc+eM57NxMXPZXWea1XyfodCnhlJ3z3IBe/3jWTrg9nna5aHUiu5C6UBjFpChQ0IX6LUkPSkLb23UglU1tySI3jb5jF8CNwIhIvoWO5USzA13hoER/gvYZrkypZIs/7UYJDtQAansNs4G5pxhnthYCAd7wtorFdo3dgnsWh73q918PRa9K6QDC08KqmtqEqhhZHKHFu6yrJp6BTjSu/krUZvqr3nA6s6I2pb0WFv5xnBwPwT71dBnqdFr2gKuaXmXZInPgysAG+Dk9SG5rN1onGdf63c2VZV4FbCA6OPAKQPPtIWseYzYBNwYMZWwE/+oc1eefbCH2cnr9TcBYOqBl5M8RdFDkyzLgIAAA=="
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendCoreInfrastructureStack-test/CDKMetadata/Default"
+   }
+  }
+ },
+ "Outputs": {
+  "VRPBackendECRRepositoryUritest": {
+   "Description": "VRPBackend ECR Repository URI (test)",
+   "Value": {
+    "Fn::Join": [
+     "",
+     [
+      {
+       "Fn::Select": [
+        4,
+        {
+         "Fn::Split": [
+          ":",
+          {
+           "Fn::GetAtt": [
+            "VRPBackendRepotest19E9342A",
+            "Arn"
+           ]
+          }
+         ]
+        }
+       ]
+      },
+      ".dkr.ecr.",
+      {
+       "Fn::Select": [
+        3,
+        {
+         "Fn::Split": [
+          ":",
+          {
+           "Fn::GetAtt": [
+            "VRPBackendRepotest19E9342A",
+            "Arn"
+           ]
+          }
+         ]
+        }
+       ]
+      },
+      ".",
+      {
+       "Ref": "AWS::URLSuffix"
+      },
+      "/",
+      {
+       "Ref": "VRPBackendRepotest19E9342A"
+      }
+     ]
+    ]
+   }
+  },
+  "VRPBackendALBDNSNametest": {
+   "Description": "VRPBackend ALB DNS Name (test)",
+   "Value": {
+    "Fn::GetAtt": [
+     "VRPBackendALBtest8706CB62",
+     "DNSName"
+    ]
+   }
+  },
+  "VRPDataTableNametest": {
+   "Description": "VRP Data DynamoDB Table Name (test)",
+   "Value": {
+    "Ref": "VRPDataTabletest218F75A5"
+   }
+  },
+  "VRPSolutionsBucketNametest": {
+   "Description": "VRP Solutions S3 Bucket Name (test)",
+   "Value": {
+    "Ref": "VRPSolutionsBuckettestD5B37E09"
+   }
+  },
+  "ExportsOutputFnGetAttVRPBackendRepotest19E9342AArn3FD7CC48": {
+   "Value": {
+    "Fn::GetAtt": [
+     "VRPBackendRepotest19E9342A",
+     "Arn"
+    ]
+   },
+   "Export": {
+    "Name": "VRPBackendCoreInfrastructureStack-test:ExportsOutputFnGetAttVRPBackendRepotest19E9342AArn3FD7CC48"
+   }
+  },
+  "ExportsOutputFnGetAttVRPDataTabletest218F75A5Arn3CAC74A7": {
+   "Value": {
+    "Fn::GetAtt": [
+     "VRPDataTabletest218F75A5",
+     "Arn"
+    ]
+   },
+   "Export": {
+    "Name": "VRPBackendCoreInfrastructureStack-test:ExportsOutputFnGetAttVRPDataTabletest218F75A5Arn3CAC74A7"
+   }
+  },
+  "ExportsOutputFnGetAttVRPSolutionsBuckettestD5B37E09Arn8F0A7AC3": {
+   "Value": {
+    "Fn::GetAtt": [
+     "VRPSolutionsBuckettestD5B37E09",
+     "Arn"
+    ]
+   },
+   "Export": {
+    "Name": "VRPBackendCoreInfrastructureStack-test:ExportsOutputFnGetAttVRPSolutionsBuckettestD5B37E09Arn8F0A7AC3"
+   }
+  },
+  "ExportsOutputRefVRPBackendVPCtestPublicSubnet1Subnet6B1CE0B5297F8B10": {
+   "Value": {
+    "Ref": "VRPBackendVPCtestPublicSubnet1Subnet6B1CE0B5"
+   },
+   "Export": {
+    "Name": "VRPBackendCoreInfrastructureStack-test:ExportsOutputRefVRPBackendVPCtestPublicSubnet1Subnet6B1CE0B5297F8B10"
+   }
+  },
+  "ExportsOutputRefVRPBackendVPCtestPublicSubnet2Subnet2FD688A8466C1F4E": {
+   "Value": {
+    "Ref": "VRPBackendVPCtestPublicSubnet2Subnet2FD688A8"
+   },
+   "Export": {
+    "Name": "VRPBackendCoreInfrastructureStack-test:ExportsOutputRefVRPBackendVPCtestPublicSubnet2Subnet2FD688A8466C1F4E"
+   }
+  },
+  "ExportsOutputRefVRPBackendVPCtest9E9F27E1667DD117": {
+   "Value": {
+    "Ref": "VRPBackendVPCtest9E9F27E1"
+   },
+   "Export": {
+    "Name": "VRPBackendCoreInfrastructureStack-test:ExportsOutputRefVRPBackendVPCtest9E9F27E1667DD117"
+   }
+  },
+  "ExportsOutputRefVRPBackendRepotest19E9342A1048FFAD": {
+   "Value": {
+    "Ref": "VRPBackendRepotest19E9342A"
+   },
+   "Export": {
+    "Name": "VRPBackendCoreInfrastructureStack-test:ExportsOutputRefVRPBackendRepotest19E9342A1048FFAD"
+   }
+  },
+  "ExportsOutputRefVRPDataTabletest218F75A5E2278CC0": {
+   "Value": {
+    "Ref": "VRPDataTabletest218F75A5"
+   },
+   "Export": {
+    "Name": "VRPBackendCoreInfrastructureStack-test:ExportsOutputRefVRPDataTabletest218F75A5E2278CC0"
+   }
+  },
+  "ExportsOutputRefVRPSolutionsBuckettestD5B37E099206F16B": {
+   "Value": {
+    "Ref": "VRPSolutionsBuckettestD5B37E09"
+   },
+   "Export": {
+    "Name": "VRPBackendCoreInfrastructureStack-test:ExportsOutputRefVRPSolutionsBuckettestD5B37E099206F16B"
+   }
+  },
+  "ExportsOutputRefVRPBackendClustertest29B32953A1217D45": {
+   "Value": {
+    "Ref": "VRPBackendClustertest29B32953"
+   },
+   "Export": {
+    "Name": "VRPBackendCoreInfrastructureStack-test:ExportsOutputRefVRPBackendClustertest29B32953A1217D45"
+   }
+  },
+  "ExportsOutputRefVRPBackendVPCtestPrivateSubnet1Subnet54DB19AFBAF81951": {
+   "Value": {
+    "Ref": "VRPBackendVPCtestPrivateSubnet1Subnet54DB19AF"
+   },
+   "Export": {
+    "Name": "VRPBackendCoreInfrastructureStack-test:ExportsOutputRefVRPBackendVPCtestPrivateSubnet1Subnet54DB19AFBAF81951"
+   }
+  },
+  "ExportsOutputRefVRPBackendVPCtestPrivateSubnet2SubnetACEDACAAE0F8365A": {
+   "Value": {
+    "Ref": "VRPBackendVPCtestPrivateSubnet2SubnetACEDACAA"
+   },
+   "Export": {
+    "Name": "VRPBackendCoreInfrastructureStack-test:ExportsOutputRefVRPBackendVPCtestPrivateSubnet2SubnetACEDACAAE0F8365A"
+   }
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}

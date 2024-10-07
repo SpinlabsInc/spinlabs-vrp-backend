@@ -1,3 +1,45 @@
+# version: 0.2
+
+# phases:
+#   install:
+#     runtime-versions:
+#       python: 3.9
+#     commands:
+#       - echo "Authenticating with Docker Hub"
+#       - export DOCKER_USERNAME=$(aws secretsmanager get-secret-value --secret-id DockerHubCredentials --query SecretString --output text | jq -r .DOCKERHUB_USERNAME)
+#       - export DOCKER_PASSWORD=$(aws secretsmanager get-secret-value --secret-id DockerHubCredentials --query SecretString --output text | jq -r .DOCKERHUB_TOKEN)
+#       - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+
+#   pre_build:
+#     commands:
+#       - echo "Logging into Amazon ECR..."
+#       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $ECR_REPO_URI
+#       - export IMAGE_TAG=$(date +%Y%m%d%H%M%S)
+#       - echo "IMAGE_TAG is $IMAGE_TAG"
+
+#   build:
+#     commands:
+#       - echo "Build started on $(date)"
+#       - echo "Building the Docker image..."
+#       # Ensure the correct Dockerfile path is specified
+#       - docker build -t $ECR_REPO_URI:$IMAGE_TAG -f vrp-services/Dockerfile vrp-services/
+#       - docker tag $ECR_REPO_URI:$IMAGE_TAG $ECR_REPO_URI:latest
+
+#   post_build:
+#     commands:
+#       - echo "Build completed on $(date)"
+#       - echo "Pushing the Docker image..."
+#       - docker push $ECR_REPO_URI:$IMAGE_TAG
+#       - docker push $ECR_REPO_URI:latest
+#       - echo "Writing image definitions file..."
+#       - printf '[{"name":"vrp-backend-container","imageUri":"%s"}]' "$ECR_REPO_URI:$IMAGE_TAG" > imageDetail.json
+#       - cat imageDetail.json
+
+
+# artifacts:
+#   files:
+#     - imageDetail.json
+#   base-directory: .
 version: 0.2
 
 phases:
@@ -5,6 +47,8 @@ phases:
     runtime-versions:
       python: 3.9
     commands:
+      - echo "Installing jq for JSON processing"
+      - yum install -y jq
       - echo "Authenticating with Docker Hub"
       - export DOCKER_USERNAME=$(aws secretsmanager get-secret-value --secret-id DockerHubCredentials --query SecretString --output text | jq -r .DOCKERHUB_USERNAME)
       - export DOCKER_PASSWORD=$(aws secretsmanager get-secret-value --secret-id DockerHubCredentials --query SecretString --output text | jq -r .DOCKERHUB_TOKEN)
@@ -12,29 +56,33 @@ phases:
 
   pre_build:
     commands:
-      - echo "Logging into Amazon ECR..."
+      - echo "Logging into Amazon ECR for environment: $ENVIRONMENT"
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $ECR_REPO_URI
       - export IMAGE_TAG=$(date +%Y%m%d%H%M%S)
       - echo "IMAGE_TAG is $IMAGE_TAG"
+      - echo "ENVIRONMENT is $ENVIRONMENT"
+      - echo "Setting environment-specific variables..."
+      - export VRP_DATA_TABLE="vrp-data-table-$ENVIRONMENT"
+      - export VRP_SOLUTIONS_BUCKET="vrp-solutions-bucket-$ENVIRONMENT"
+      - export VRP_SOLVER_JOB_DEFINITION="vrp-solver-job-definition-$ENVIRONMENT"
+      - export VRP_SOLVER_JOB_QUEUE="vrp-solver-job-queue-$ENVIRONMENT"
 
   build:
     commands:
       - echo "Build started on $(date)"
-      - echo "Building the Docker image..."
-      # Ensure the correct Dockerfile path is specified
-      - docker build -t $ECR_REPO_URI:$IMAGE_TAG -f vrp-services/Dockerfile vrp-services/
+      - echo "Building the Docker image for environment: $ENVIRONMENT"
+      - docker build --build-arg ENVIRONMENT=$ENVIRONMENT -t $ECR_REPO_URI:$IMAGE_TAG -f vrp-services/Dockerfile vrp-services/
       - docker tag $ECR_REPO_URI:$IMAGE_TAG $ECR_REPO_URI:latest
 
   post_build:
     commands:
       - echo "Build completed on $(date)"
-      - echo "Pushing the Docker image..."
+      - echo "Pushing the Docker image to ECR..."
       - docker push $ECR_REPO_URI:$IMAGE_TAG
       - docker push $ECR_REPO_URI:latest
       - echo "Writing image definitions file..."
       - printf '[{"name":"vrp-backend-container","imageUri":"%s"}]' "$ECR_REPO_URI:$IMAGE_TAG" > imageDetail.json
       - cat imageDetail.json
-
 
 artifacts:
   files:

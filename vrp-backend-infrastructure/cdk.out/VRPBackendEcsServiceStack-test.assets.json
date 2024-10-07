@@ -1,0 +1,20 @@
+{
+  "version": "38.0.1",
+  "files": {
+    "141f5e70c7dcf3d159f0aa8606c4502519fd1f80ef3662ac3fe8407fd795ee7d": {
+      "source": {
+        "path": "VRPBackendEcsServiceStack-test.template.json",
+        "packaging": "file"
+      },
+      "destinations": {
+        "448049814374-us-east-1": {
+          "bucketName": "cdk-hnb659fds-assets-448049814374-us-east-1",
+          "objectKey": "141f5e70c7dcf3d159f0aa8606c4502519fd1f80ef3662ac3fe8407fd795ee7d.json",
+          "region": "us-east-1",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::448049814374:role/cdk-hnb659fds-file-publishing-role-448049814374-us-east-1"
+        }
+      }
+    }
+  },
+  "dockerImages": {}
+}

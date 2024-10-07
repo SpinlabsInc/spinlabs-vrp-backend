@@ -1,0 +1,20 @@
+{
+  "version": "38.0.1",
+  "files": {
+    "19705585b843d6f19f58d145620e4791ad453fe7e5453f410302b9fd8a0e9347": {
+      "source": {
+        "path": "VRPBackendCognitoStack-prod.template.json",
+        "packaging": "file"
+      },
+      "destinations": {
+        "448049814374-us-east-1": {
+          "bucketName": "cdk-hnb659fds-assets-448049814374-us-east-1",
+          "objectKey": "19705585b843d6f19f58d145620e4791ad453fe7e5453f410302b9fd8a0e9347.json",
+          "region": "us-east-1",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::448049814374:role/cdk-hnb659fds-file-publishing-role-448049814374-us-east-1"
+        }
+      }
+    }
+  },
+  "dockerImages": {}
+}

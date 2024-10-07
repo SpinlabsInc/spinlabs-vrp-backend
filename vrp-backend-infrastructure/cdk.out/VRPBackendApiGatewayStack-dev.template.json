@@ -1,0 +1,223 @@
+{
+ "Resources": {
+  "VRPBackendApiAE313B9D": {
+   "Type": "AWS::ApiGateway::RestApi",
+   "Properties": {
+    "Description": "This service serves VRP backend.",
+    "Name": "VRP Backend Service",
+    "Tags": [
+     {
+      "Key": "Environment",
+      "Value": "dev"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendApiGatewayStack-dev/VRPBackendApi/Resource"
+   }
+  },
+  "VRPBackendApiDeployment085943EB975de274f316e4522cf65d317f0a0143": {
+   "Type": "AWS::ApiGateway::Deployment",
+   "Properties": {
+    "Description": "This service serves VRP backend.",
+    "RestApiId": {
+     "Ref": "VRPBackendApiAE313B9D"
+    }
+   },
+   "DependsOn": [
+    "VRPBackendApiproxyANY73A8C48F",
+    "VRPBackendApiproxy1AB1CC72",
+    "VRPBackendApiAuthorizerD10F9C9E"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendApiGatewayStack-dev/VRPBackendApi/Deployment/Resource"
+   }
+  },
+  "VRPBackendApiDeploymentStageprod130BDF60": {
+   "Type": "AWS::ApiGateway::Stage",
+   "Properties": {
+    "DeploymentId": {
+     "Ref": "VRPBackendApiDeployment085943EB975de274f316e4522cf65d317f0a0143"
+    },
+    "RestApiId": {
+     "Ref": "VRPBackendApiAE313B9D"
+    },
+    "StageName": "prod",
+    "Tags": [
+     {
+      "Key": "Environment",
+      "Value": "dev"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendApiGatewayStack-dev/VRPBackendApi/DeploymentStage.prod/Resource"
+   }
+  },
+  "VRPBackendApiproxy1AB1CC72": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Fn::GetAtt": [
+      "VRPBackendApiAE313B9D",
+      "RootResourceId"
+     ]
+    },
+    "PathPart": "{proxy+}",
+    "RestApiId": {
+     "Ref": "VRPBackendApiAE313B9D"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendApiGatewayStack-dev/VRPBackendApi/Default/{proxy+}/Resource"
+   }
+  },
+  "VRPBackendApiproxyANY73A8C48F": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "COGNITO_USER_POOLS",
+    "AuthorizerId": {
+     "Ref": "VRPBackendApiAuthorizerD10F9C9E"
+    },
+    "HttpMethod": "ANY",
+    "Integration": {
+     "Type": "MOCK"
+    },
+    "ResourceId": {
+     "Ref": "VRPBackendApiproxy1AB1CC72"
+    },
+    "RestApiId": {
+     "Ref": "VRPBackendApiAE313B9D"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendApiGatewayStack-dev/VRPBackendApi/Default/{proxy+}/ANY/Resource"
+   }
+  },
+  "VRPBackendApiAuthorizerD10F9C9E": {
+   "Type": "AWS::ApiGateway::Authorizer",
+   "Properties": {
+    "IdentitySource": "method.request.header.Authorization",
+    "Name": "VRPBackendApiGatewayStackdevVRPBackendApiAuthorizerA340A279",
+    "ProviderARNs": [
+     {
+      "Fn::ImportValue": "VRPBackendCognitoStack-dev:ExportsOutputFnGetAttVRPBackendUserPool6E0C7F5CArn7645F585"
+     }
+    ],
+    "RestApiId": {
+     "Ref": "VRPBackendApiAE313B9D"
+    },
+    "Type": "COGNITO_USER_POOLS"
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendApiGatewayStack-dev/VRPBackendApiAuthorizer/Resource"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/02MTwuCQBBHP0t33VIQulpdo1A6x6aTrn92ZGc2MfG7x2Kip3nvMfxCEURHcdjJnvwsr/1GvcSYssxqT/b0lJ0qJEMvBzEmQBx3yju/9YIX6BocWtDs6sZSlgW4NkMChNZkcJK0yn9o5itwiblLC2GhFeODwNwRG4otl2jUF4x7Wm1yerPcWd4OTp7GHERF+08YikgEu4qU8o3VrFoQyXx/h29Inv4AAAA="
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendApiGatewayStack-dev/CDKMetadata/Default"
+   }
+  }
+ },
+ "Outputs": {
+  "VRPBackendApiEndpoint57BCFC5C": {
+   "Value": {
+    "Fn::Join": [
+     "",
+     [
+      "https://",
+      {
+       "Ref": "VRPBackendApiAE313B9D"
+      },
+      ".execute-api.us-east-1.",
+      {
+       "Ref": "AWS::URLSuffix"
+      },
+      "/",
+      {
+       "Ref": "VRPBackendApiDeploymentStageprod130BDF60"
+      },
+      "/"
+     ]
+    ]
+   }
+  },
+  "VRPBackendApiUrl": {
+   "Description": "The URL for the VRP Backend API",
+   "Value": {
+    "Fn::Join": [
+     "",
+     [
+      "https://",
+      {
+       "Ref": "VRPBackendApiAE313B9D"
+      },
+      ".execute-api.us-east-1.",
+      {
+       "Ref": "AWS::URLSuffix"
+      },
+      "/",
+      {
+       "Ref": "VRPBackendApiDeploymentStageprod130BDF60"
+      },
+      "/"
+     ]
+    ]
+   }
+  },
+  "ExportsOutputRefVRPBackendApiAE313B9D23D5D49B": {
+   "Value": {
+    "Ref": "VRPBackendApiAE313B9D"
+   },
+   "Export": {
+    "Name": "VRPBackendApiGatewayStack-dev:ExportsOutputRefVRPBackendApiAE313B9D23D5D49B"
+   }
+  },
+  "ExportsOutputRefVRPBackendApiDeploymentStageprod130BDF607979A30D": {
+   "Value": {
+    "Ref": "VRPBackendApiDeploymentStageprod130BDF60"
+   },
+   "Export": {
+    "Name": "VRPBackendApiGatewayStack-dev:ExportsOutputRefVRPBackendApiDeploymentStageprod130BDF607979A30D"
+   }
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}
