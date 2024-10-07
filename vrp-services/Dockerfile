@@ -11,7 +11,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the source code into the container
 COPY src/ /app/src/
 
-# Set the default AWS region (replace 'us-east-1' with your preferred region)
+# Pass environment-specific variables
+ARG ENVIRONMENT
+ENV ENVIRONMENT=$ENVIRONMENT
 ENV AWS_DEFAULT_REGION us-east-1
 
 # Expose port 80

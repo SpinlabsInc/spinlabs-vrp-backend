@@ -1,0 +1,20 @@
+{
+  "version": "36.3.0",
+  "files": {
+    "739c1c4c77cccf93de2bc191ecceef7fe1556c6cf7017c6fcb25a049e2667efc": {
+      "source": {
+        "path": "VRPBackendCICDPipelineStack-dev.template.json",
+        "packaging": "file"
+      },
+      "destinations": {
+        "448049814374-us-east-1": {
+          "bucketName": "cdk-hnb659fds-assets-448049814374-us-east-1",
+          "objectKey": "739c1c4c77cccf93de2bc191ecceef7fe1556c6cf7017c6fcb25a049e2667efc.json",
+          "region": "us-east-1",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::448049814374:role/cdk-hnb659fds-file-publishing-role-448049814374-us-east-1"
+        }
+      }
+    }
+  },
+  "dockerImages": {}
+}

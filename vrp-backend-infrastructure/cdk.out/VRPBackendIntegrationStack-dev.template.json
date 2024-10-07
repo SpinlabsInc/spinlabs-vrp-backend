@@ -1,0 +1,72 @@
+{
+ "Outputs": {
+  "VRPBackendIntegrationStackApiUrldev": {
+   "Description": "The URL for the VRP Backend API for the dev environment",
+   "Value": {
+    "Fn::Join": [
+     "",
+     [
+      "https://",
+      {
+       "Fn::ImportValue": "VRPBackendApiGatewayStack-dev:ExportsOutputRefVRPBackendApiAE313B9D23D5D49B"
+      },
+      ".execute-api.us-east-1.",
+      {
+       "Ref": "AWS::URLSuffix"
+      },
+      "/",
+      {
+       "Fn::ImportValue": "VRPBackendApiGatewayStack-dev:ExportsOutputRefVRPBackendApiDeploymentStageprod130BDF607979A30D"
+      },
+      "/"
+     ]
+    ]
+   }
+  }
+ },
+ "Resources": {
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/zPSMzS10DNQTCwv1k1OydbNyUzSqw4uSUzO1nFOy/MvLSkoLQGxglKL80uLklNrdfLyU1L1sor1y4yM9Ez1DBWzijMzdYtK80oyc1P1giA0AIGTgB9WAAAA"
+   },
+   "Metadata": {
+    "aws:cdk:path": "VRPBackendIntegrationStack-dev/CDKMetadata/Default"
+   }
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}

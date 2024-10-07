@@ -1,0 +1,20 @@
+{
+  "version": "36.3.0",
+  "files": {
+    "069564e58c4625a11b9faa56f3e0898ef3d6b688fc615007e0c7ca1f75c4c498": {
+      "source": {
+        "path": "VRPBackendApiGatewayStack-dev.template.json",
+        "packaging": "file"
+      },
+      "destinations": {
+        "448049814374-us-east-1": {
+          "bucketName": "cdk-hnb659fds-assets-448049814374-us-east-1",
+          "objectKey": "069564e58c4625a11b9faa56f3e0898ef3d6b688fc615007e0c7ca1f75c4c498.json",
+          "region": "us-east-1",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::448049814374:role/cdk-hnb659fds-file-publishing-role-448049814374-us-east-1"
+        }
+      }
+    }
+  },
+  "dockerImages": {}
+}

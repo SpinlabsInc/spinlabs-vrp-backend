@@ -9,60 +9,66 @@ import { VRPBackendIntegrationStack } from "../lib/vrp-backend-integration-stack
 
 const app = new cdk.App();
 
-// List of environments
-const environments = ['dev', 'test', 'prod'];
+// Retrieve the environment from the context
+const environment = app.node.tryGetContext('env') || 'develop';
 
-// Iterate over environments and deploy stacks
-environments.forEach(env => {
-  const envConfig = { account: process.env.CDK_DEFAULT_ACCOUNT, region: process.env.CDK_DEFAULT_REGION };
+// Make sure the environment is one of the expected values
+const validEnvironments = ['develop', 'test', 'prod'];
 
-  // Deploy the core infrastructure stack
-  const coreStack = new VRPBackendCoreInfrastructureStack(app, `VRPBackendCoreInfrastructureStack-${env}`, {
-    env: envConfig,
-    environment: env,
-  });
 
-  // Deploy the Cognito stack
-  const cognitoStack = new VRPBackendCognitoStack(app, `VRPBackendCognitoStack-${env}`, {
-    env: envConfig,
-    environment: env,
-  });
+if (!validEnvironments.includes(environment)) {
+  throw new Error(`Invalid environment: ${environment}. Valid environments are ${validEnvironments.join(', ')}.`);
+}
 
-  // Deploy the API Gateway stack, passing the Cognito User Pool
-  const apiGatewayStack = new VRPBackendApiGatewayStack(app, `VRPBackendApiGatewayStack-${env}`, {
-    cognitoUserPool: cognitoStack.userPool,
-    env: envConfig,
-    environment: env,
-  });
+console.log(`Deploying to environment: ${environment}`);
+const envConfig = { account: process.env.CDK_DEFAULT_ACCOUNT, region: process.env.CDK_DEFAULT_REGION };
 
-  // Deploy the ECS service stack, utilizing resources from the core stack
-  const ecsServiceStack = new VRPBackendEcsServiceStack(app, `VRPBackendEcsServiceStack-${env}`, {
-    cluster: coreStack.ecsCluster,
-    repository: coreStack.ecrRepository,
-    vrpDataTable: coreStack.vrpDataTable,
-    vrpSolutionsBucket: coreStack.vrpSolutionsBucket,
-    vpc: coreStack.vpc,
-    env: envConfig,
-    environment: env,
-  });
+// Deploy the core infrastructure stack
+const coreStack = new VRPBackendCoreInfrastructureStack(app, `VRPBackendCoreInfrastructureStack-${environment}`, {
+  env: envConfig,
+  environment,
+});
 
-  // Deploy the Integration stack
-  new VRPBackendIntegrationStack(app, `VRPBackendIntegrationStack-${env}`, {
-    api: apiGatewayStack.api,
-    authorizer: apiGatewayStack.authorizer,
-    loadBalancer: ecsServiceStack.loadBalancer,
-    env: envConfig,
-    environment: env,
-  });
+// Deploy the Cognito stack
+const cognitoStack = new VRPBackendCognitoStack(app, `VRPBackendCognitoStack-${environment}`, {
+  env: envConfig,
+  environment,
+});
 
-  // Deploy the CICD pipeline stack
-  new VRPBackendCICDPipelineStack(app, `VRPBackendCICDPipelineStack-${env}`, {
-    ecrRepository: coreStack.ecrRepository,
-    ecsCluster: coreStack.ecsCluster,
-    ecsService: ecsServiceStack.fargateService,
-    env: envConfig,
-    environment: env,
-  });
+// Deploy the API Gateway stack, passing the Cognito User Pool
+const apiGatewayStack = new VRPBackendApiGatewayStack(app, `VRPBackendApiGatewayStack-${environment}`, {
+  cognitoUserPool: cognitoStack.userPool,
+  env: envConfig,
+  environment,
+});
+
+// Deploy the ECS service stack, utilizing resources from the core stack
+const ecsServiceStack = new VRPBackendEcsServiceStack(app, `VRPBackendEcsServiceStack-${environment}`, {
+  cluster: coreStack.ecsCluster,
+  repository: coreStack.ecrRepository,
+  vrpDataTable: coreStack.vrpDataTable,
+  vrpSolutionsBucket: coreStack.vrpSolutionsBucket,
+  vpc: coreStack.vpc,
+  env: envConfig,
+  environment,
+});
+
+// Deploy the Integration stack
+new VRPBackendIntegrationStack(app, `VRPBackendIntegrationStack-${environment}`, {
+  api: apiGatewayStack.api,
+  authorizer: apiGatewayStack.authorizer,
+  loadBalancer: ecsServiceStack.loadBalancer,
+  env: envConfig,
+  environment,
+});
+
+// Deploy the CICD pipeline stack
+new VRPBackendCICDPipelineStack(app, `VRPBackendCICDPipelineStack-${environment}`, {
+  ecrRepository: coreStack.ecrRepository,
+  ecsCluster: coreStack.ecsCluster,
+  ecsService: ecsServiceStack.fargateService,
+  env: envConfig,
+  environment,
 });
 
 app.synth();
