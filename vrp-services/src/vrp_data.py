@@ -3,6 +3,9 @@ import boto3
 import logging
 from data import locations, time_windows, service_times
 from botocore.exceptions import ClientError
+from dotenv import load_dotenv
+load_dotenv()
+
 
 # Setup logging
 logging.basicConfig(level=logging.INFO)
@@ -15,24 +18,24 @@ dynamodb = session.resource('dynamodb')
 s3_client = session.client('s3')
 
 # Get environment variables
-ENVIRONMENT = os.getenv('ENVIRONMENT', 'develop')
-VRP_DATA_TABLE = os.environ['VRP_DATA_TABLE']
-VRP_SOLUTIONS_BUCKET = os.environ['VRP_SOLUTIONS_BUCKET']
+# ENVIRONMENT = os.getenv('ENVIRONMENT', 'develop')
+VRP_DATA_TABLE = os.getenv('VRP_DATA_TABLE')
+VRP_SOLUTIONS_BUCKET = os.getenv('VRP_SOLUTIONS_BUCKET')
 
-# def create_s3_bucket(bucket_name):
-#     """Create an S3 bucket if it doesn't already exist."""
-#     try:
-#         s3_client.head_bucket(Bucket=bucket_name)
-#         logger.info(f"Bucket '{bucket_name}' already exists.")
-#     except ClientError as e:
-#         if e.response['Error']['Code'] == '404':
-#             try:
-#                 s3_client.create_bucket(Bucket=bucket_name)
-#                 logger.info(f"Bucket '{bucket_name}' created successfully.")
-#             except ClientError as err:
-#                 logger.error(f"Error creating S3 bucket: {err}")
-#         else:
-#             logger.error(f"Error checking bucket: {e}")
+def create_s3_bucket(bucket_name):
+    """Create an S3 bucket if it doesn't already exist."""
+    try:
+        s3_client.head_bucket(Bucket=bucket_name)
+        logger.info(f"Bucket '{bucket_name}' already exists.")
+    except ClientError as e:
+        if e.response['Error']['Code'] == '404':
+            try:
+                s3_client.create_bucket(Bucket=bucket_name)
+                logger.info(f"Bucket '{bucket_name}' created successfully.")
+            except ClientError as err:
+                logger.error(f"Error creating S3 bucket: {err}")
+        else:
+            logger.error(f"Error checking bucket: {e}")
 
 # def create_sqs_queue(queue_name):
 #     """Create an SQS queue if it doesn't already exist and return its URL."""
@@ -60,11 +63,11 @@ def initialize_data():
         create_s3_bucket(VRP_SOLUTIONS_BUCKET)
 
         # Create the SQS queue and set the URL in the environment
-        queue_url = create_sqs_queue(SQS_QUEUE_NAME)
-        if queue_url:
-            os.environ['SQS_QUEUE_URL'] = queue_url
-        else:
-            logger.error("Failed to create or retrieve the SQS queue URL.")
+        # queue_url = create_sqs_queue(SQS_QUEUE_NAME)
+        # if queue_url:
+        #     os.environ['SQS_QUEUE_URL'] = queue_url
+        # else:
+        #     logger.error("Failed to create or retrieve the SQS queue URL.")
 
         # Check if the DynamoDB table already exists
         table = dynamodb.Table(VRP_DATA_TABLE)

@@ -4,7 +4,8 @@ import boto3
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from botocore.exceptions import ClientError
-from vrp_solver import solve_vrp
+from src.vrp_solver import solve_vrp
+
 
 app = Flask(__name__)
 CORS(app)
