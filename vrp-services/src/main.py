@@ -4,22 +4,27 @@ import boto3
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from botocore.exceptions import ClientError
+from src.vrp_solver import solve_vrp
+
 
 app = Flask(__name__)
 CORS(app)
 
-# Initialize AWS clients
-dynamodb = boto3.resource('dynamodb')
-s3 = boto3.client('s3')
-batch = boto3.client('batch')
 
 # Get environment variables
 ENVIRONMENT = os.getenv('ENVIRONMENT', 'develop')
-VRP_DATA_TABLE = os.getenv('VRP_DATA_TABLE', f'vrp-data-table-{ENVIRONMENT}')
-VRP_SOLUTIONS_BUCKET = os.getenv('VRP_SOLUTIONS_BUCKET', f'vrp-solutions-bucket-{ENVIRONMENT}')
-VRP_SOLVER_JOB_DEFINITION = os.getenv('VRP_SOLVER_JOB_DEFINITION', f'vrp-solver-job-definition-{ENVIRONMENT}')
-VRP_SOLVER_JOB_QUEUE = os.getenv('VRP_SOLVER_JOB_QUEUE', f'vrp-solver-job-queue-{ENVIRONMENT}')
 
+# Initialize AWS clients with environment-specific configurations
+session = boto3.Session()
+dynamodb = session.resource('dynamodb')
+s3 = session.client('s3')
+batch = session.client('batch')
+
+# Define environment-specific resource names
+VRP_DATA_TABLE = os.getenv('VRP_DATA_TABLE')
+VRP_SOLUTIONS_BUCKET = os.getenv('VRP_SOLUTIONS_BUCKET')
+VRP_SOLVER_JOB_DEFINITION = os.getenv('VRP_SOLVER_JOB_DEFINITION')
+VRP_SOLVER_JOB_QUEUE = os.getenv('VRP_SOLVER_JOB_QUEUE')
 
 table = dynamodb.Table(VRP_DATA_TABLE)
 
@@ -27,30 +32,11 @@ table = dynamodb.Table(VRP_DATA_TABLE)
 def vrp_solution():
     try:
         if request.method == 'GET':
-            # Retrieve VRP data from DynamoDB
-            response = table.get_item(Key={'id': 'current_data'})
-            vrp_data = response['Item']['data']
-
-            # Submit AWS Batch job
-            job_response = batch.submit_job(
-                jobName='vrp-solver-job',
-                jobQueue=VRP_SOLVER_JOB_QUEUE,
-                jobDefinition=VRP_SOLVER_JOB_DEFINITION,
-                containerOverrides={
-                    'environment': [
-                        {
-                            'name': 'VRP_DATA',
-                            'value': json.dumps(vrp_data)
-                        }
-                    ]
-                }
-            )
-
-            return jsonify({'jobId': job_response['jobId']}), 202
+            result = solve_vrp(dynamodb, VRP_DATA_TABLE)
+            return jsonify(result), 202
 
         elif request.method == 'POST':
             data = request.json
-            # Store new VRP data in DynamoDB
             table.put_item(Item={
                 'id': 'current_data',
                 'data': data
@@ -59,7 +45,6 @@ def vrp_solution():
 
         elif request.method == 'PUT':
             data = request.json
-            # Update VRP data in DynamoDB
             table.update_item(
                 Key={'id': 'current_data'},
                 UpdateExpression='SET data = :val',
@@ -68,7 +53,6 @@ def vrp_solution():
             return jsonify({'message': 'Data updated successfully'}), 200
 
         elif request.method == 'DELETE':
-            # Delete VRP data from DynamoDB
             table.delete_item(Key={'id': 'current_data'})
             return jsonify({'message': 'Data deleted successfully'}), 200
 
